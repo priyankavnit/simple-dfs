@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:comp="org.agile.component.*" width="100%" height="100%" layout="absolute" creationComplete="init();">
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:comp="org.agile.component.*" width="100%" height="100%" layout="absolute" creationComplete="init();" xmlns:view="org.agile.dfs.view.*">
 	<!-- title header -->
 	<mx:Box width="100%" height="100%" paddingBottom="5" paddingLeft="10" paddingRight="10" paddingTop="5" backgroundColor="#d4cdca" cornerRadius="8" borderStyle="solid" borderColor="#b7babc"
 			borderThickness="1" horizontalGap="0">
 		<mx:Box width="100%" height="25" verticalAlign="middle" direction="horizontal">
-			<mx:Label text="{ 'Application Server (' + targetIp + ':' + targetPort + ')' }" fontSize="15" color="#010101"/>
+			<mx:Label text="{ 'Application Server (' + targetIp + ':' + targetPort + ')' }" fontSize="15" fontWeight="bold" color="#010101"/>
 			<mx:Image source="res/img/button/connected.png"/>
 			<mx:Spacer width="100%"/>
+			<comp:IconButton click="{switchModule('space');}" width="80" iconSource="res/img/button/dialog.gif" iconName="Space"/>
 			<comp:IconButton click="{switchModule('home');}" width="80" iconSource="res/img/button/home.png" iconName="Home"/>
 			<comp:IconButton click="{switchModule('thread');}" width="80" iconSource="res/img/button/thread.gif" iconName="Thread"/>
 			<comp:IconButton click="{switchModule('memory');}" width="80" iconSource="res/img/button/memory.gif" iconName="Memory"/>
@@ -16,9 +17,7 @@
 		<!-- business panel container -->
 		<mx:Box width="100%" height="100%" paddingBottom="6" paddingLeft="6" paddingRight="6" paddingTop="6" backgroundColor="#afa7a1" cornerRadius="8" alpha="1.0" borderStyle="solid"
 				borderColor="#757575" borderThickness="1">
-			<mx:Box width="100%" height="100%" backgroundColor="#f1f2f3">
-
-			</mx:Box>
+			<view:NameSpaceGrid backgroundColor="#d4cdca" />
 		</mx:Box>
 	</mx:Box>
 	<mx:Script>
