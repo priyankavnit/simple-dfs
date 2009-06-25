@@ -15,13 +15,15 @@
 
 	</mx:DataGrid>
 	<mx:Box width="100%" direction="horizontal" horizontalAlign="right" paddingTop="1" paddingRight="7" paddingBottom="7">
-		<mx:Button label="create" />
+		<mx:Button label="create" click="openNameSpaceDialog();" />
 		<mx:Button label="delete" />
 		<mx:Button label="modify" />
 	</mx:Box>
 
 	<mx:Script>
 		<![CDATA[
+			import mx.managers.PopUpManager;
+			import mx.core.Application;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.rpc.http.mxml.HTTPService;
@@ -86,6 +88,16 @@
 				}
 				return -1;
 			}
+			
+			public function openNameSpaceDialog():void {
+				var app:Application=Application.application as Application;
+				var dialog:DfsDialog=PopUpManager.createPopUp(app, DfsDialog, true)as DfsDialog;
+				var form:NameSpaceForm=new NameSpaceForm();
+				// dchart.showDataTips=true;
+				dialog.widget=form;
+				dialog.title="Dfs NameSpace Information";
+				PopUpManager.centerPopUp(dialog);
+			}			
 		]]>
 	</mx:Script>
 </mx:Box>
