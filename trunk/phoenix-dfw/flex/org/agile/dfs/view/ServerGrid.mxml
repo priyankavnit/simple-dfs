@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:DataGrid xmlns:mx="http://www.adobe.com/2006/mxml" dataProvider="{servers}" width="100%" height="100%" borderThickness="1" backgroundColor="#f1f2f5" borderStyle="solid" borderColor="#b7babc"
+			 color="#575957" verticalGridLines="false" creationComplete="init();">
+	<mx:columns>
+		<mx:DataGridColumn headerText="NO" textAlign="center" width="40" resizable="false" labelFunction="rowNum"/>
+		<mx:DataGridColumn dataField="@type" headerText="TYPE" textAlign="center" width="50" resizable="false"/>
+		<mx:DataGridColumn dataField="@ip" headerText="IP Address"/>
+		<mx:DataGridColumn dataField="@port" headerText="Port" width="50" resizable="false" textAlign="center"/>
+		<mx:DataGridColumn dataField="@lastActiveTime" headerText="Active" width="50" resizable="false" textAlign="center"/>
+	</mx:columns>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.http.mxml.HTTPService;
+			import org.agile.framework.util.DateUtil;
+
+			private static var idNo:Number=0;
+			private static var timer:Timer=new Timer(10 * 1000, 0);
+			[Bindable]
+			private var servers:ArrayCollection=new ArrayCollection();
+
+			private function init():void {
+				servers.addItem(<item id="1" type="NAME" ip="127.0.0.1" port="45100" lastActiveTime="15:35" />);
+			}
+
+			private function schedule():void {
+				timer.addEventListener(TimerEvent.TIMER, function():void {
+						load();
+					});
+				timer.start();
+			}
+
+			private function load():void {
+				var service:HTTPService=new HTTPService();
+				service.url="../center?domain=collector&action=findTotalCollector";
+				service.resultFormat="text";
+				service.addEventListener(ResultEvent.RESULT, resultHandler);
+				service.send();
+			}
+
+			private function rowNum(item:Object, col:int):String {
+				var ix:int = servers.getItemIndex(item) + 1;
+				return String(ix);
+			}
+
+			private function resultHandler(event:ResultEvent):void {
+				var data:XML=XML(event.result);
+				var cs:XMLList=data..c;
+				for each (var c:XML in cs) {
+					//trace("-> " + c);
+					c.@lastActiveTime=DateUtil.format(new Number(c.@lastActiveTime), "HH:NN:SS");
+					var pos:int=indexOfTarget(servers, c);
+					if (pos == -1) {
+						c.@id=++idNo;
+						servers.addItem(c);
+					} else {
+						c.@id=servers.getItemAt(pos).@id;
+						servers.setItemAt(c, pos);
+					}
+				}
+			}
+
+			private function indexOfTarget(collection:ArrayCollection, item:XML):int {
+				var key:String=item.@ip + ":" + item.@port;
+
+				for (var i:int=0, l:int=collection.length; i < l; i++) {
+					var o:Object=collection.getItemAt(i);
+					var k:String=o.@ip + ":" + o.@port;
+					if (k == key) {
+						return i;
+					}
+				}
+				return -1;
+			}
+		]]>
+	</mx:Script>
+</mx:DataGrid>
