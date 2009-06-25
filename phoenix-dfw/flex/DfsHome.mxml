@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.dfs.view.*" layout="vertical" creationComplete="init();" backgroundColor="#010101" paddingBottom="0" paddingLeft="0"
+                paddingRight="0" paddingTop="0" verticalGap="0">
+    <mx:Style source="res/css/global.css"/>
+    <!-- header title -->
+    <mx:Box width="100%" height="45" direction="horizontal" verticalAlign="middle" paddingLeft="5" paddingRight="5" borderStyle="solid" borderColor="#464646" borderSides="bottom">
+        <mx:Label text="Phoenix Web Console" fontFamily="monotype" fontSize="25" color="#f1f3f5"/>
+        <mx:Spacer width="100%"/>
+        <mx:ComboBox fillColors="#080809" color="#ffffff" iconColor="#f1f2f5" dataProvider="{menus}" width="180" alternatingItemColors="[#868788, #9f9c9d]"/>
+    </mx:Box>
+
+    <!-- middle area -->
+    <mx:Box width="100%" height="100%" backgroundColor="#262626" direction="horizontal" horizontalGap="10" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+        <!-- bar show when list hidden -->
+        <mx:Box id="hideBar" width="32" height="100%" backgroundColor="#afa7a1" includeInLayout="false" visible="false" paddingBottom="3" paddingLeft="3" paddingRight="3" paddingTop="3"
+                cornerRadius="3" alpha="1.0" borderStyle="solid" borderColor="#b7babc" borderThickness="1" click="showList();" mouseOver="hideBar.setStyle('backgroundColor','#d4cdca');"
+                mouseOut="hideBar.setStyle('backgroundColor','#afa7a1');">
+            <mx:Button icon="@Embed(source='res/img/button/expand.gif')" width="25" click="showList();"/>
+        </mx:Box>
+        <!-- list -->
+        <mx:Box id="listBar" width="320" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" backgroundColor="#d4cdca" cornerRadius="8" borderStyle="solid"
+                borderColor="#b7babc" borderThickness="1" verticalAlign="middle">
+            <!-- list toolbar -->
+            <mx:Box width="100%" direction="horizontal" verticalAlign="middle">
+                <mx:Label text="IP:"/>
+                <mx:TextInput text="" width="150" cornerRadius="5" borderStyle="solid" borderColor="#b7babc" borderThickness="1"/>
+                <mx:Button label="filter" width="60"/>
+                <mx:Spacer width="100%"/>
+                <mx:Button width="25" click="hideList();" icon="@Embed(source='res/img/button/collapse.gif')"/>
+            </mx:Box>
+            <!-- list datagrid -->
+            <view:ServerGrid id="serverGrid" doubleClickEnabled="true" doubleClick="load();"/>
+        </mx:Box>
+        <mx:Box id="moduleLoader" backgroundColor="#f1f3f5" width="100%" height="100%">
+
+        </mx:Box>
+        <!--<view:LoaderBox id="moduleLoader" width="100%" height="100%" />-->
+    </mx:Box>
+
+    <!-- status -->
+    <mx:Box width="100%" height="25" borderStyle="solid" borderColor="#464646" borderSides="top" verticalAlign="middle" paddingLeft="5" paddingRight="5" direction="horizontal" visible="true"
+            includeInLayout="true">
+        <!--<mx:Label id="memLabel" color="#f1f3f9"/>-->
+        <mx:Label id="memLabel" color="#f1f3f5"/>
+        <mx:Spacer width="100%"/>
+        <!--<mx:Label id="errLabel" color="#f1f3f9" text="Tips" click="{ErrorsManager.showDialog();}"/>-->
+    </mx:Box>
+    <mx:Script>
+        <![CDATA[
+        	import org.agile.framework.action.ModuleAction;
+            import mx.collections.ArrayCollection;
+
+            [Bindable]
+            private var menus:ArrayCollection=new ArrayCollection([{ label: "Dashboard", data: 1 }, { label: "Message Center", data: 2 }, { label: "192.168.1.11", data: 3 }, { label: "192.168.1.15", data: 4 }]);
+
+			private var loader:ModuleAction = new ModuleAction(moduleLoader);
+			
+            private function init():void {
+                var timer:Timer=new Timer(3 * 1000, 0);
+                timer.start();
+                timer.addEventListener(TimerEvent.TIMER, function():void {
+                    	// "Flash Memory Used: " 
+                        memLabel.text=format(System.totalMemory);
+                        System.gc();
+                    }); 
+                loader.loadModule("org/agile/dfs/module/NameNode.swf");
+            }
+
+            private function format(mem:uint):String {
+                var k:uint=mem / 1024;
+                var b:uint=mem % 1024;
+                var m:uint=k / 1024;
+                k=k % 1024;
+                return m + "m," + k + "k";
+            }
+
+			private function load():void {
+				// hideList();
+				var tar:Object=serverGrid.selectedItem;
+				// GlobalLoader.preloadByServer(tar.@ip, tar.@port);
+			}
+			
+            private function hideList():void {
+                listBar.visible=false;
+                listBar.includeInLayout=false;
+                hideBar.visible=true;
+                hideBar.includeInLayout=true;
+            }
+
+            private function showList():void {
+                listBar.visible=true;
+                listBar.includeInLayout=true;
+                hideBar.visible=false;
+                hideBar.includeInLayout=false;
+            }
+        ]]>
+    </mx:Script>
+</mx:Application>

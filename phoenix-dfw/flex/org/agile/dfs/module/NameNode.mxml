@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:comp="org.agile.component.*" width="100%" height="100%" layout="absolute" creationComplete="init();">
+	<!-- title header -->
+	<mx:Box width="100%" height="100%" paddingBottom="5" paddingLeft="10" paddingRight="10" paddingTop="5" backgroundColor="#d4cdca" cornerRadius="8" borderStyle="solid" borderColor="#b7babc"
+			borderThickness="1" horizontalGap="0">
+		<mx:Box width="100%" height="25" verticalAlign="middle" direction="horizontal">
+			<mx:Label text="{ 'Application Server (' + targetIp + ':' + targetPort + ')' }" fontSize="15" color="#010101"/>
+			<mx:Image source="res/img/button/connected.png"/>
+			<mx:Spacer width="100%"/>
+			<comp:IconButton click="{switchModule('home');}" width="80" iconSource="res/img/button/home.png" iconName="Home"/>
+			<comp:IconButton click="{switchModule('thread');}" width="80" iconSource="res/img/button/thread.gif" iconName="Thread"/>
+			<comp:IconButton click="{switchModule('memory');}" width="80" iconSource="res/img/button/memory.gif" iconName="Memory"/>
+			<comp:IconButton click="{switchModule('jdbc');}" width="80" iconSource="res/img/button/jdbc.gif" iconName="Jdbc"/>
+			<comp:IconButton click="{switchModule('service');}" width="80" iconSource="res/img/button/service.gif" iconName="Service"/>
+		</mx:Box>
+		<!-- business panel container -->
+		<mx:Box width="100%" height="100%" paddingBottom="6" paddingLeft="6" paddingRight="6" paddingTop="6" backgroundColor="#afa7a1" cornerRadius="8" alpha="1.0" borderStyle="solid"
+				borderColor="#757575" borderThickness="1">
+			<mx:Box width="100%" height="100%" backgroundColor="#f1f2f3">
+
+			</mx:Box>
+		</mx:Box>
+	</mx:Box>
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var targetIp:String="0";
+			[Bindable]
+			public var targetPort:int=0;
+
+			private function init():void {
+				var s:String=this.loaderInfo.url.toString();
+				var ipb:int=s.lastIndexOf("ip=");
+				var ipe:int=s.lastIndexOf("&");
+				targetIp=(ipb >= 0 && ipe >= 0) ? s.substring(ipb + 3, ipe) : 'error url';
+				var ptb:int=s.lastIndexOf("port=");
+				targetPort=Number(s.substring(ptb + 5));
+				// currentModuleContainer=homeContainer;
+			}
+
+			private function switchModule(name:String):void {
+//				if (currentModuleContainer) {
+//					currentModuleContainer.visible=false;
+//					currentModuleContainer.includeInLayout=false;
+//				}
+//				var targetModuleContainer:Box;
+//				if (name == "home") {
+//					targetModuleContainer=homeContainer;
+//				} else if (name == "thread") {
+//					targetModuleContainer=threadContainer;
+//				} else if (name == "memory") {
+//					targetModuleContainer=memoryContainer;
+//				} else if (name == "jdbc") {
+//					targetModuleContainer=jdbcContainer;
+//				} else if (name == "service") {
+//					targetModuleContainer=serviceContainer;
+//				}
+//				if (targetModuleContainer) {
+//					targetModuleContainer.includeInLayout=true;
+//					targetModuleContainer.visible=true;
+//					currentModuleContainer=targetModuleContainer;
+//				}			private function switchModule(name:String):void {
+//				if (currentModuleContainer) {
+//					currentModuleContainer.visible=false;
+//					currentModuleContainer.includeInLayout=false;
+//				}
+//				var targetModuleContainer:Box;
+//				if (name == "home") {
+//					targetModuleContainer=homeContainer;
+//				} else if (name == "thread") {
+//					targetModuleContainer=threadContainer;
+//				} else if (name == "memory") {
+//					targetModuleContainer=memoryContainer;
+//				} else if (name == "jdbc") {
+//					targetModuleContainer=jdbcContainer;
+//				} else if (name == "service") {
+//					targetModuleContainer=serviceContainer;
+//				}
+//				if (targetModuleContainer) {
+//					targetModuleContainer.includeInLayout=true;
+//					targetModuleContainer.visible=true;
+//					currentModuleContainer=targetModuleContainer;
+//				}
+			}
+		]]>
+	</mx:Script>
+</mx:Module>

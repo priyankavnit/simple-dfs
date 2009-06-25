@@ -1,0 +1,41 @@
+    <mx:Application   
+       xmlns:mx="http://www.adobe.com/2006/mxml"   
+       layout="absolute"   
+       implements="mx.rpc.IResponder"  
+       xmlns:hessian="hessian.mxml.*">   
+       <mx:Script>
+       		<![CDATA[
+       			import org.agile.dfs.action.UserAction; 
+              	import mx.controls.Alert;  
+              	import mx.rpc.events.ResultEvent;  
+              	import mx.rpc.AsyncToken;  
+                
+              private var action:UserAction = new UserAction();
+                
+              public function result(data:Object):void {  
+                  var event:ResultEvent = data as ResultEvent;  
+                  userName.text = event.result as String;  
+              }  
+                
+              public function fault(data:Object):void {  
+                  Alert.show("error: " + data);  
+              }  
+                
+              public function onClick():void {  
+                  // var userId : Number  = Number(userIdInput.text);  
+                  //getUserName 就是java服务端 MyHessianServiceImpl 中的 getUserName 方法  
+                  // var token:AsyncToken = myHessianService.getUserName.send(userId);  
+                  // token.addResponder(this);  
+                  action.create(null);
+              }  
+          ]]>
+      </mx:Script>  
+    
+      <hessian:HessianService id="myHessianService" destination="basicservice" showBusyCursor="true"/>  
+    
+      <mx:Label x="10" y="10" text="UserID"/>  
+     <mx:TextInput id="userIdInput" x="61" y="8"/>  
+     <mx:Button x="10" y="36" label="getUserName" click="onClick()"/>  
+     <mx:Label id="userName" x="122" y="38" text="" width="99" fontWeight="bold" fontSize="11"/>  
+       
+ </mx:Application>  
