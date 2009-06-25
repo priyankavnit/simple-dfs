@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+    <mx:Box width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="5"
+        horizontalAlign="center" verticalAlign="middle"
+        backgroundColor="#d4cdca" cornerRadius="8" alpha="1.0" borderStyle="solid" borderColor="#b7babc"  borderThickness="1"> 
+        <mx:ProgressBar id="process" height="15" width="150"  indeterminate="true" labelPlacement="center" label=" "/>
+          
+        <mx:Label id="tip" text="loading ... " />
+    </mx:Box>
+    
+</mx:Box>
