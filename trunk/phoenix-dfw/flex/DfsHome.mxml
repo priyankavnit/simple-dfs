@@ -31,7 +31,8 @@
             <!-- list datagrid -->
             <view:ServerGrid id="serverGrid" doubleClickEnabled="true" doubleClick="load();"/>
         </mx:Box>
-        <mx:Box id="moduleLoader" backgroundColor="#f1f3f5" width="100%" height="100%">
+        <mx:Box id="moduleLoader" width="100%" height="100%" backgroundColor="#d4cdca" cornerRadius="8" borderStyle="solid"
+                borderColor="#b7babc" borderThickness="1" >
 
         </mx:Box>
         <!--<view:LoaderBox id="moduleLoader" width="100%" height="100%" />-->
@@ -53,9 +54,10 @@
             [Bindable]
             private var menus:ArrayCollection=new ArrayCollection([{ label: "Dashboard", data: 1 }, { label: "Message Center", data: 2 }, { label: "192.168.1.11", data: 3 }, { label: "192.168.1.15", data: 4 }]);
 
-			private var loader:ModuleAction = new ModuleAction(moduleLoader);
+			private var loader:ModuleAction;
 			
             private function init():void {
+            	loader = new ModuleAction(moduleLoader);
                 var timer:Timer=new Timer(3 * 1000, 0);
                 timer.start();
                 timer.addEventListener(TimerEvent.TIMER, function():void {
