@@ -4,7 +4,8 @@
 		<mx:Label text="Total NameSpace On the Name Node" fontWeight="bold"/>
 	</mx:Box>
 
-	<mx:DataGrid width="100%" height="100%" dataProvider="{servers}" borderThickness="1" backgroundColor="#f1f2f5" borderStyle="solid" borderSides="top,bottom" borderColor="#b7babc" color="#575957" verticalGridLines="false">
+	<mx:DataGrid width="100%" height="100%" dataProvider="{servers}" borderThickness="1" backgroundColor="#f1f2f5" borderStyle="solid" borderSides="top,bottom" borderColor="#b7babc" color="#575957"
+				 verticalGridLines="false">
 		<mx:columns>
 			<mx:DataGridColumn headerText="NO" textAlign="center" width="50" resizable="false" labelFunction="rowNum"/>
 			<mx:DataGridColumn dataField="@name" headerText="Name" textAlign="center" width="150" resizable="false"/>
@@ -15,13 +16,15 @@
 
 	</mx:DataGrid>
 	<mx:Box width="100%" direction="horizontal" horizontalAlign="right" paddingTop="1" paddingRight="7" paddingBottom="7">
-		<mx:Button label="create" click="openNameSpaceDialog();" />
-		<mx:Button label="delete" />
-		<mx:Button label="modify" />
+		<mx:Button label="create" click="openNameSpaceDialog();"/>
+		<mx:Button label="delete"/>
+		<mx:Button label="modify"/>
 	</mx:Box>
 
 	<mx:Script>
 		<![CDATA[
+			import org.agile.dfs.util.DfsPopup;
+			import org.agile.framework.util.PhoenixPopUp;
 			import mx.managers.PopUpManager;
 			import mx.core.Application;
 			import mx.collections.ArrayCollection;
@@ -78,7 +81,6 @@
 
 			private function indexOfTarget(collection:ArrayCollection, item:XML):int {
 				var key:String=item.@ip + ":" + item.@port;
-
 				for (var i:int=0, l:int=collection.length; i < l; i++) {
 					var o:Object=collection.getItemAt(i);
 					var k:String=o.@ip + ":" + o.@port;
@@ -88,16 +90,10 @@
 				}
 				return -1;
 			}
-			
+
 			public function openNameSpaceDialog():void {
-				var app:Application=Application.application as Application;
-				var dialog:DfsDialog=PopUpManager.createPopUp(app, DfsDialog, true)as DfsDialog;
-				var form:NameSpaceForm=new NameSpaceForm();
-				// dchart.showDataTips=true;
-				dialog.widget=form;
-				dialog.title="Dfs NameSpace Information";
-				PopUpManager.centerPopUp(dialog);
-			}			
+				DfsPopup.popup("Dfs NameSpace Information", new NameSpaceForm());
+			}
 		]]>
 	</mx:Script>
 </mx:Box>
