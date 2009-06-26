@@ -8,7 +8,7 @@ package org.agile.dfs.manager {
 	import org.agile.framework.hessian.DefaultHessianService;
 
 	public class DfsService {
-		private static var url:String=""; //Configuration.hessianConnectionUrl;
+		private static var url:String="../service"; //Configuration.hessianConnectionUrl;
 		private static var services:ArrayCollection=new ArrayCollection();
 
 		public function DfsService() {
