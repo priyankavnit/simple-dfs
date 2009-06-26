@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" horizontalAlign="center" verticalAlign="middle" width="100%" height="100%"
-		  backgroundColor="#f1f2f3" titleStyleName="myPanelTitle" borderThicknessTop="1" borderThicknessRight="1" borderThicknessBottom="1"
-		  borderThicknessLeft="1">
-	<mx:Style>
-          .myPanelTitle {
-              textIndent: 5;
-              background-color:#ff0000;
-              font-size:16;
-              font-weight:bold;
-          }
-          </mx:Style>
-	<mx:Form width="80%" height="100%">
-		<mx:FormItem label="用户名/邮箱：" color="#131313" width="100%">
-			<mx:TextInput id="userId" maxChars="50" width="100%"/>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:entity="org.agile.dfs.entity.*" horizontalAlign="center" verticalAlign="middle" width="100%" height="100%" backgroundColor="#f1f2f3">
+	<mx:Form width="90%">
+		<mx:FormItem label="Space Name：" color="#131313" width="100%">
+			<mx:TextInput id="spaceName" maxChars="50" width="100%"/>
 		</mx:FormItem>
-		<mx:FormItem label="密  码：" color="#131313" width="100%">
-			<mx:TextInput id="passWord" maxChars="50" width="100%"/>
+		<mx:FormItem label="Url：" color="#131313" width="100%">
+			<mx:TextInput id="url" maxChars="50" width="100%"/>
 		</mx:FormItem>
-		<!--
-			 <mx:FormItem label="验证码：" color="#131313" width="100%">
-			 <mx:TextInput id="checkCode" maxChars="50" width="100%"/>
-			 </mx:FormItem>
-		-->
+		<mx:FormItem label="Status：" color="#131313" width="100%">
+			<mx:TextInput id="status" maxChars="50" width="100%"/>
+		</mx:FormItem>
+		<mx:FormItem label="Description：" color="#131313" width="100%">
+			<mx:TextInput id="description" maxChars="50" width="100%"/>
+		</mx:FormItem>
 	</mx:Form>
-	<mx:ControlBar horizontalAlign="right">
-		<mx:Button label=" 登 录 "/>
+	<entity:NameSpace id="entity" name="{spaceName.text}" url="{url.text}" status="{status.text}"/>
+	<mx:ControlBar width="90%" horizontalAlign="right">
+		<mx:Button label=" submit " click="save();"/>
 	</mx:ControlBar>
-</mx:Panel>
+	<mx:Script>
+		<![CDATA[
+			import org.agile.dfs.action.NameSpaceAction;
+			import org.agile.framework.util.PhoenixPopUp;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+			private var action:NameSpaceAction=new NameSpaceAction();
+
+			private function save():void { 
+				action.create(entity);
+				PhoenixPopUp.removePopUp(null);
+			}
+		]]>
+	</mx:Script>
+</mx:Box>
