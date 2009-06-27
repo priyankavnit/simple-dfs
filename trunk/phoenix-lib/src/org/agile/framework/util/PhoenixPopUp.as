@@ -1,9 +1,7 @@
 package org.agile.framework.util {
 	import flash.display.DisplayObject;
-	
-	import mx.core.Application;
+
 	import mx.core.IFlexDisplayObject;
-	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
 
 	public class PhoenixPopUp extends PopUpManager {
@@ -30,7 +28,7 @@ package org.agile.framework.util {
 
 		public static function centerPopUp(popUp:IFlexDisplayObject):void {
 			PopUpManager.centerPopUp(popUp);
-			last=popUp;
+			last = popUp;
 		}
 	}
 }
