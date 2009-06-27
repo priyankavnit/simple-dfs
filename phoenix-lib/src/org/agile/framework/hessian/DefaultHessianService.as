@@ -1,11 +1,11 @@
 package org.agile.framework.hessian {
 	
 	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.utils.flash_proxy;
 	
 	import hessian.client.HessianService;
 	
-	import mx.controls.Alert;
 	import mx.rpc.AbstractOperation;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.IResponder;
@@ -21,10 +21,14 @@ package org.agile.framework.hessian {
 		public function invoke(method:String,args:Array=null,onResult:Function=null,onFault:Function=null):void{
 			var responder:IResponder = new DefaultHessianResponder(onResult,onFault); 
 			var op:AbstractOperation = getOperation(getLocalName(method));
-			op.addEventListener("ioError",function(event:IOErrorEvent):void{
-				// Alert.show("ERROR");
+			// handle some special exception
+			op.addEventListener(IOErrorEvent.IO_ERROR,function(event:IOErrorEvent):void{ 
 				onFault(event);
 			});
+			op.addEventListener("Error",function(event:SecurityErrorEvent):void{ 
+				onFault(event);
+			});			
+			
         	var tk:AsyncToken;
         	if(args==null){
         		tk = op.send();
