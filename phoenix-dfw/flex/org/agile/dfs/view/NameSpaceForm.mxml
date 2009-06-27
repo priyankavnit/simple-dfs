@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:entity="org.agile.dfs.entity.*" horizontalAlign="center" verticalAlign="middle" width="100%" height="100%" backgroundColor="#f1f2f3">
-	<mx:Form width="90%">
+	<mx:Form width="90%" paddingBottom="5">
 		<mx:FormItem label="Space Name：" color="#131313" width="100%">
 			<mx:TextInput id="spaceName" maxChars="50" width="100%"/>
 		</mx:FormItem>
 		<mx:FormItem label="Url：" color="#131313" width="100%">
 			<mx:TextInput id="url" maxChars="50" width="100%"/>
 		</mx:FormItem>
-		<mx:FormItem label="Status：" color="#131313" width="100%">
-			<mx:TextInput id="status" maxChars="50" width="100%"/>
-		</mx:FormItem>
+		<!--
+			 <mx:FormItem label="Status：" color="#131313" width="100%">
+			 <mx:ComboBox id="status" width="100%" dataProvider="{[{label:'NORMAL',data:'NORMAL'},{label:'INIT',data:'INIT'},{label:'TRASH',data:'TRASH'}]}"/>
+			 </mx:FormItem>
+		-->
 		<mx:FormItem label="Description：" color="#131313" width="100%">
-			<mx:TextInput id="description" maxChars="50" width="100%"/>
+			<!--<mx:TextInput id="description" maxChars="50" width="100%"/>-->
+			<mx:TextArea id="description" width="100%" height="100"/>
 		</mx:FormItem>
 	</mx:Form>
-	<entity:NameSpace id="entity" name="{spaceName.text}" url="{url.text}" status="{status.text}"/>
 	<mx:ControlBar width="90%" horizontalAlign="right">
 		<mx:Button label=" submit " click="save();"/>
 	</mx:ControlBar>
+	<entity:NameSpace id="entity" name="{spaceName.text}" url="{url.text}" description="{description.text}"/>
 	<mx:Script>
 		<![CDATA[
 			import org.agile.dfs.action.NameSpaceAction;
@@ -25,11 +28,18 @@
 			import mx.core.IFlexDisplayObject;
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
-			private var action:NameSpaceAction=new NameSpaceAction();
 
-			private function save():void { 
-				action.create(entity);
-				PhoenixPopUp.removePopUp(null);
+			public var callback:Function;
+						
+			[Bindable] 
+			private var action:NameSpaceAction=new NameSpaceAction();
+			
+			private function save():void {
+				action.create(entity, function(data:Object):void{
+					if(callback!=null){
+						callback(data);
+					}
+				});
 			}
 		]]>
 	</mx:Script>

@@ -14,10 +14,26 @@ package org.agile.dfs.entity {
     [Bindable]
     public class NameSpaceBase implements IExternalizable {
 
+        private var _createTime:Date;
+        private var _description:String;
         private var _id:String;
         private var _name:String;
         private var _status:String;
         private var _url:String;
+
+        public function set createTime(value:Date):void {
+            _createTime = value;
+        }
+        public function get createTime():Date {
+            return _createTime;
+        }
+
+        public function set description(value:String):void {
+            _description = value;
+        }
+        public function get description():String {
+            return _description;
+        }
 
         public function set id(value:String):void {
             _id = value;
@@ -48,6 +64,8 @@ package org.agile.dfs.entity {
         }
 
         public function readExternal(input:IDataInput):void {
+            _createTime = input.readObject() as Date;
+            _description = input.readObject() as String;
             _id = input.readObject() as String;
             _name = input.readObject() as String;
             _status = input.readObject() as String;
@@ -55,6 +73,8 @@ package org.agile.dfs.entity {
         }
 
         public function writeExternal(output:IDataOutput):void {
+            output.writeObject(_createTime);
+            output.writeObject(_description);
             output.writeObject(_id);
             output.writeObject(_name);
             output.writeObject(_status);
