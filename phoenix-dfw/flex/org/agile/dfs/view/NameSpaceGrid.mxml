@@ -23,14 +23,14 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.agile.dfs.util.DfsPopup;
-			import org.agile.framework.util.PhoenixPopUp;
 			import mx.managers.PopUpManager;
 			import mx.core.Application;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.rpc.http.mxml.HTTPService;
+			
 			import org.agile.framework.util.DateUtil;
+			import org.agile.dfs.util.DfsPopup; 
 
 			private static var idNo:Number=0;
 			private static var timer:Timer=new Timer(10 * 1000, 0);
