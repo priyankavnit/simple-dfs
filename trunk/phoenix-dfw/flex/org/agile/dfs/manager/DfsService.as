@@ -1,5 +1,5 @@
 package org.agile.dfs.manager {
-	import flash.events.Event;
+	import flash.events.SecurityErrorEvent;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
@@ -8,7 +8,7 @@ package org.agile.dfs.manager {
 	import org.agile.framework.hessian.DefaultHessianService;
 
 	public class DfsService {
-		private static var url:String="../service"; //Configuration.hessianConnectionUrl;
+		private static var url:String="http://192.168.1.218:8080/phoenix-dfw/hessian"; //Configuration.hessianConnectionUrl;
 		private static var services:ArrayCollection=new ArrayCollection();
 
 		public function DfsService() {
@@ -17,6 +17,14 @@ package org.agile.dfs.manager {
 		public static function invoke(service:String, method:String, args:Array, onResult:Function=null, onFault:Function=null):void {
 			try {
 				_invoke(service, method, args, onResult, onFault);
+			} catch (serr:SecurityErrorEvent) {
+				if (onFault == null) {
+					// var f:FaultEvent=data as FaultEvent;
+					var smsg:String="调用" + service + "." + method + "异常! \n" + serr;
+					Alert.show(smsg, "调用服务异常");
+				} else {
+					onFault(serr);
+				}
 			} catch (err:Error) {
 				if (onFault == null) {
 					// var f:FaultEvent=data as FaultEvent;
