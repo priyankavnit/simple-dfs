@@ -6,7 +6,7 @@ import org.agile.dfs.entity.NameSpace;
 
 public interface NameSpaceService {
 
-    public void create(final NameSpace ns);
+    public NameSpace create(final NameSpace ns);
 
     public List queryAll();
 
