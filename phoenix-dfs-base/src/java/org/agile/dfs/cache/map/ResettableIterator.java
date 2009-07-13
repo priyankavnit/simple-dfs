@@ -14,33 +14,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.apache;
+package org.agile.dfs.cache.map;
 
-/**
- * Defines an iterator that operates over an ordered <code>Map</code>.
+import java.util.Iterator;
+
+/** 
+ * Defines an iterator that can be reset back to an initial state.
  * <p>
- * This iterator allows both forward and reverse iteration through the map.
- *  
+ * This interface allows an iterator to be repeatedly reused.
+ *
  * @since Commons Collections 3.0
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- *
+ * 
  * @author Stephen Colebourne
  */
-public interface OrderedMapIterator extends MapIterator, OrderedIterator {
-    
-    /**
-     * Checks to see if there is a previous entry that can be iterated to.
-     *
-     * @return <code>true</code> if the iterator has a previous element
-     */
-    boolean hasPrevious();
+public interface ResettableIterator extends Iterator {
 
     /**
-     * Gets the previous <em>key</em> from the <code>Map</code>.
-     *
-     * @return the previous key in the iteration
-     * @throws java.util.NoSuchElementException if the iteration is finished
+     * Resets the iterator back to the position at which the iterator
+     * was created.
      */
-    Object previous();
+    public void reset();
 
 }

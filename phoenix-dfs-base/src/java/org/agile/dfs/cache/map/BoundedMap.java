@@ -14,35 +14,36 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.apache;
+package org.agile.dfs.cache.map;
 
-import java.util.Iterator;
+import java.util.Map;
 
 /**
- * Defines an iterator that operates over an ordered collection.
+ * Defines a map that is bounded in size.
  * <p>
- * This iterator allows both forward and reverse iteration through the collection.
- *  
+ * The size of the map can vary, but it can never exceed a preset 
+ * maximum number of elements. This interface allows the querying of details
+ * associated with the maximum number of elements.
+ *
  * @since Commons Collections 3.0
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- *
+ * 
  * @author Stephen Colebourne
  */
-public interface OrderedIterator extends Iterator {
+public interface BoundedMap extends Map {
 
     /**
-     * Checks to see if there is a previous element that can be iterated to.
+     * Returns true if this map is full and no new elements can be added.
      *
-     * @return <code>true</code> if the iterator has a previous element
+     * @return <code>true</code> if the map is full
      */
-    boolean hasPrevious();
+    boolean isFull();
 
     /**
-     * Gets the previous element from the collection.
+     * Gets the maximum size of the map (the bound).
      *
-     * @return the previous element in the iteration
-     * @throws java.util.NoSuchElementException if the iteration is finished
+     * @return the maximum number of elements the map can hold
      */
-    Object previous();
+    int maxSize();
 
 }
