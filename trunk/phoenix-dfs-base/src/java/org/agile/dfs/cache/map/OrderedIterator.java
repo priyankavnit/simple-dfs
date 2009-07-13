@@ -14,34 +14,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.apache;
+package org.agile.dfs.cache.map;
+
+import java.util.Iterator;
 
 /**
- * Defines a simple key value pair.
+ * Defines an iterator that operates over an ordered collection.
  * <p>
- * A Map Entry has considerable additional semantics over and above a simple
- * key-value pair. This interface defines the minimum key value, with just the
- * two get methods.
- *
+ * This iterator allows both forward and reverse iteration through the collection.
+ *  
  * @since Commons Collections 3.0
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- * 
+ *
  * @author Stephen Colebourne
  */
-public interface KeyValue {
+public interface OrderedIterator extends Iterator {
 
     /**
-     * Gets the key from the pair.
+     * Checks to see if there is a previous element that can be iterated to.
      *
-     * @return the key 
+     * @return <code>true</code> if the iterator has a previous element
      */
-    Object getKey();
+    boolean hasPrevious();
 
     /**
-     * Gets the value from the pair.
+     * Gets the previous element from the collection.
      *
-     * @return the value
+     * @return the previous element in the iteration
+     * @throws java.util.NoSuchElementException if the iteration is finished
      */
-    Object getValue();
+    Object previous();
 
 }

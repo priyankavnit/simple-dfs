@@ -14,26 +14,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.apache;
+package org.agile.dfs.cache.map;
 
-import java.util.Iterator;
 
 /** 
- * Defines an iterator that can be reset back to an initial state.
- * <p>
- * This interface allows an iterator to be repeatedly reused.
+ * Provides an implementation of an empty map iterator.
  *
- * @since Commons Collections 3.0
+ * @since Commons Collections 3.1
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
  * 
  * @author Stephen Colebourne
  */
-public interface ResettableIterator extends Iterator {
+public class EmptyMapIterator extends AbstractEmptyIterator implements MapIterator, ResettableIterator {
 
     /**
-     * Resets the iterator back to the position at which the iterator
-     * was created.
+     * Singleton instance of the iterator.
+     * @since Commons Collections 3.1
      */
-    public void reset();
+    public static final MapIterator INSTANCE = new EmptyMapIterator();
+
+    /**
+     * Constructor.
+     */
+    protected EmptyMapIterator() {
+        super();
+    }
 
 }

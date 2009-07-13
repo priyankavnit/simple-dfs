@@ -14,30 +14,34 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.apache;
+package org.agile.dfs.cache.map;
 
-
-/** 
- * Provides an implementation of an empty map iterator.
+/**
+ * Defines a simple key value pair.
+ * <p>
+ * A Map Entry has considerable additional semantics over and above a simple
+ * key-value pair. This interface defines the minimum key value, with just the
+ * two get methods.
  *
- * @since Commons Collections 3.1
+ * @since Commons Collections 3.0
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
  * 
  * @author Stephen Colebourne
  */
-public class EmptyMapIterator extends AbstractEmptyIterator implements MapIterator, ResettableIterator {
+public interface KeyValue {
 
     /**
-     * Singleton instance of the iterator.
-     * @since Commons Collections 3.1
+     * Gets the key from the pair.
+     *
+     * @return the key 
      */
-    public static final MapIterator INSTANCE = new EmptyMapIterator();
+    Object getKey();
 
     /**
-     * Constructor.
+     * Gets the value from the pair.
+     *
+     * @return the value
      */
-    protected EmptyMapIterator() {
-        super();
-    }
+    Object getValue();
 
 }
