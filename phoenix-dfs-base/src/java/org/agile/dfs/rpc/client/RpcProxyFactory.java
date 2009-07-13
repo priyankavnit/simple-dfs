@@ -9,7 +9,7 @@ public class RpcProxyFactory {
     /**
      * 
      * @param endpoint
-     *            service location flag, ex:tcp://192.168.1.9, http://www.some.com/service
+     *            service location flag, ex:tcp://192.168.1.9:8080, http://www.some.com/service
      * @return
      */
     @SuppressWarnings("unchecked")

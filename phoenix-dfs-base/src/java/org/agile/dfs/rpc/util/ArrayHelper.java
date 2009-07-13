@@ -1,5 +1,7 @@
 package org.agile.dfs.rpc.util;
 
+import java.lang.reflect.Array;
+
 @SuppressWarnings("unchecked")
 public class ArrayHelper<T> {
 
@@ -14,17 +16,18 @@ public class ArrayHelper<T> {
         if (size >= data.length) {
             T[] tmp = (T[]) new Object[data.length + data.length / 2];
             System.arraycopy(data, 0, tmp, 0, size);
+            data = tmp;
         }
         data[size++] = item;
     }
 
     public T[] array() {
-        if (size == data.length) {
-            return data;
-        } else {
-            T[] tmp = (T[]) new Object[size];
+        if (size > 0) {
+            T[] tmp = (T[]) Array.newInstance(data[0].getClass(), size);
             System.arraycopy(data, 0, tmp, 0, size);
             return tmp;
+        } else {
+            return null;
         }
     }
 }

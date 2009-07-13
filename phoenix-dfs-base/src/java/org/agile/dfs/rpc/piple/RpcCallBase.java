@@ -1,8 +1,5 @@
 package org.agile.dfs.rpc.piple;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.agile.dfs.rpc.endpoint.Endpointable;
 
 public class RpcCallBase {
@@ -12,8 +9,5 @@ public class RpcCallBase {
     public RpcCallBase(Endpointable endpoint) {
         this.endpoint = endpoint;
     }
-
-    public Map readHeader() {
-        return new HashMap();
-    }
+ 
 }

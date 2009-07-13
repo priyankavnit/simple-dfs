@@ -10,14 +10,11 @@ import org.agile.dfs.rpc.piple.RpcResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RpcHandler {
+public abstract class RpcHandler {
     private static final Logger logger = LoggerFactory.getLogger(RpcHandler.class);
     private static final RpcCallHelper helper = RpcCallHelper.instance();
-    private static final ReflectInvoker invoker = new ReflectInvoker();
-    private static final String PROTOCOL_FLAG = "agile.chen";
 
-    public RpcHandler() {
-    }
+    private static final String PROTOCOL_FLAG = "agile.chen";
 
     public void handle(Endpointable endpoint) throws IOException {
         RpcRequest req = receive(endpoint);
@@ -25,7 +22,7 @@ public class RpcHandler {
             // TODO impl, notice client
             endpoint.close();
         } else {
-            Object result = invoker.invoke(req);
+            Object result = getRpcInvoker().invoke(req);
             RpcResponse resp = new RpcResponse();
             resp.setResult(result);
             send(endpoint, resp);
@@ -90,4 +87,6 @@ public class RpcHandler {
         }
         return num == len ? new String(buf) : null;
     }
+
+    public abstract RpcInvoker getRpcInvoker();
 }
