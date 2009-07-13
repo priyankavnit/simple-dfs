@@ -38,8 +38,7 @@ public abstract class RpcServer extends SimpleTcpServer {
                 socket.setKeepAlive(true);
                 Endpointable endpoint = new TcpEndpoint(socket);
                 RpcRunnable run = new RpcRunnable(endpoint, this.getRpcHandler());
-                this.execute(run);
-                // handle(endpoint);
+                this.execute(run); 
             } catch (IOException ioe) {
 
             } catch (Exception e) {

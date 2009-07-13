@@ -24,9 +24,10 @@ public class SocketBuilder {
     }
 
     public Socket build(String ip, int port) throws IOException {
+        // TODO l1, cache socket
         Socket socket = new Socket();
         socket.connect(new InetSocketAddress(ip, port), 3 * 1000);
-        socket.setSoTimeout(300 * 1000);
+        socket.setSoTimeout(3 * 1000);
         return socket;
     }
 }

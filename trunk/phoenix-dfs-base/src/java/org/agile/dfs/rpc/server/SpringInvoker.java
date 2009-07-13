@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import org.agile.dfs.rpc.exception.ReflectOperateException;
 import org.agile.dfs.rpc.piple.RpcRequest;
 
-public class ReflectInvoker implements RpcInvoker {
- 
+public class SpringInvoker implements RpcInvoker {
+
     public Object invoke(String clzName, String methodName, Object[] args) throws ReflectOperateException {
         try {
             return doInvoke(clzName, methodName, args);
@@ -14,20 +14,24 @@ public class ReflectInvoker implements RpcInvoker {
             throw new ReflectOperateException("Fail to reflect invoke " + clzName + ":" + methodName, e);
         }
     }
- 
+
     public Object invoke(RpcRequest req) throws ReflectOperateException {
         return this.invoke(req.getInterfaceClz(), req.getMethodName(), req.getArgs());
     }
-
-    @SuppressWarnings("unchecked")
+ 
     private Object doInvoke(String clzName, String methodName, Object[] args) throws Exception {
-        // TODO l2, cache instance
-        Class clz = Class.forName(clzName + "Impl");
-        Object ins = clz.newInstance();
-
+        Object ins = getInstance(clzName);
         Method method = getMethod(ins.getClass(), methodName, args);
         Object res = method.invoke(ins, args);
         return res;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object getInstance(String clzName) throws Exception {
+        // TODO l2, cache instance
+        Class clz = Class.forName(clzName + "Impl");
+        Object ins = clz.newInstance();
+        return ins;
     }
 
     @SuppressWarnings("unchecked")
