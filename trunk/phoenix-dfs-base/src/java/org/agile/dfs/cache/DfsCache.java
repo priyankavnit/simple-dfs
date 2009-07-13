@@ -1,6 +1,6 @@
 package org.agile.dfs.cache;
 
-import org.agile.dfs.cache.map.LRUMap;
+import org.agile.dfs.cache.apache.LRUMap;
 
 /**
  * Simple lru cache impl by apache's lru map
