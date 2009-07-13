@@ -1,0 +1,9 @@
+CREATE TABLE {tableName} (
+	id VARCHAR(20) NOT NULL,
+	parentId VARCHAR(20) NOT NULL,
+	name VARCHAR(200) NOT NULL,
+	status VARCHAR(10) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE INDEX PID_NAME_INX ON {tableName} (parentId,name); 
