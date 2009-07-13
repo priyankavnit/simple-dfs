@@ -14,39 +14,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.map;
+package org.agile.dfs.cache.apache;
 
-import java.util.Iterator;
 
 /** 
- * Provides an implementation of an empty iterator.
- * <p>
- * This class provides an implementation of an empty iterator.
- * This class provides for binary compatability between Commons Collections
- * 2.1.1 and 3.1 due to issues with <code>IteratorUtils</code>.
+ * Provides an implementation of an empty ordered iterator.
  *
- * @since Commons Collections 2.1.1 and 3.1
+ * @since Commons Collections 3.1
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
  * 
  * @author Stephen Colebourne
  */
-public class EmptyIterator extends AbstractEmptyIterator implements ResettableIterator {
+public class EmptyOrderedIterator extends AbstractEmptyIterator implements OrderedIterator, ResettableIterator {
 
     /**
      * Singleton instance of the iterator.
      * @since Commons Collections 3.1
      */
-    public static final ResettableIterator RESETTABLE_INSTANCE = new EmptyIterator();
-    /**
-     * Singleton instance of the iterator.
-     * @since Commons Collections 2.1.1 and 3.1
-     */
-    public static final Iterator INSTANCE = RESETTABLE_INSTANCE;
+    public static final OrderedIterator INSTANCE = new EmptyOrderedIterator();
 
     /**
      * Constructor.
      */
-    protected EmptyIterator() {
+    protected EmptyOrderedIterator() {
         super();
     }
 

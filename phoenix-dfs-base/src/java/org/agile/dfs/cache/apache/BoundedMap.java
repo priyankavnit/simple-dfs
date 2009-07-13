@@ -14,30 +14,36 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.agile.dfs.cache.map;
+package org.agile.dfs.cache.apache;
 
+import java.util.Map;
 
-/** 
- * Provides an implementation of an empty ordered map iterator.
+/**
+ * Defines a map that is bounded in size.
+ * <p>
+ * The size of the map can vary, but it can never exceed a preset 
+ * maximum number of elements. This interface allows the querying of details
+ * associated with the maximum number of elements.
  *
- * @since Commons Collections 3.1
+ * @since Commons Collections 3.0
  * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
  * 
  * @author Stephen Colebourne
  */
-public class EmptyOrderedMapIterator extends AbstractEmptyIterator implements OrderedMapIterator, ResettableIterator {
+public interface BoundedMap extends Map {
 
     /**
-     * Singleton instance of the iterator.
-     * @since Commons Collections 3.1
+     * Returns true if this map is full and no new elements can be added.
+     *
+     * @return <code>true</code> if the map is full
      */
-    public static final OrderedMapIterator INSTANCE = new EmptyOrderedMapIterator();
+    boolean isFull();
 
     /**
-     * Constructor.
+     * Gets the maximum size of the map (the bound).
+     *
+     * @return the maximum number of elements the map can hold
      */
-    protected EmptyOrderedMapIterator() {
-        super();
-    }
+    int maxSize();
 
 }
