@@ -27,13 +27,6 @@ public class NameStarter extends Thread {
         Environment.init();
         NameStarter starter = new NameStarter();
         starter.start();
-
-        // while (true) {
-        // try {
-        // Thread.sleep(60 * 1000);
-        // } catch (InterruptedException e) {
-        // // do nothing
-        // }
-        // }
+ 
     }
 }

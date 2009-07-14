@@ -3,6 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+	<bean id="global.member.UserManager" parent="framework.AbstractProxyManager">
+		<property name="target">
+			<bean class="org.agile.dfs.name.service.FileServiceImpl" parent="framework.AbstractDaoManager" />
+		</property>
+	</bean>
 	<bean id="dfs.FileService" class="org.agile.dfs.name.service.FileServiceImpl"></bean>
 	<bean id="dfs.SpaceService" class="org.agile.dfs.name.service.SpaceServiceImpl"></bean>
 </beans>

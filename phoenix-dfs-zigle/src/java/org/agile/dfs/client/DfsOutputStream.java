@@ -38,8 +38,10 @@ public class DfsOutputStream extends OutputStream {
 
     /* override parent class method */
     public void close() throws IOException {
-        flush();
-        cache.close();
+        if (cache != null) {
+            cache.flush();
+            cache.close();
+        }
         logger.info("Close dfs output stream.");
     }
 
