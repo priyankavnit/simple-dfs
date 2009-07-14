@@ -1,36 +1,31 @@
-package org.agile.dfs.rpc.server;
+package org.agile.dfs.rpc.client;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.agile.dfs.rpc.endpoint.Endpointable;
+import org.agile.dfs.rpc.piple.RpcCallBase;
 import org.agile.dfs.rpc.piple.RpcCallHelper;
 import org.agile.dfs.rpc.piple.RpcRequest;
 import org.agile.dfs.rpc.piple.RpcResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class RpcHandler {
-    private static final Logger logger = LoggerFactory.getLogger(RpcHandler.class);
+public class AsyncCaller extends RpcCallBase {
+    private static final Logger logger = LoggerFactory.getLogger(AsyncCaller.class);
     private static final RpcCallHelper helper = RpcCallHelper.instance();
-
     private static final String PROTOCOL_FLAG = "agile.chen";
 
-    public void handle(Endpointable endpoint) throws IOException {
-        RpcRequest req = receive(endpoint);
-        if (req == null) {
-            // TODO impl, notice client
-            endpoint.close();
-        } else {
-            Object result = getRpcInvoker().invoke(req);
-            RpcResponse resp = new RpcResponse();
-            resp.setResult(result);
-            send(endpoint, resp);
-        }
+    public AsyncCaller(Endpointable endpoint) {
+        super(endpoint);
     }
 
-    protected void send(Endpointable endpoint, RpcResponse resp) throws IOException {
-        byte[] bs = helper.marshall(resp).getBytes();
+    public void call(RpcRequest req) throws IOException {
+        this.send(req);
+    }
+
+    private void send(RpcRequest req) throws IOException {
+        byte[] bs = helper.marshall(req).getBytes();
         endpoint.write(PROTOCOL_FLAG.getBytes());
         endpoint.write(' ');
         String len = String.valueOf(bs.length);
@@ -40,21 +35,21 @@ public abstract class RpcHandler {
         endpoint.flush();
     }
 
-    protected RpcRequest receive(Endpointable endpoint) throws IOException {
-        String flag = this.read(endpoint, (byte) ' ');
-        String lens = this.read(endpoint, (byte) ' ');
+    private RpcResponse receive() throws IOException {
+        String flag = this.read((byte) ' ');
+        String lens = this.read((byte) ' ');
         if (PROTOCOL_FLAG.equals(flag)) {
             int len = Integer.parseInt(lens);
-            String body = readFixed(endpoint, len);
-            RpcRequest req = helper.buildRequest(body);
-            return req;
+            String body = readFixed(len);
+            RpcResponse resp = helper.buildResponse(body);
+            return resp;
         } else {
             logger.error("Protocol header error! " + flag + " " + lens);
         }
         return null;
     }
 
-    private String read(Endpointable endpoint, byte stop) throws IOException {
+    private String read(byte stop) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(10);
         for (int i = 0; i < 1 * 50; i++) {
             int k = endpoint.read();
@@ -71,22 +66,17 @@ public abstract class RpcHandler {
         return bos.toString();
     }
 
-    private String readFixed(Endpointable endpoint, int len) throws IOException {
+    private String readFixed(int len) throws IOException {
         byte[] buf = new byte[len];
-        int num = endpoint.read(buf);
-        if (num == -1) {
-            throw new IOException("Connection reset");
-        }
+        int num = endpoint.read(buf, 0, len);
         while (num != -1 && num < len) {
             int tmp = endpoint.read(buf, num, len - num);
             if (tmp != -1) {
                 num += tmp;
             } else {
-                throw new IOException("Connection reset");
+                break;
             }
         }
         return num == len ? new String(buf) : null;
     }
-
-    public abstract RpcInvoker getRpcInvoker();
 }

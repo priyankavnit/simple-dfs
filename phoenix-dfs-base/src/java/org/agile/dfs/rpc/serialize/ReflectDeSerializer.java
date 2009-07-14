@@ -31,13 +31,16 @@ public class ReflectDeSerializer implements RpcDeSerializer {
         }
     }
 
-    private Object _read(String s) throws ClassNotFoundException {
+    private Object _read(String s) throws ClassNotFoundException { 
         int cb = 6;
         int ce = s.indexOf("</c>", cb);
         String cstr = s.substring(cb, ce);
 
         // simple object
         if (cstr.indexOf(".") == -1) {
+            if (cstr.equals("null")) {
+                return null;
+            }
             int vb = ce + 4 + 3;
             int ve = s.indexOf("</v>", vb);
             String val = s.substring(vb, ve);

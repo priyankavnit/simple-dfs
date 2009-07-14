@@ -21,13 +21,13 @@ public class ArrayHelper<T> {
         data[size++] = item;
     }
 
-    public T[] array() {
+    public T[] array(Class clz) {
         if (size > 0) {
-            T[] tmp = (T[]) Array.newInstance(data[0].getClass(), size);
+            T[] tmp = (T[]) Array.newInstance(clz, size);
             System.arraycopy(data, 0, tmp, 0, size);
             return tmp;
         } else {
-            return null;
+            return (T[]) Array.newInstance(clz, 0);
         }
     }
 }

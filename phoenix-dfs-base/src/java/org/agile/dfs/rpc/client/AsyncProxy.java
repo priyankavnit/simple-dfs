@@ -11,36 +11,30 @@ import org.agile.dfs.rpc.piple.RpcResponse;
 import org.agile.dfs.util.MulValueThreadLocal;
 
 @SuppressWarnings("unchecked")
-public class RpcProxy {
+public class AsyncProxy {
     private static final MulValueThreadLocal local = MulValueThreadLocal.newInstance();
     private static final EndpointFactory endpointMgr = new EndpointFactory();
     private Endpointable endpoint;
     private Class interfaceClz;
-    private RpcCaller caller;
+    private AsyncCaller caller;
 
-    public RpcProxy(String endstring, Class clz) {
+    public AsyncProxy(String endstring, Class clz) {
         this.interfaceClz = clz;
         this.endpoint = endpointMgr.findEndpoint(endstring);
-        this.caller = new RpcCaller(endpoint);
+        this.caller = new AsyncCaller(endpoint);
     }
 
-    public Object invoke(Method method, Object[] args) {
+    public void invoke(Method method, Object[] args) {
         RpcRequest req = new RpcRequest();
         req.setInterfaceClz(interfaceClz.getName());
         req.setMethodName(method.getName());
         req.setArgs(args);
         try {
             local.set("dfs.endpoint", endpoint);
-            RpcResponse resp = caller.call(req);
-            return resp.getResult();
+            caller.call(req);
         } catch (IOException e) {
             throw new RpcOperateException("Network io exception! ", e);
-        } finally {
-            // not clear, because some function is out of proxy box, and them need endpoint
-            // may has memory or resource leak
-            // local.clear("dfs.endpoint");
         }
-
     }
 
 }
