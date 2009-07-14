@@ -4,4 +4,5 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<bean id="dfs.FileService" class="org.agile.dfs.name.service.FileServiceImpl"></bean>
+	<bean id="dfs.SpaceService" class="org.agile.dfs.name.service.SpaceServiceImpl"></bean>
 </beans>
