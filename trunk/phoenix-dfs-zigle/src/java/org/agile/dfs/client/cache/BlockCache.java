@@ -7,8 +7,8 @@ import org.agile.dfs.client.ServiceLocator;
 import org.agile.dfs.core.entity.BlockItem;
 import org.agile.dfs.data.service.BlockService;
 import org.agile.dfs.name.service.SpaceService;
-import org.agile.dfs.rpc.endpoint.Endpointable;
-import org.agile.dfs.rpc.util.EndpointHelper;
+import org.agile.dfs.rpc.piple.RpcAttachment;
+import org.agile.dfs.rpc.util.AttachmentHelper;
 
 public class BlockCache {
     private static final SpaceService spaceService = ServiceLocator.lookup(SpaceService.class);
@@ -25,22 +25,18 @@ public class BlockCache {
     }
 
     public void write(byte[] b, int off, int len) throws IOException {
-        Endpointable endpoint = EndpointHelper.current();
+        RpcAttachment attachment = AttachmentHelper.getAttachment();
         int free = block.getCapacity() - block.getSize();
         if (free > len) {
             blockService.write(block.getId(), len);
-            // streamCaller.stream = buf[];
-            
-            endpoint.write(b, off, len);
-            endpoint.flush();
+            attachment.write(b, off, len);
         } else {
             // write part byte into cache's remain space
             blockService.write(block.getId(), free);
-            endpoint.write(b, off, free); 
+            attachment.write(b, off, len);
             spaceService.commit(dfsFile.getId(), block.getId());
             spaceService.locate(dfsFile.getId());
             this.write(b, off + free, len - free);
-            endpoint.flush();
         }
     }
 

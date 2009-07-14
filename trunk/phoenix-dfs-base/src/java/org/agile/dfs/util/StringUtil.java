@@ -100,7 +100,7 @@ public class StringUtil {
         }
         String[] ret = new String[num];
         System.arraycopy(res, 0, ret, 0, num);
-        return res;
+        return ret;
     }
 
     public static String simpleReplace(String s, String src, String dest) {
