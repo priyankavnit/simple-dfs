@@ -75,6 +75,7 @@ public class TcpEndpoint extends AbstractEndpoint {
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         out.write(b, off, len);
+        out.flush();
     }
 
     @Override

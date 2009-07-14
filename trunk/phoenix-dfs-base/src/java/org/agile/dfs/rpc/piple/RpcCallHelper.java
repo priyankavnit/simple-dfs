@@ -121,7 +121,7 @@ public class RpcCallHelper {
                 ab = body.indexOf("<a>", ae + 4);
             }
         }
-        service.setArgs(args.array());
+        service.setArgs(args.array(Object.class));
         return service;
     }
 
@@ -177,7 +177,7 @@ public class RpcCallHelper {
                 ab = body.indexOf("<a>", ae + 4);
             }
         }
-        service.setArgs(args.array());
+        service.setArgs(args.array(Object.class));
         return service;
     }
 }

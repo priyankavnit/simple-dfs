@@ -3,7 +3,9 @@ package org.agile.dfs.rpc.server;
 import java.lang.reflect.Method;
 
 import org.agile.dfs.rpc.exception.ReflectOperateException;
+import org.agile.dfs.rpc.exception.RpcOperateException;
 import org.agile.dfs.rpc.piple.RpcRequest;
+import org.agile.framework.ComponentFactory;
 
 public class SpringInvoker implements RpcInvoker {
 
@@ -18,7 +20,7 @@ public class SpringInvoker implements RpcInvoker {
     public Object invoke(RpcRequest req) throws ReflectOperateException {
         return this.invoke(req.getInterfaceClz(), req.getMethodName(), req.getArgs());
     }
- 
+
     private Object doInvoke(String clzName, String methodName, Object[] args) throws Exception {
         Object ins = getInstance(clzName);
         Method method = getMethod(ins.getClass(), methodName, args);
@@ -29,8 +31,11 @@ public class SpringInvoker implements RpcInvoker {
     @SuppressWarnings("unchecked")
     private Object getInstance(String clzName) throws Exception {
         // TODO l2, cache instance
-        Class clz = Class.forName(clzName + "Impl");
-        Object ins = clz.newInstance();
+        Class clz = Class.forName(clzName);
+        Object ins = ComponentFactory.getBean("dfs.",clz);
+        if (ins == null) {
+            throw new RpcOperateException("Can't find service for " + clzName);
+        }
         return ins;
     }
 

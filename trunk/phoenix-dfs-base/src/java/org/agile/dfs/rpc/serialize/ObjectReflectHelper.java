@@ -29,7 +29,7 @@ public class ObjectReflectHelper {
             fields[i].setAccessible(true);
             as.add(fields[i]);
         }
-        fields = as.array();
+        fields = as.array(Field.class);
     }
 
     public static final ObjectReflectHelper instance(Object obj) {
