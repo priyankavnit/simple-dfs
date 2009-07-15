@@ -8,7 +8,7 @@ public class BaseDfsClientTestCase extends TestCase {
         DfsClientInitializer.init();
         // multicast time interval
         try {
-            Thread.sleep(3 * 1000);
+            Thread.sleep(2 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

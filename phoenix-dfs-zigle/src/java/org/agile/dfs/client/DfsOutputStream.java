@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class DfsOutputStream extends OutputStream {
     private static final Logger logger = LoggerFactory.getLogger(DfsOutputStream.class);
+    private DfsFile dfsFile;
     private BlockCache cache;
 
     public DfsOutputStream(String nameSpace, String fileFullPath) throws IOException {
@@ -17,6 +18,7 @@ public class DfsOutputStream extends OutputStream {
     }
 
     public DfsOutputStream(DfsFile dfile) throws IOException {
+        this.dfsFile = dfile;
         // TODO l3 , validate file path format
         if (!dfile.exists()) {
             throw new FileNotFoundException(dfile.toString());
@@ -41,8 +43,9 @@ public class DfsOutputStream extends OutputStream {
         if (cache != null) {
             cache.flush();
             cache.close();
+            cache = null;
+            logger.info("Close dfs output stream." + dfsFile);
         }
-        logger.info("Close dfs output stream.");
     }
 
     public void flush() throws IOException {
