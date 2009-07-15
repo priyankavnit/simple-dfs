@@ -30,7 +30,7 @@ public class AsyncProxy {
         req.setMethodName(method.getName());
         req.setArgs(args);
         try {
-            local.set("dfs.endpoint", endpoint);
+            local.set("dfs.async.endpoint", endpoint);
             caller.call(req);
         } catch (IOException e) {
             throw new RpcOperateException("Network io exception! ", e);
