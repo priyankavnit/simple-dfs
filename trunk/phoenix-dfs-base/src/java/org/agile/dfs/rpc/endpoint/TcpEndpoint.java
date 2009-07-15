@@ -19,21 +19,24 @@ public class TcpEndpoint extends AbstractEndpoint {
     public TcpEndpoint(String ip, int port) {
         try {
             socket = SocketBuilder.instance().build(ip, port);
-            in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
-            out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
+            in = socket.getInputStream();
+            out = socket.getOutputStream();
+            // in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
+            // out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
         } catch (IOException e) {
-            throw new InvalidServerException("Rpc server ip:" + ip + ", port:" + port + " is invalid!", e);
+            throw new InvalidServerException("Tcp endpoint  ip:" + ip + ", port:" + port + " is invalid!", e);
         }
     }
 
     public TcpEndpoint(Socket socket) {
         try {
-            this.socket = socket;
-            in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
-            out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
+            this.socket = socket; 
+            in = socket.getInputStream();
+            out = socket.getOutputStream();
+            // in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
+            // out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
         } catch (IOException e) {
-            throw new InvalidServerException("Rpc server ip:" + socket.getInetAddress() + ", port:" + socket.getPort()
-                    + " is invalid!", e);
+            throw new InvalidServerException("Tcp endpoint " + socket + " is invalid!", e);
         }
     }
 

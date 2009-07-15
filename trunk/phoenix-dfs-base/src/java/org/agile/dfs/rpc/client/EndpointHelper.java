@@ -1,4 +1,4 @@
-package org.agile.dfs.rpc.util;
+package org.agile.dfs.rpc.client;
 
 import org.agile.dfs.rpc.endpoint.Endpointable;
 import org.agile.dfs.util.MulValueThreadLocal;
