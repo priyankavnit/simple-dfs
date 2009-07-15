@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.agile.dfs.client.BaseDfsClientTestCase;
 import org.agile.dfs.rpc.client.AsyncProxyFactory;
 import org.agile.dfs.rpc.piple.RpcAttachment;
-import org.agile.dfs.rpc.util.AttachmentHelper;
+import org.agile.dfs.rpc.server.AttachmentHelper;
 
 public class BlockServiceImplTest extends BaseDfsClientTestCase {
 

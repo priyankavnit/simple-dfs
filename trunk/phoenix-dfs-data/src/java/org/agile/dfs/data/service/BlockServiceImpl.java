@@ -3,7 +3,7 @@ package org.agile.dfs.data.service;
 import java.io.IOException;
 
 import org.agile.dfs.rpc.piple.RpcAttachment;
-import org.agile.dfs.rpc.util.AttachmentHelper;
+import org.agile.dfs.rpc.server.AttachmentHelper;
 
 public class BlockServiceImpl implements BlockService {
 
@@ -17,7 +17,7 @@ public class BlockServiceImpl implements BlockService {
         byte[] buf = new byte[len];
         int num = attachment.read(buf);
         if (num == -1) {
-            throw new IOException("Connection is closed!");
+           // throw new IOException("Connection is closed!");
         }
         while (num != -1 && num < len) {
             int tmp = attachment.read(buf, num, len - num);

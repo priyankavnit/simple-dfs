@@ -34,8 +34,7 @@ public class DfsOutputStreamTest extends BaseDfsClientTestCase {
         // output.write(b);
         // }
         // output.close();
-
-        Thread.sleep(1000);
+        output.close(); 
         // System.out.println(dos);
     }
 
