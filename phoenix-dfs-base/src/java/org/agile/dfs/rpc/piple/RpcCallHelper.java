@@ -4,7 +4,7 @@ import org.agile.dfs.rpc.exception.RpcSerializeException;
 import org.agile.dfs.rpc.serialize.RpcDeSerializer;
 import org.agile.dfs.rpc.serialize.RpcSerializer;
 import org.agile.dfs.rpc.serialize.SerializerFactory;
-import org.agile.dfs.rpc.util.ArrayHelper;
+import org.agile.dfs.util.ArrayHelper;
 
 public class RpcCallHelper {
     private static final RpcSerializer serializer = SerializerFactory.instance().getRpcSerializer();
@@ -61,7 +61,7 @@ public class RpcCallHelper {
         // TODO l2, use CharWriter
         StringBuilder sb = new StringBuilder(250);
         sb.append("<r>");
-        sb.append("<s>").append("success").append("</s>");
+        sb.append("<s>").append(resp.getStatus()).append("</s>");
         sb.append(serializer.write(resp.getResult()));
         sb.append("</r>");
         return sb.toString();
@@ -71,20 +71,14 @@ public class RpcCallHelper {
         int sb = 6;
         int se = str.indexOf("</s>", 6);
         String status = str.substring(sb, se);
-        if ("success".equals(status)) {
-            int rb = se + 4;
-            int re = str.indexOf("</r>", rb);
-            String body = str.substring(rb, re);
-            Object result = deserializer.read(body);
-            RpcResponse resp = new RpcResponse();
-            resp.setResult(result);
-            return resp;
-        } else {
-            int mb = se + 4 + 3;
-            int me = str.indexOf("</m>", mb);
-            String msg = str.substring(mb, me);
-            throw new RpcSerializeException(msg);
-        }
+        int rb = se + 4;
+        int re = str.indexOf("</r>", rb);
+        String body = str.substring(rb, re);
+        Object result = deserializer.read(body);
+        RpcResponse resp = new RpcResponse();
+        resp.setStatus(status);
+        resp.setResult(result);
+        return resp;
     }
 
     // request example ( all in one line)

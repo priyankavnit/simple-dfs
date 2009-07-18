@@ -8,4 +8,6 @@ public interface FileService {
 
     public boolean exists(String nameSpace, String fullPath);
 
+    public boolean delete(String nameSpace, String fullPath);
+
 }

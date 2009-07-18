@@ -3,6 +3,7 @@ package org.agile.dfs.rpc.server;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.agile.dfs.core.exception.DfsException;
 import org.agile.dfs.rpc.endpoint.Endpointable;
 import org.agile.dfs.rpc.piple.RpcCallHelper;
 import org.agile.dfs.rpc.piple.RpcRequest;
@@ -17,15 +18,28 @@ public abstract class RpcHandler {
     private static final String PROTOCOL_FLAG = "agile.chen";
 
     public void handle(Endpointable endpoint) throws IOException {
-        RpcRequest req = receive(endpoint);
-        if (req == null) {
-            // TODO impl, notice client
-            endpoint.close();
-        } else {
-            Object result = getRpcInvoker().invoke(req);
+        try {
+            RpcRequest req = receive(endpoint);
+            if (req == null) {
+                RpcResponse resp = new RpcResponse();
+                resp.setStatus(RpcResponse.STATUS_EXCEPTION);
+                resp.setResult("Can't build request from header!");
+                send(endpoint, resp);
+                logger.error("Can't build request from header!");
+                endpoint.close();
+            } else {
+                Object result = getRpcInvoker().invoke(req);
+                RpcResponse resp = new RpcResponse();
+                resp.setStatus(RpcResponse.STATUS_SUCCESS);
+                resp.setResult(result);
+                send(endpoint, resp);
+            }
+        } catch (DfsException e) {
             RpcResponse resp = new RpcResponse();
-            resp.setResult(result);
+            resp.setStatus(RpcResponse.STATUS_EXCEPTION);
+            resp.setResult(e.toString());
             send(endpoint, resp);
+            logger.error("Fail to handle " + endpoint, e);
         }
     }
 
@@ -49,7 +63,9 @@ public abstract class RpcHandler {
             RpcRequest req = helper.buildRequest(body);
             return req;
         } else {
-            logger.error("Protocol header error! " + flag + " " + lens);
+            if (!endpoint.isClose()) {
+                logger.error("Protocol header error! " + flag + " " + lens);
+            }
         }
         return null;
     }
@@ -59,7 +75,7 @@ public abstract class RpcHandler {
         for (int i = 0; i < 1 * 50; i++) {
             int k = endpoint.read();
             if (k == -1) {
-                throw new IOException("Connection reset");
+                endpoint.close();
             }
             byte b = (byte) k;
             if (b != ' ') {
@@ -75,7 +91,7 @@ public abstract class RpcHandler {
         byte[] buf = new byte[len];
         int num = endpoint.read(buf);
         if (num == -1) {
-            throw new IOException("Connection reset");
+            endpoint.close();
         }
         while (num != -1 && num < len) {
             int tmp = endpoint.read(buf, num, len - num);

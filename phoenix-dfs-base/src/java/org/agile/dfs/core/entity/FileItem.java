@@ -1,40 +1,31 @@
 package org.agile.dfs.core.entity;
 
 public class FileItem {
-    public static final String TYPE_DIR = "dir";
-    public static final String TYPE_FILE = "file";
+    public static final String TYPE_DIR = "DIR";
+    public static final String TYPE_FILE = "FILE";
     public static final String STATUS_INIT = "INIT";
     public static final String STATUS_NORMAL = "NORMAL";
     public static final String STATUS_TRASH = "TRASH";
     public static final String STATUS_DELETE = "DELETE";
-    
-    private String nsId;
-    private String parentId;
-    private String id;
-    private String name;
-    private String status;
-    private int blockNum;
-    private int copyNum;
-    private String type;
+
+    private String parentId;// not null
+    private String id;// not null
+    private String name;// not null
+    private String status;// not null
+    private int blockNum;// not null, default 0
+    private int minCopyNum;// not null, default 3
+    private int maxCopyNum;// not null, default 3
+    private int nowCopyNum;// not null, default 0
+    private String type;// not null
+    private int version;// not null
 
     public String toString() {
         StringBuffer sb = new StringBuffer(100);
-        sb.append("nsId:").append(nsId).append(",");
         sb.append("id:").append(id).append(",");
         sb.append("parentId:").append(parentId).append(",");
         sb.append("name:").append(name).append(",");
         sb.append("status:").append(status);
         return sb.toString();
-    }
-
-    public static FileItem fromString(String s) {
-        if (s == null || s.equalsIgnoreCase("null")) {
-            return null;
-        } else {
-            FileItem item = new FileItem();
-            // TODO impl
-            return item;
-        }
     }
 
     /* getter and setter */
@@ -78,20 +69,12 @@ public class FileItem {
         this.blockNum = blockNum;
     }
 
-    public int getCopyNum() {
-        return copyNum;
+    public int getNowCopyNum() {
+        return nowCopyNum;
     }
 
-    public void setCopyNum(int copyNum) {
-        this.copyNum = copyNum;
-    }
-
-    public String getNsId() {
-        return nsId;
-    }
-
-    public void setNsId(String nsId) {
-        this.nsId = nsId;
+    public void setNowCopyNum(int copyNum) {
+        this.nowCopyNum = copyNum;
     }
 
     public String getType() {
@@ -100,5 +83,29 @@ public class FileItem {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getMinCopyNum() {
+        return minCopyNum;
+    }
+
+    public void setMinCopyNum(int minCopyNum) {
+        this.minCopyNum = minCopyNum;
+    }
+
+    public int getMaxCopyNum() {
+        return maxCopyNum;
+    }
+
+    public void setMaxCopyNum(int maxCopyNum) {
+        this.maxCopyNum = maxCopyNum;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

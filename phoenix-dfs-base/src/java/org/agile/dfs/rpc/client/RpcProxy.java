@@ -32,7 +32,11 @@ public class RpcProxy {
         try {
             local.set("dfs.endpoint", endpoint);
             RpcResponse resp = caller.call(req);
-            return resp.getResult();
+            if (resp.isSucess()) {
+                return resp.getResult();
+            } else {
+                throw new RpcOperateException("Remote handle error [ " + resp.getResult() + "]");
+            }
         } catch (IOException e) {
             throw new RpcOperateException("Network io exception! ", e);
         } finally {

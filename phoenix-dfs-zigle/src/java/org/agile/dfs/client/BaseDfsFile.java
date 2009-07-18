@@ -16,7 +16,7 @@ public class BaseDfsFile extends java.io.File {
 
     /**
      * 
-     * DfsFile namespace style: http://www.agile.org/photo (like url)
+     * DfsFile schema style: http://www.agile.org/photo (like url)
      * 
      * DfsFile path style: /home/agile/some.jpg (file), /home/photo (directory)
      * 
@@ -37,7 +37,7 @@ public class BaseDfsFile extends java.io.File {
         this.id = id;
     }
 
-    public String getNameSpace() {
+    public String getSchema() {
         return nameSpace;
     }
 

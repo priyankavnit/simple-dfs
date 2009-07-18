@@ -8,7 +8,7 @@ public class DfsOutputStreamTest extends BaseDfsClientTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        // NameSpace ns = new NameSpace("phoenix", "/home/test/test.jpg");
+        // DfsSchema ns = new DfsSchema("phoenix", "/home/test/test.jpg");
         DfsFile file = new DfsFile("phoenix", "/home/test/test.jpg");
         file.getParentFile().mkdirs();
         if (!file.exists()) {

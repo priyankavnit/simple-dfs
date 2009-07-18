@@ -3,7 +3,8 @@ package org.agile.dfs.core.entity;
 import java.util.Date;
 import java.util.Map;
 
-public class NameSpace {
+public class DfsSchema implements java.io.Serializable {
+    private static final long serialVersionUID = 1978;
     public static final String STATUS_INIT = "INIT";
     public static final String STATUS_NORMAL = "NORMAL";
     public static final String STATUS_TRASH = "TRASH";
@@ -16,11 +17,11 @@ public class NameSpace {
     private Date createTime;
     private String description;
 
-    public NameSpace() {
+    public DfsSchema() {
         this.status = STATUS_INIT;
     }
 
-    public NameSpace(String name, String url) {
+    public DfsSchema(String name, String url) {
         this.name = name;
         this.url = url;
         this.status = STATUS_INIT;
@@ -30,11 +31,11 @@ public class NameSpace {
         return "name:" + name + ",url:" + url + ", status:" + status;
     }
 
-    public static NameSpace fromMap(Map map) {
+    public static DfsSchema fromMap(Map map) {
         if (map == null) {
             return null;
         }
-        NameSpace ns = new NameSpace();
+        DfsSchema ns = new DfsSchema();
         ns.setId(map.get("id") == null ? null : map.get("id").toString());
         ns.setName(map.get("name") == null ? null : map.get("name").toString());
         ns.setUrl(map.get("url") == null ? null : map.get("url").toString());

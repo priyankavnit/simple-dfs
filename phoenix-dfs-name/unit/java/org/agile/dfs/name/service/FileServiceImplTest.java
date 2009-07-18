@@ -2,19 +2,19 @@ package org.agile.dfs.name.service;
 
 import junit.framework.Assert;
 
-import org.agile.dfs.core.entity.NameSpace;
-import org.agile.dfs.core.factory.ServiceFactory;
+import org.agile.dfs.core.entity.DfsSchema;
 import org.agile.dfs.name.BaseNameNodeTestCase;
-import org.agile.dfs.name.manager.NameSpaceManager;
+import org.agile.dfs.name.manager.SchemaManager;
+import org.agile.dfs.util.ServiceFactory;
 
 public class FileServiceImplTest extends BaseNameNodeTestCase {
 
     private static FileService fileService = (FileService) ServiceFactory.findService(FileServiceImpl.class);
-    private static NameSpaceManager nameManager = (NameSpaceManager) ServiceFactory.findService(NameSpaceManager.class);
+    private static SchemaManager nameManager = (SchemaManager) ServiceFactory.findService(SchemaManager.class);
 
     private static String ns = "phoenix";
     static {
-        nameManager.build(new NameSpace(ns, "http://www.zigle.com/"));
+        nameManager.build(new DfsSchema(ns, "http://www.zigle.com/"));
     }
 
     protected void setUp() throws Exception {

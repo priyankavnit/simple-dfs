@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!-- Select NameSpace By Name-->
+	<cacheModel id="cache" type="LRU" readOnly="false" serialize="true">
+		<property value="5000" name="size" />
+		<flushInterval seconds="5" />
+		<flushOnExecute statement="dfs.fs.insert" /> 
+		<flushOnExecute statement="dfs.fs.delete.id" /> 
+	</cacheModel>
+ 
+	<!-- Insert NameSpace -->
+	<insert id="dfs.fs.insert" parameterClass="java.util.HashMap">
+		insert into $table$
+		( parentId, id, name, status, blockNum, minCopyNum, maxCopyNum, nowCopyNum, type, version )
+		values
+		( #parentId#, #id#, #name#, #status#, #blockNum#, #minCopyNum#, #maxCopyNum#, #nowCopyNum#, #type#, #version# )
+  	</insert> 
+  	<delete id="dfs.fs.delete.id">
+  		delete from $table$ where id=#id#
+  	</delete>
+</sqlMap>

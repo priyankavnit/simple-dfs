@@ -2,11 +2,11 @@ package org.agile.dfs.name.manager;
 
 import junit.framework.Assert;
 
-import org.agile.dfs.core.factory.ServiceFactory;
 import org.agile.dfs.name.jdbc.JdbcTemplate;
 import org.agile.dfs.name.manager.TableLocator;
 import org.agile.dfs.name.manager.TableManager;
 import org.agile.dfs.name.BaseNameNodeTestCase;
+import org.agile.dfs.util.ServiceFactory;
 
 public class TableManagerTest extends BaseNameNodeTestCase {
 
@@ -41,21 +41,10 @@ public class TableManagerTest extends BaseNameNodeTestCase {
         flag = manager.existsTable(tn);
         Assert.assertTrue(!flag);
     }
-
-    public void testCreateDirTable() {
-        String ns = "phoenix";
-        String tableName = tlocator.dirTableName(ns);
-        manager.dropTable(tableName);
-        boolean flag = manager.existsTable(tableName);
-        Assert.assertTrue(!flag);
-        manager.createDirTable(ns);
-        flag = manager.existsTable(tableName);
-        Assert.assertTrue(flag);
-    }
-
+ 
     public void testCreateFileTable() {
         String ns = "phoenix";
-        String tableName = tlocator.fileTableName(ns);
+        String tableName = tlocator.fileTable(ns);
         manager.dropTable(tableName);
         boolean flag = manager.existsTable(tableName);
         Assert.assertTrue(!flag);

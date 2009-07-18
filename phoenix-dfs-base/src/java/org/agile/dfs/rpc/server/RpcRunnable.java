@@ -2,7 +2,6 @@ package org.agile.dfs.rpc.server;
 
 import java.io.IOException;
 
-import org.agile.dfs.core.exception.DfsException;
 import org.agile.dfs.rpc.endpoint.Endpointable;
 import org.agile.dfs.util.MulValueThreadLocal;
 import org.slf4j.Logger;
@@ -20,23 +19,19 @@ public class RpcRunnable implements Runnable {
     }
 
     public void run() {
-        logger.info("Request from {} ", endpoint);
+        logger.info(" >>> Request from {} ", endpoint);
         // long connection
         while (true) {
             try {
                 // set endpoint, for hign speed data bytes transport
                 local.set("dfs.endpoint", endpoint);
                 handler.handle(endpoint);
-            } catch (DfsException de) {
-                logger.error("Fail to handle  " + endpoint, de);
-            } catch (IOException se) {
-                String msg = se.getMessage();
-                if ("Connection reset".equalsIgnoreCase(msg)) {
-                    logger.error("Connection {} is reset!", endpoint);
+            } catch (IOException e) {
+                if (endpoint.isClose()) {
+                    logger.error("Endpoint is closed! " + endpoint);
                 } else {
-                    logger.error(msg, se);
+                    logger.error("IOException when handle " + endpoint, e);
                 }
-                break;
             } catch (Throwable t) {
                 logger.error("Handle request error!", t);
                 break;
@@ -44,11 +39,13 @@ public class RpcRunnable implements Runnable {
                 // clear threadlocal
                 local.clear("dfs.endpoint");
             }
-            // if connect is closed, break handle loop
-
+            if (endpoint.isClose()) {
+                break;
+            }
         }
         // last clear resource
         endpoint.close();
-        logger.info("Close socket  {}", endpoint);
+        logger.info("Close session {}", endpoint);
     }
+
 }

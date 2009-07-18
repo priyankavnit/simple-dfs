@@ -1,4 +1,4 @@
-package org.agile.dfs.rpc.util;
+package org.agile.dfs.util;
 
 import java.lang.reflect.Array;
 

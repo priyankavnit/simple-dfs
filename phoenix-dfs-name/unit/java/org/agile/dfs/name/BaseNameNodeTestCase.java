@@ -3,8 +3,8 @@ package org.agile.dfs.name;
 import junit.framework.TestCase;
 
 import org.agile.dfs.core.common.UuidHexGenerator;
-import org.agile.dfs.core.factory.ServiceFactory;
 import org.agile.dfs.name.setup.NameInstaller;
+import org.agile.dfs.util.ServiceFactory;
 
 public class BaseNameNodeTestCase extends TestCase {
 
