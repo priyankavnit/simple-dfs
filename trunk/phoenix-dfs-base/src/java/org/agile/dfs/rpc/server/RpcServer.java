@@ -38,13 +38,13 @@ public abstract class RpcServer extends SimpleTcpServer {
                 socket.setKeepAlive(true);
                 Endpointable endpoint = new TcpEndpoint(socket);
                 RpcRunnable run = new RpcRunnable(endpoint, this.getRpcHandler());
-                this.execute(run); 
+                this.execute(run);
             } catch (IOException ioe) {
 
             } catch (Exception e) {
 
             }
-            logger.info("Wait for handle next name request ... ");
+            logger.info("Wait for next call ... ");
         }
 
     }

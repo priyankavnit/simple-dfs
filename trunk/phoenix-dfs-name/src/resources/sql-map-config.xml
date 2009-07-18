@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" />
+
+	<transactionManager type="JDBC" commitRequired="true">
+		<dataSource type="SIMPLE">
+			<property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
+			<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3306/dfs" />
+			<property name="JDBC.Username" value="dfs" />
+			<property name="JDBC.Password" value="dfs" />
+		</dataSource>
+	</transactionManager>
+
+	<sqlMap resource="org/agile/dfs/core/entity/DfsSchema.xml" />
+	<sqlMap resource="org/agile/dfs/core/entity/FileItem.xml" />
+</sqlMapConfig>

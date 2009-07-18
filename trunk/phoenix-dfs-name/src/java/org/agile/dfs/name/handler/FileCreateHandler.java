@@ -3,16 +3,16 @@ package org.agile.dfs.name.handler;
 import org.agile.dfs.core.action.DfsBaseAction;
 import org.agile.dfs.core.action.FileCreate;
 import org.agile.dfs.core.entity.FileItem;
-import org.agile.dfs.core.entity.NameSpace;
+import org.agile.dfs.core.entity.DfsSchema;
 import org.agile.dfs.core.factory.ServiceFactory;
 import org.agile.dfs.core.handler.ActionHandler;
 import org.agile.dfs.core.rpc.RpcContext;
 import org.agile.dfs.name.manager.FileItemManager;
-import org.agile.dfs.name.manager.NameSpaceManager;
+import org.agile.dfs.name.manager.SchemaManager;
 import org.agile.dfs.util.StringUtil;
 
 public class FileCreateHandler implements ActionHandler {
-    private static final NameSpaceManager nsMgr = (NameSpaceManager) ServiceFactory.findService(NameSpaceManager.class);
+    private static final SchemaManager nsMgr = (SchemaManager) ServiceFactory.findService(SchemaManager.class);
     private static final FileItemManager fileMgr = (FileItemManager) ServiceFactory.findService(FileItemManager.class);
 
     // private static final DirItemManager dirMgr = (DirItemManager) ServiceFactory.findService(DirItemManager.class);
@@ -28,7 +28,7 @@ public class FileCreateHandler implements ActionHandler {
         boolean id = args.length >= 3 ? StringUtil.getBoolean(args[2]) : false;
         boolean ip = args.length >= 4 ? StringUtil.getBoolean(args[3]) : false;
         // TODO l3, validate ns and path (name format, length and level)
-        NameSpace ns = nsMgr.findByName(nt);
+        Schema ns = nsMgr.findByName(nt);
         if (ns == null) {
             throw new RuntimeException("Name space is null!");
         }

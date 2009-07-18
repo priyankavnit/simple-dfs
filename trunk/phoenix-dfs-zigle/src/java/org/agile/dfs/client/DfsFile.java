@@ -19,40 +19,49 @@ public class DfsFile extends BaseDfsFile {
 
     @Override
     public boolean createNewFile() throws IOException {
-        boolean flag = fileService.createNewFile(this.getNameSpace(), this.getFullPath());
+        boolean flag = fileService.createNewFile(this.getSchema(), this.getFullPath());
         if (flag) {
-            logger.info("Success to create file {}:{} ", this.getNameSpace(), this.getFullPath());
+            logger.info("Success to create file {}:{} ", this.getSchema(), this.getFullPath());
         }
         return flag;
     }
 
     @Override
     public boolean mkdir() {
-        boolean flag = fileService.mkdir(this.getNameSpace(), this.getFullPath(), false);
+        boolean flag = fileService.mkdir(this.getSchema(), this.getFullPath(), false);
         if (flag) {
-            logger.info("Success to create directory {}:{})", this.getNameSpace(), this.getFullPath());
+            logger.info("Success to create directory {}:{})", this.getSchema(), this.getFullPath());
         }
         return flag;
     }
 
     @Override
     public boolean mkdirs() {
-        boolean flag = fileService.mkdir(this.getNameSpace(), this.getFullPath(), true);
+        boolean flag = fileService.mkdir(this.getSchema(), this.getFullPath(), true);
         if (flag) {
-            logger.info("Success to create directory {}:{})", this.getNameSpace(), this.getFullPath());
+            logger.info("Success to create directory {}:{})", this.getSchema(), this.getFullPath());
         }
         return flag;
     }
 
     @Override
     public boolean exists() {
-        return fileService.exists(this.getNameSpace(), this.getFullPath());
+        return fileService.exists(this.getSchema(), this.getFullPath());
     }
 
     @Override
     public File getParentFile() {
         String parent = super.getParent();
-        return new DfsFile(this.getNameSpace(), parent);
+        return new DfsFile(this.getSchema(), parent);
+    }
+
+    @Override
+    public boolean delete() {
+        boolean flag = fileService.delete(this.getSchema(), this.getFullPath());
+        if (flag) {
+            this.setId(null);
+        }
+        return flag;
     }
 
 }

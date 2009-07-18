@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<cacheModel id="cache" type="LRU" readOnly="false" serialize="true">
+		<property value="50" name="size" />
+		<flushInterval seconds="5" />
+		<flushOnExecute statement="dfs.ns.insert" />
+		<flushOnExecute statement="dfs.ns.delete.byname" />
+		<flushOnExecute statement="dfs.ns.select.byname" /> 
+	</cacheModel>
+
+	<resultMap id="NameSpaceResult" class="org.agile.dfs.core.entity.DfsSchema">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="url" column="url" />
+		<result property="status" column="status" />
+		<result property="createTime" column="createTime" />
+		<result property="description" column="description" />
+	</resultMap>
+
+	<!-- Insert NameSpace -->
+	<insert id="dfs.ns.insert" parameterClass="org.agile.dfs.core.entity.DfsSchema">
+		insert into TBL_DFS_NAMESPACE
+		( id, name, url, status, createTime, description )
+		values
+		( #id#, #name#, #url#, #status#, #createTime#, #description# )
+  	</insert>
+ 
+	<!-- delete NameSpace By Name-->
+ 	<delete id="dfs.ns.delete.byname" parameterClass="string" >
+ 		delete from TBL_DFS_NAMESPACE where name=#name#
+ 	</delete>
+ 	
+ 	<!-- Select NameSpace By Name-->
+	<select id="dfs.ns.select.byname" cacheModel="cache" parameterClass="string" resultMap="NameSpaceResult">
+		select * from TBL_DFS_NAMESPACE where name=#name#
+	</select>
+</sqlMap>

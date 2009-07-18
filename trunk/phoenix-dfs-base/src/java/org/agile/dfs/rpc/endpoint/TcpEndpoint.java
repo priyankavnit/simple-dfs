@@ -15,14 +15,15 @@ public class TcpEndpoint extends AbstractEndpoint {
     private Socket socket;
     private InputStream in;
     private OutputStream out;
+    private boolean _close = false;
 
     public TcpEndpoint(String ip, int port) {
         try {
             socket = SocketBuilder.instance().build(ip, port);
-            in = socket.getInputStream();
-            out = socket.getOutputStream();
-            // in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
-            // out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
+            // in = socket.getInputStream();
+            // out = socket.getOutputStream();
+            in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
+            out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
         } catch (IOException e) {
             throw new InvalidServerException("Tcp endpoint  ip:" + ip + ", port:" + port + " is invalid!", e);
         }
@@ -30,7 +31,7 @@ public class TcpEndpoint extends AbstractEndpoint {
 
     public TcpEndpoint(Socket socket) {
         try {
-            this.socket = socket; 
+            this.socket = socket;
             in = socket.getInputStream();
             out = socket.getOutputStream();
             // in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
@@ -47,11 +48,21 @@ public class TcpEndpoint extends AbstractEndpoint {
 
     @Override
     public void close() {
+        _close = true;
         try {
             if (socket != null)
                 socket.close();
         } catch (IOException e) {
             // ignore
+        }
+    }
+
+    @Override
+    public boolean isClose() {
+        if (_close) {
+            return _close;
+        } else {
+            return socket.isClosed();
         }
     }
 

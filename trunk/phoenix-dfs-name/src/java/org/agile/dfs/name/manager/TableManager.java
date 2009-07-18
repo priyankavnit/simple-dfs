@@ -49,35 +49,37 @@ public class TableManager {
                     return null;
                 }
             }, false);
+            logger.info("Drop table {} success. ", tableName);
             return true;
         } catch (RuntimeException e) {
+            logger.info("Drop table {} exception. {}", tableName, e);
             return false;
         }
     }
 
-    public void createDirTable(String namespace) {
-        final String tableName = tlocator.dirTableName(namespace);
-        final List list = readAllStatement("/dfs-sql-dir.sql");
-        if (!existsTable(tableName)) {
-            template.doInStatement(new StatementAction() {
-                public Object excute(Statement stat) throws Exception {
-                    for (int i = 0, len = list.size(); i < len; i++) {
-                        String sql = (String) list.get(i);
-                        sql = StringUtil.simpleReplace(sql, "tableName", tableName);
-                        logger.info(sql);
-                        stat.execute(sql);
-                    }
-                    return null;
-                }
-            }, false);
-            logger.info("Create table {} success. ", tableName);
-        } else {
-            logger.info("Table {} exists, not create. ", tableName);
-        }
-    }
+    // public void createDirTable(String schema) {
+    // final String tableName = tlocator.dirTableName(schema);
+    // final List list = readAllStatement("/dfs-sql-dir.sql");
+    // if (!existsTable(tableName)) {
+    // template.doInStatement(new StatementAction() {
+    // public Object excute(Statement stat) throws Exception {
+    // for (int i = 0, len = list.size(); i < len; i++) {
+    // String sql = (String) list.get(i);
+    // sql = StringUtil.simpleReplace(sql, "tableName", tableName);
+    // logger.info(sql);
+    // stat.execute(sql);
+    // }
+    // return null;
+    // }
+    // }, false);
+    // logger.info("Create table {} success. ", tableName);
+    // } else {
+    // logger.info("Table {} exists, not create. ", tableName);
+    // }
+    // }
 
-    public void createFileTable(String namespace) {
-        final String tableName = tlocator.fileTableName(namespace);
+    public void createFileTable(String schema) {
+        final String tableName = tlocator.fileTable(schema);
         final List list = readAllStatement("/dfs-sql-file.sql");
         if (!existsTable(tableName)) {
             template.doInStatement(new StatementAction() {
@@ -97,7 +99,7 @@ public class TableManager {
         }
     }
 
-    public void createNameSpaceTable() {
+    public void createSchemaTable() {
         final List list = readAllStatement("/dfs-sql-ns.sql");
         if (!existsTable("TBL_DFS_NAMESPACE")) {
             template.doInStatement(new StatementAction() {

@@ -27,7 +27,7 @@ public class SocketBuilder {
         // TODO l1, cache socket
         Socket socket = new Socket();
         socket.connect(new InetSocketAddress(ip, port), 3 * 1000);
-        socket.setSoTimeout(300 * 1000);
+        socket.setSoTimeout(300 * 1000); // TODO check for release
         return socket;
     }
 }

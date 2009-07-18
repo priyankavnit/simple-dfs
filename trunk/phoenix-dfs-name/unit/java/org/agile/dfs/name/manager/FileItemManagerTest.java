@@ -1,100 +1,73 @@
 package org.agile.dfs.name.manager;
 
+import junit.framework.Assert;
+
 import org.agile.dfs.core.common.UuidHexGenerator;
-import org.agile.dfs.core.entity.NameSpace;
-import org.agile.dfs.core.factory.ServiceFactory;
+import org.agile.dfs.core.entity.DfsSchema;
+import org.agile.dfs.core.entity.FileItem;
 import org.agile.dfs.name.BaseNameNodeTestCase;
-import org.agile.dfs.name.manager.FileItemManager;
-import org.agile.dfs.name.manager.NameSpaceManager;
+import org.agile.dfs.name.service.SchemaService;
+import org.agile.dfs.name.service.SchemaServiceImpl;
+import org.agile.dfs.util.ServiceFactory;
 
 public class FileItemManagerTest extends BaseNameNodeTestCase {
 
     FileItemManager fileMgr;
-    NameSpaceManager nsMgr;
     UuidHexGenerator idGen;
+    TableLocator tblLoc;
+
+    SchemaService schemaService;
+    String schema = "phoenix";
 
     protected void setUp() throws Exception {
         super.setUp();
-        fileMgr = (FileItemManager) ServiceFactory.findService(FileItemManager.class);
-        nsMgr = (NameSpaceManager) ServiceFactory.findService(NameSpaceManager.class);
-        idGen = (UuidHexGenerator) ServiceFactory.findService(UuidHexGenerator.class);
+        fileMgr = ServiceFactory.findService(FileItemManager.class);
+        schemaService = ServiceFactory.findService(SchemaServiceImpl.class);
+        idGen = ServiceFactory.findService(UuidHexGenerator.class);
+        tblLoc = ServiceFactory.findService(TableLocator.class);
+        if (!schemaService.exists(schema)) {
+            schemaService.build(new DfsSchema(schema, "http://www.agile.org/dfs"));
+        }
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
+        schemaService.destory(schema);
     }
 
     public void testFindById() {
         fail("Not yet implemented");
     }
 
-    public void testFindByPathNameSpaceString() {
+    public void testFindByPathSchemaString() {
         fail("Not yet implemented");
     }
 
-    public void testFindByPathNameSpaceStringBoolean() {
+    public void testFindByPathSchemaStringBoolean() {
         fail("Not yet implemented");
     }
 
     public void testCreate() {
-        fail("Not yet implemented");
+        String table = tblLoc.fileTable(schema);
+        FileItem item = new FileItem();
+        item.setParentId("pid");
+        item.setName("name" + new  java.util.Random().nextLong());
+        item.setType(FileItem.TYPE_FILE);
+        item.setStatus(FileItem.STATUS_NORMAL);
+        fileMgr.create(table, item);
+        Assert.assertNotNull(item.getId());
     }
 
-    public void testCreateFile() {
-        NameSpace ns = nsMgr.findByName("phoenix");
-        if (ns == null) {
-            ns = nsMgr.build(new NameSpace("phoenix", "http://www.g.cn/phoenix/photo"));
-        }
-        String rand = idGen.generate().toString();
-        fileMgr.mkdir(ns, "/home/agile/" + rand, true);
-        fileMgr.mkfile(ns, "/home/agile/" + rand + "/some.jpg");
-    }
+    public void testDelete() {
+        String table = tblLoc.fileTable(schema);
+        FileItem item = new FileItem();
+        item.setParentId("pid");
+        item.setName("name" + new  java.util.Random().nextLong());
+        item.setType(FileItem.TYPE_FILE);
+        item.setStatus(FileItem.STATUS_NORMAL);
+        fileMgr.create(table, item);
+        Assert.assertNotNull(item.getId());
 
-    public void testBenchCreateFile() {
-        NameSpace ns = nsMgr.findByName("phoenix");
-        if (ns == null) {
-            ns = nsMgr.build(new NameSpace("phoenix", "http://www.g.cn/phoenix/photo"));
-        }
-        String rand = idGen.generate().toString();
-        long t1 = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
-            String dir = "/home/" + rand + "/photo/Dir" + i;
-            fileMgr.mkdir(ns, dir, true);
-            // System.out.println("---------------------------------");
-            for (int j = 0; j < 100; j++) {
-                String file = dir + "/onetwothreefive" + j + ".jpg";
-                fileMgr.mkfile(ns, file);
-                // System.out.println("..................................");
-            }
-        }
-        long t2 = System.currentTimeMillis();
-        System.out.println("Time:" + (t2 - t1));
+        fileMgr.deleteById(table, item.getId());
     }
-
-    public void testMulThreadBenchCreateFile() {
-        Thread[] ths = new Thread[100];
-        long t1 = System.currentTimeMillis();
-        for (int i = 0; i < ths.length; i++) {
-            ths[i] = new Thread() {
-                public void run() {
-                    testBenchCreateFile();
-                }
-            };
-            ths[i].start();
-        }
-        for (int i = 0; i < ths.length; i++) {
-            try {
-                ths[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        long t2 = System.currentTimeMillis();
-        System.out.println("Time:" + (t2 - t1));
-    }
-
-    public void testCreateDir() {
-        fail("Not yet implemented");
-    }
-
 }

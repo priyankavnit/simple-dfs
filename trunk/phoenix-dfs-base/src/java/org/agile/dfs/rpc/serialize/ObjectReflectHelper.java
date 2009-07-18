@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.agile.dfs.rpc.exception.ReflectOperateException;
-import org.agile.dfs.rpc.util.ArrayHelper;
+import org.agile.dfs.util.ArrayHelper;
 
 @SuppressWarnings("unchecked")
 public class ObjectReflectHelper {
