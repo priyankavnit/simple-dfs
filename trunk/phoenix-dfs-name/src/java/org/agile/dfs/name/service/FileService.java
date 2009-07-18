@@ -2,12 +2,16 @@ package org.agile.dfs.name.service;
 
 public interface FileService {
 
-    public boolean createNewFile(String nameSpace, String fullPath);
+    public boolean createNewFile(String schema, String fullPath);
 
-    public boolean mkdir(String nameSpace, String fullPath, boolean parent);
+    public boolean createNewFiles(String schema, String fullPath);
 
-    public boolean exists(String nameSpace, String fullPath);
+    public boolean mkdir(String schema, String fullPath);
 
-    public boolean delete(String nameSpace, String fullPath);
+    public boolean mkdirs(String schema, String fullPath);
+
+    public boolean exists(String schema, String fullPath);
+
+    public void delete(String schema, String fullPath);
 
 }

@@ -1,13 +1,13 @@
 package org.agile.dfs.name.service;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import org.agile.dfs.core.entity.DfsSchema;
+import org.agile.dfs.name.BaseNameNodeTestCase;
 import org.agile.dfs.util.ServiceFactory;
 
-public class NameServiceImplTest extends TestCase {
-    private static SchemaService schemaService = (SchemaService) ServiceFactory.findService(SchemaServiceImpl.class);
+public class SchemaServiceImplTest extends BaseNameNodeTestCase {
+    private static SchemaService schemaService = ServiceFactory.findService(SchemaServiceImpl.class);
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -17,21 +17,15 @@ public class NameServiceImplTest extends TestCase {
         super.tearDown();
     }
 
-    public void testBuild() {
+    public void testExistsBuildDestory() {
         String ns = "phoenix";
         DfsSchema dfsSchema = new DfsSchema(ns, "http://www.agile.org/dfs");
         schemaService.destory(ns);
         Assert.assertTrue(!schemaService.exists(ns));
         schemaService.build(dfsSchema);
         Assert.assertTrue(schemaService.exists(ns));
-    }
-
-    public void testExists() {
-        fail("Not yet implemented");
-    }
-
-    public void testDestory() {
-        fail("Not yet implemented");
+        schemaService.destory(ns);
+        Assert.assertTrue(!schemaService.exists(ns));
     }
 
 }

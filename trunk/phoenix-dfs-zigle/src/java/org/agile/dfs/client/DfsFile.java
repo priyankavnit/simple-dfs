@@ -13,8 +13,8 @@ public class DfsFile extends BaseDfsFile {
     private static final Logger logger = LoggerFactory.getLogger(DfsFile.class);
     private static final FileService fileService = ServiceLocator.lookup(FileService.class);
 
-    public DfsFile(String nameSpace, String fullPath) {
-        super(nameSpace, fullPath);
+    public DfsFile(String schema, String fullPath) {
+        super(schema, fullPath);
     }
 
     @Override

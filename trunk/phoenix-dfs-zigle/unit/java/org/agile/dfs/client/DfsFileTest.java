@@ -11,13 +11,13 @@ public class DfsFileTest extends BaseDfsClientTestCase {
 
     private static final SchemaService schemaService = ServiceLocator.lookup(SchemaService.class);
 
-    private String nameSpace = "phoenix";
+    private String schema = "phoenix";
 
     protected void setUp() throws Exception {
         super.setUp();
-        if (!schemaService.exists(nameSpace)) {
+        if (!schemaService.exists(schema)) {
             DfsSchema ns = new DfsSchema();
-            ns.setName(nameSpace);
+            ns.setName(schema);
             ns.setUrl("http://www.agile.org/dfs");
             schemaService.build(ns);
         }
@@ -28,26 +28,26 @@ public class DfsFileTest extends BaseDfsClientTestCase {
     }
 
     public void testCreateNewFile() throws IOException {
-        DfsFile file = new DfsFile(nameSpace, "/home/dfs/one.jpg");
+        DfsFile file = new DfsFile(schema, "/home/dfs/one.jpg");
         file.delete();
-        DfsFile file2 = new DfsFile(nameSpace, "/home/dfs/one.jpg");
+        DfsFile file2 = new DfsFile(schema, "/home/dfs/one.jpg");
         file2.getParentFile().mkdirs();
         file2.createNewFile();
         Assert.assertTrue(file2.exists());
     }
 
     public void testExists() throws IOException {
-        DfsFile file = new DfsFile(nameSpace, "/home/dfs/one.jpg");
+        DfsFile file = new DfsFile(schema, "/home/dfs/one.jpg");
         file.delete();
         Assert.assertTrue(!file.exists());
-        DfsFile file2 = new DfsFile(nameSpace, "/home/dfs/one.jpg");
+        DfsFile file2 = new DfsFile(schema, "/home/dfs/one.jpg");
         file2.getParentFile().mkdirs();
         file2.createNewFile();
         Assert.assertTrue(file2.exists());
     }
 
     public void testMkdir() {
-        DfsFile file = new DfsFile(nameSpace, "/home/dfs/dir");
+        DfsFile file = new DfsFile(schema, "/home/dfs/dir");
         file.delete();
         Assert.assertTrue(!file.exists());
         DfsFile file2 = (DfsFile) file.getParentFile();
@@ -58,7 +58,7 @@ public class DfsFileTest extends BaseDfsClientTestCase {
     }
 
     public void testMkdirs() {
-        DfsFile file = new DfsFile(nameSpace, "/home/dfs/dir");
+        DfsFile file = new DfsFile(schema, "/home/dfs/dir");
         file.delete();
         Assert.assertTrue(!file.exists());
         DfsFile file2 = (DfsFile) file.getParentFile();
