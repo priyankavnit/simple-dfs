@@ -10,22 +10,20 @@ import org.slf4j.LoggerFactory;
 public class SchemaManager {
     private static final Logger logger = LoggerFactory.getLogger(SchemaManager.class);
     private static final IBatisTemplate template = ServiceFactory.findService(IBatisTemplate.class);
-    // private final TableManager tblMgr = (TableManager) ServiceFactory.findService(TableManager.class);
-    // private final TableLocator tblLoc = (TableLocator) ServiceFactory.findService(TableLocator.class);
     private final UuidHexGenerator idGen = (UuidHexGenerator) ServiceFactory.findService(UuidHexGenerator.class);
 
     public DfsSchema create(DfsSchema dfsSchema) {
         dfsSchema.setId(idGen.generate());
-        template.insert("dfs.ns.insert", dfsSchema);
+        template.insert("dfs.schema.insert", dfsSchema);
         return dfsSchema;
     }
 
     public void deleteByName(String name) {
-        template.delete("dfs.ns.delete.byname", name);
+        template.delete("dfs.schema.delete.name", name);
     }
 
     public DfsSchema findByName(final String name) {
-        return (DfsSchema) template.findByParameter("dfs.ns.select.byname", name);
+        return (DfsSchema) template.findByParameter("dfs.schema.select.name", name);
     }
 
     // public DfsSchema save(final DfsSchema ns) {

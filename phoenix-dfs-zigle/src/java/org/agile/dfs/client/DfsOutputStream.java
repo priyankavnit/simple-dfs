@@ -13,8 +13,8 @@ public class DfsOutputStream extends OutputStream {
     private DfsFile dfsFile;
     private BlockCache cache;
 
-    public DfsOutputStream(String nameSpace, String fileFullPath) throws IOException {
-        this(new DfsFile(nameSpace, fileFullPath));
+    public DfsOutputStream(String schema, String fileFullPath) throws IOException {
+        this(new DfsFile(schema, fileFullPath));
     }
 
     public DfsOutputStream(DfsFile dfile) throws IOException {

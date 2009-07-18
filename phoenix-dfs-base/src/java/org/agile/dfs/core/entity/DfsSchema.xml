@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap>
-	<cacheModel id="cache" type="LRU" readOnly="false" serialize="true">
+	<cacheModel id="schema.cache" type="LRU" readOnly="false" serialize="true">
 		<property value="50" name="size" />
 		<flushInterval seconds="5" />
-		<flushOnExecute statement="dfs.ns.insert" />
-		<flushOnExecute statement="dfs.ns.delete.byname" />
-		<flushOnExecute statement="dfs.ns.select.byname" /> 
+		<flushOnExecute statement="dfs.schema.insert" />
+		<flushOnExecute statement="dfs.schema.delete.name" />
+		<flushOnExecute statement="dfs.schema.select.name" /> 
 	</cacheModel>
 
-	<resultMap id="NameSpaceResult" class="org.agile.dfs.core.entity.DfsSchema">
+	<resultMap id="SchemaResult" class="org.agile.dfs.core.entity.DfsSchema">
 		<result property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="url" column="url" />
@@ -19,7 +19,7 @@
 	</resultMap>
 
 	<!-- Insert NameSpace -->
-	<insert id="dfs.ns.insert" parameterClass="org.agile.dfs.core.entity.DfsSchema">
+	<insert id="dfs.schema.insert" parameterClass="org.agile.dfs.core.entity.DfsSchema" >
 		insert into TBL_DFS_NAMESPACE
 		( id, name, url, status, createTime, description )
 		values
@@ -27,12 +27,12 @@
   	</insert>
  
 	<!-- delete NameSpace By Name-->
- 	<delete id="dfs.ns.delete.byname" parameterClass="string" >
+ 	<delete id="dfs.schema.delete.name" parameterClass="string" >
  		delete from TBL_DFS_NAMESPACE where name=#name#
  	</delete>
  	
  	<!-- Select NameSpace By Name-->
-	<select id="dfs.ns.select.byname" cacheModel="cache" parameterClass="string" resultMap="NameSpaceResult">
+	<select id="dfs.schema.select.name" cacheModel="schema.cache" parameterClass="string" resultMap="SchemaResult">
 		select * from TBL_DFS_NAMESPACE where name=#name#
 	</select>
 </sqlMap>

@@ -1,6 +1,7 @@
 package org.agile.dfs.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.ibatis.sqlmap.client.SqlMapSession;
 
@@ -48,6 +49,15 @@ public class IBatisTemplate {
         return this.doInSqlMapSession(new SqlMapAction() {
             public Object execute(SqlMapSession session) throws SQLException {
                 return session.queryForObject(statementId, param);
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public List findListByParameter(final String statementId, final Object param) throws IBatisDaoException {
+        return (List) this.doInSqlMapSession(new SqlMapAction() {
+            public Object execute(SqlMapSession session) throws SQLException {
+                return session.queryForList(statementId, param);
             }
         });
     }

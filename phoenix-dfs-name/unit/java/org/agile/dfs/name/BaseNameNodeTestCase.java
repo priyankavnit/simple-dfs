@@ -24,4 +24,7 @@ public class BaseNameNodeTestCase extends TestCase {
         super.tearDown();
     }
 
+    public void testDemo() {
+
+    }
 }

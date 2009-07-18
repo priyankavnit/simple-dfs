@@ -4,21 +4,21 @@ import junit.framework.Assert;
 
 import org.agile.dfs.core.entity.DfsSchema;
 import org.agile.dfs.name.BaseNameNodeTestCase;
-import org.agile.dfs.name.manager.SchemaManager;
 import org.agile.dfs.util.ServiceFactory;
 
 public class FileServiceImplTest extends BaseNameNodeTestCase {
 
-    private static FileService fileService = (FileService) ServiceFactory.findService(FileServiceImpl.class);
-    private static SchemaManager nameManager = (SchemaManager) ServiceFactory.findService(SchemaManager.class);
+    private static FileService fileService = ServiceFactory.findService(FileServiceImpl.class);
+    private static SchemaService schemaService = ServiceFactory.findService(SchemaServiceImpl.class);
 
-    private static String ns = "phoenix";
-    static {
-        nameManager.build(new DfsSchema(ns, "http://www.zigle.com/"));
-    }
+    private String schema = "phoenix";
 
     protected void setUp() throws Exception {
         super.setUp();
+        schemaService.destory(schema);
+        if (!schemaService.exists(schema)) {
+            schemaService.build(new DfsSchema(schema, "http://www.agile.com/dfs/name"));
+        }
     }
 
     protected void tearDown() throws Exception {
@@ -26,26 +26,53 @@ public class FileServiceImplTest extends BaseNameNodeTestCase {
     }
 
     public void testCreateNewFile() {
-        String dir = "/home/testCreateNewFile";
-        fileService.mkdir(ns, dir, true);
-        fileService.createNewFile(ns, dir + "/" + "soms.dfd");
+        String file = "/home/testCreateNewFile";
+        fileService.delete(schema, file);
+        Assert.assertTrue(!fileService.exists(schema, file));
+        fileService.mkdirs(schema, "/home");
+        fileService.createNewFile(schema, file);
+        Assert.assertTrue(fileService.exists(schema, file));
     }
 
-    public void testExists() {
-        String dir = "/home/testExists";
-        fileService.mkdir(ns, dir, true);
-        fileService.createNewFile(ns, dir + "/" + "soms.dfd");
-        boolean flag = fileService.exists(ns, dir + "/" + "soms.dfd");
-        Assert.assertTrue(flag);
-        boolean flag2 = fileService.exists(ns, dir + "/" + "soms.dfd.2");
-        Assert.assertTrue(!flag2);
+    public void testCreateNewFiles() {
+        String file = "/home/" + new java.util.Random().nextLong() + "/testCreateNewFile";
+        fileService.delete(schema, file);
+        Assert.assertTrue(!fileService.exists(schema, file));
+        // fileService.mkdirs(schema, "/home");
+        fileService.createNewFiles(schema, file);
+        Assert.assertTrue(fileService.exists(schema, file));
     }
 
     public void testMkdir() {
-        String dir = "/home/testMkdir";
-        fileService.mkdir(ns, dir, true);
-        boolean flag = fileService.exists(ns, dir);
-        Assert.assertTrue(flag);
+        String dir = "/home/" + new java.util.Random().nextLong() + "dir";
+        fileService.delete(schema, dir);
+        Assert.assertTrue(!fileService.exists(schema, dir));
+        fileService.mkdir(schema, "/home");
+        fileService.mkdir(schema, dir);
+        Assert.assertTrue(fileService.exists(schema, dir));
     }
 
+    public void testMkdirs() {
+        String dir = "/home/" + new java.util.Random().nextLong() + "/dir";
+        fileService.delete(schema, dir);
+        Assert.assertTrue(!fileService.exists(schema, dir));
+        fileService.mkdirs(schema, dir);
+        Assert.assertTrue(fileService.exists(schema, dir));
+    }
+
+    public void testDelete() {
+        String dir1 = "/home/" + new java.util.Random().nextLong() + "/dir";
+        fileService.delete(schema, dir1);
+        Assert.assertTrue(!fileService.exists(schema, dir1));
+        fileService.mkdirs(schema, dir1);
+
+        String dir2 = "/home/" + new java.util.Random().nextLong() + "/dir";
+        fileService.delete(schema, dir2);
+        Assert.assertTrue(!fileService.exists(schema, dir2));
+        fileService.mkdirs(schema, dir2);
+
+        fileService.delete(schema, "/home");
+        Assert.assertTrue(!fileService.exists(schema, dir1));
+        Assert.assertTrue(!fileService.exists(schema, dir2));
+    }
 }

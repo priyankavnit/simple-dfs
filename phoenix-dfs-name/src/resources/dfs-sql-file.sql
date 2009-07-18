@@ -3,8 +3,12 @@ CREATE TABLE {tableName} (
 	parentId VARCHAR(20) NOT NULL,
 	name VARCHAR(200) NOT NULL,
 	status VARCHAR(10) NOT NULL,
-	blockNum INT,
-	copyNum INT,
+	blockNum INT NOT NULL,
+	minCopyNum INT NOT NULL,
+	maxCopyNum INT NOT NULL,
+	nowCopyNum INT NOT NULL,
+	type VARCHAR(200) NOT NULL,
+	version INT NOT NULL,
 	PRIMARY KEY (id)
 );
 

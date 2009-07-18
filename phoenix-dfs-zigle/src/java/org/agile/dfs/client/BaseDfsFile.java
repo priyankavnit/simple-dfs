@@ -11,7 +11,7 @@ import java.net.URL;
 public class BaseDfsFile extends java.io.File {
     private static final long serialVersionUID = 1978;
     private String id;
-    private String nameSpace;
+    private String schema;
     private String fullPath;
 
     /**
@@ -20,12 +20,12 @@ public class BaseDfsFile extends java.io.File {
      * 
      * DfsFile path style: /home/agile/some.jpg (file), /home/photo (directory)
      * 
-     * @param nameSpace
+     * @param schema
      * @param fullPath
      */
-    public BaseDfsFile(String nameSpace, String fullPath) {
+    public BaseDfsFile(String schema, String fullPath) {
         super(fullPath);
-        this.nameSpace = nameSpace;
+        this.schema = schema;
         this.fullPath = fullPath;
     }
 
@@ -38,7 +38,7 @@ public class BaseDfsFile extends java.io.File {
     }
 
     public String getSchema() {
-        return nameSpace;
+        return schema;
     }
 
     public String getFullPath() {
@@ -178,7 +178,7 @@ public class BaseDfsFile extends java.io.File {
     }
 
     public String toString() {
-        return "Dfs file, ns:" + this.nameSpace + ", path:" + fullPath;
+        return "Dfs file, ns:" + this.schema + ", path:" + fullPath;
     }
 
     public URI toURI() {

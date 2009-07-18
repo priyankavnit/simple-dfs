@@ -1,6 +1,7 @@
 package org.agile.dfs.core.entity;
 
-public class FileItem {
+public class FileItem implements java.io.Serializable { 
+    private static final long serialVersionUID = 1978;
     public static final String TYPE_DIR = "DIR";
     public static final String TYPE_FILE = "FILE";
     public static final String STATUS_INIT = "INIT";
@@ -18,6 +19,10 @@ public class FileItem {
     private int nowCopyNum;// not null, default 0
     private String type;// not null
     private int version;// not null
+
+    public boolean isDirectory() {
+        return TYPE_DIR.equals(type);
+    }
 
     public String toString() {
         StringBuffer sb = new StringBuffer(100);
