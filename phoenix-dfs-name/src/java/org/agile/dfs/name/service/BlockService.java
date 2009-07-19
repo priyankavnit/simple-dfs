@@ -2,7 +2,7 @@ package org.agile.dfs.name.service;
 
 import org.agile.dfs.core.entity.BlockItem;
 
-public interface SpaceService {
+public interface BlockService {
 
     public BlockItem locate(String fileId);
 
