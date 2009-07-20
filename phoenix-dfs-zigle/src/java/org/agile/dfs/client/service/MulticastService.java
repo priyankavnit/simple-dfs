@@ -1,7 +1,7 @@
 package org.agile.dfs.client.service;
 
-import org.agile.dfs.client.DfsClientInitializer;
-import org.agile.dfs.core.common.Configuration;
+import org.agile.dfs.client.DfsInitializer;
+import org.agile.dfs.client.config.Configuration;
 import org.agile.dfs.core.entity.NodeItem;
 import org.agile.dfs.rpc.serialize.RpcDeSerializer;
 import org.agile.dfs.rpc.serialize.SerializerFactory;
@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MulticastService extends Thread {
-    private final static Logger logger = LoggerFactory.getLogger(DfsClientInitializer.class);
+    private final static Logger logger = LoggerFactory.getLogger(DfsInitializer.class);
     private static NameNodeService nameNodeService = NameNodeService.instance();
     private RpcDeSerializer deserializer = SerializerFactory.instance().getRpcDeSerializer();
 
