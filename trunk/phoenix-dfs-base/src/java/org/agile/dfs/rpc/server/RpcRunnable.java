@@ -3,13 +3,13 @@ package org.agile.dfs.rpc.server;
 import java.io.IOException;
 
 import org.agile.dfs.rpc.endpoint.Endpointable;
-import org.agile.dfs.util.MulValueThreadLocal;
+import org.agile.dfs.rpc.util.MulValueLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RpcRunnable implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RpcRunnable.class);
-    private static final MulValueThreadLocal local = MulValueThreadLocal.newInstance();
+    private static final MulValueLocal local = MulValueLocal.newInstance();
     private RpcHandler handler;
     private Endpointable endpoint;
 

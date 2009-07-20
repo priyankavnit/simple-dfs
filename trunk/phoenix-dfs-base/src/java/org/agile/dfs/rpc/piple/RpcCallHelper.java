@@ -4,7 +4,7 @@ import org.agile.dfs.rpc.exception.RpcSerializeException;
 import org.agile.dfs.rpc.serialize.RpcDeSerializer;
 import org.agile.dfs.rpc.serialize.RpcSerializer;
 import org.agile.dfs.rpc.serialize.SerializerFactory;
-import org.agile.dfs.util.ArrayHelper;
+import org.agile.dfs.rpc.util.ArrayHelper;
 
 public class RpcCallHelper {
     private static final RpcSerializer serializer = SerializerFactory.instance().getRpcSerializer();

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!-- Select NameSpace By Name-->
+	<cacheModel id="block.cache" type="LRU" readOnly="false" serialize="true">
+		<property value="5000" name="size" />
+		<flushInterval seconds="5" />
+		<flushOnExecute statement="dfs.block.insert" />  
+		<flushOnExecute statement="dfs.block.update" />  
+		<flushOnExecute statement="dfs.block.select.id" />  
+		<flushOnExecute statement="dfs.block.select.fileId" />  
+	</cacheModel>
+    
+	<resultMap id="BlockItemResult" class="org.agile.dfs.core.entity.BlockItem">
+		<result property="id" column="id" />
+		<result property="nodeId" column="nodeId" />
+		<result property="fileId" column="fileId" />
+		<result property="status" column="status" /> 
+		<result property="blockNo" column="blockNo" />
+		<result property="copyNo" column="copyNo" />
+		<result property="capacity" column="capacity" />
+		<result property="size" column="size" /> 
+	</resultMap>
+	 
+	<!-- Insert -->
+	<insert id="dfs.block.insert" parameterClass="java.util.HashMap">
+		insert into $table$
+		( id, nodeId, fileId, status, blockNo, copyNo, capacity, size )
+		values
+		( #id#, #nodeId#, #fileId#, #status#, #blockNo#, #copyNo#, #capacity#, #size# )
+  	</insert>
+  	
+	<update id="dfs.block.update" parameterClass="java.util.HashMap">
+		update $table$ set status=#status#, size=#size# where id=#id#
+  	</update>
+  	  	
+  	<select id="dfs.block.select.fileId" parameterClass="java.util.HashMap" cacheModel="block.cache" resultMap="BlockItemResult">
+  		select * from $table$ where fileId=#fileId# order by blockNo
+  	</select> 
+  	
+  	<select id="dfs.block.select.id" parameterClass="java.util.HashMap" cacheModel="block.cache" resultMap="BlockItemResult">
+  		select * from $table$ where id=#id#
+  	</select>   	
+</sqlMap>

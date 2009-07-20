@@ -2,9 +2,9 @@ package org.agile.dfs.rpc.server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import org.agile.dfs.core.exception.DfsException;
+ 
 import org.agile.dfs.rpc.endpoint.Endpointable;
+import org.agile.dfs.rpc.exception.RpcException;
 import org.agile.dfs.rpc.piple.RpcCallHelper;
 import org.agile.dfs.rpc.piple.RpcRequest;
 import org.agile.dfs.rpc.piple.RpcResponse;
@@ -34,7 +34,7 @@ public abstract class RpcHandler {
                 resp.setResult(result);
                 send(endpoint, resp);
             }
-        } catch (DfsException e) {
+        } catch (RpcException e) {
             RpcResponse resp = new RpcResponse();
             resp.setStatus(RpcResponse.STATUS_EXCEPTION);
             resp.setResult(e.toString());

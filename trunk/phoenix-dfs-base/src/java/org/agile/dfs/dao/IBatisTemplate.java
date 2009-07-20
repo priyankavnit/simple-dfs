@@ -28,8 +28,13 @@ public class IBatisTemplate {
         });
     }
 
-    public void update(String statementId, Object param) throws SQLException {
-
+    public void update(final String statementId, final Object param) throws IBatisDaoException {
+        this.doInSqlMapSession(new SqlMapAction() {
+            public Object execute(SqlMapSession session) throws SQLException {
+                session.update(statementId, param);
+                return param;
+            }
+        });
     }
 
     public void delete(final String statementId, final Object param) throws IBatisDaoException {
