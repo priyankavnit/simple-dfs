@@ -56,14 +56,18 @@ public class FileItemManager {
     public FileItem mkdir(DfsSchema schema, String fullPath, boolean mkp) {
         int pos = fullPath.lastIndexOf("/");
         if (pos >= fullPath.length() - 1) {
-            throw new NameNodeException("Not exist name in " + fullPath);
+            // throw new NameNodeException("Not exist name in " + fullPath);
+            logger.warn("Not exist name in " + fullPath);
+            return null;
         }
         String p = fullPath.substring(0, pos);
         String n = fullPath.substring(pos + 1);
         FileItem parent = this.findByPath(schema, p);
         if (parent == null) {
             if (!mkp) {
-                throw new NameNodeException("Parent directory " + p + " not exist! ");
+                // throw new NameNodeException("Parent directory " + p + " not exist! ");
+                logger.warn("Parent directory " + p + " not exist! ");
+                return null;
             } else {
                 String[] paths = StringUtil.simpleSplit(fullPath, '/');
                 FileItem tp = this.findRoot(schema);

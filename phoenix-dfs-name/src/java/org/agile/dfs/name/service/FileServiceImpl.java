@@ -8,9 +8,11 @@ import org.agile.dfs.name.exception.NameNodeException;
 import org.agile.dfs.name.manager.FileItemManager;
 import org.agile.dfs.name.manager.SchemaManager;
 import org.agile.dfs.util.ServiceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileServiceImpl implements FileService {
-
+    private static final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
     private FileItemManager fileItemManager;
     private SchemaManager schemaManager;
 
@@ -19,22 +21,22 @@ public class FileServiceImpl implements FileService {
         this.schemaManager = ServiceFactory.findService(SchemaManager.class);
     }
 
-    public boolean createNewFile(String schema, String fullPath) {
+    public String createNewFile(String schema, String fullPath) {
         DfsSchema ds = schemaManager.findByName(schema);
         if (ds == null) {
             throw new NameNodeException("Schema " + schema + " not exist! ");
         }
         FileItem item = fileItemManager.mkfile(ds, fullPath, false);
-        return item != null ? item.getId() != null ? true : false : false;
+        return item != null ? item.getId() != null ? item.getId() : null : null;
     }
 
-    public boolean createNewFiles(String schema, String fullPath) {
+    public String createNewFiles(String schema, String fullPath) {
         DfsSchema ds = schemaManager.findByName(schema);
         if (ds == null) {
             throw new NameNodeException("Schema " + schema + " not exist! ");
         }
         FileItem item = fileItemManager.mkfile(ds, fullPath, true);
-        return item != null ? item.getId() != null ? true : false : false;
+        return item != null ? item.getId() != null ? item.getId() : null : null;
     }
 
     public boolean exists(String schema, String fullPath) {
@@ -43,9 +45,6 @@ public class FileServiceImpl implements FileService {
             throw new NameNodeException("Schema " + schema + " not exist! ");
         }
         FileItem item = fileItemManager.findByPath(ds, fullPath);
-        if (item == null) {
-            item = fileItemManager.findByPath(ds, fullPath);
-        }
         return item != null;
     }
 
@@ -54,8 +53,17 @@ public class FileServiceImpl implements FileService {
         if (ds == null) {
             throw new NameNodeException("Schema " + schema + " not exist! ");
         }
-        FileItem item = fileItemManager.mkdir(ds, fullPath, false);
-        return item != null ? item.getId() != null : false;
+        if (!exists(schema, fullPath)) {
+            try {
+                FileItem item = fileItemManager.mkdir(ds, fullPath, false);
+                return item != null ? item.getId() != null : false;
+            } catch (Exception e) {
+                logger.error("Fail to mkdir " + schema + ":" + fullPath, e);
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     public boolean mkdirs(String schema, String fullPath) {
@@ -63,8 +71,17 @@ public class FileServiceImpl implements FileService {
         if (ds == null) {
             throw new NameNodeException("Schema " + schema + " not exist! ");
         }
-        FileItem item = fileItemManager.mkdir(ds, fullPath, true);
-        return item != null ? item.getId() != null : false;
+        if (!exists(schema, fullPath)) {
+            try {
+                FileItem item = fileItemManager.mkdir(ds, fullPath, true);
+                return item != null ? item.getId() != null : false;
+            } catch (Exception e) {
+                logger.error("Fail to mkdir " + schema + ":" + fullPath, e);
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     public void delete(String schema, String fullPath) {
@@ -90,5 +107,14 @@ public class FileServiceImpl implements FileService {
         }
         fileItemManager.deleteByParentId(schema, fileId);
         fileItemManager.deleteById(schema, fileId);
+    }
+
+    public FileItem findByPath(String schema, String fullPath) {
+        DfsSchema ds = schemaManager.findByName(schema);
+        if (ds == null) {
+            throw new NameNodeException("Schema " + schema + " not exist! ");
+        }
+        FileItem item = fileItemManager.findByPath(ds, fullPath);
+        return item;
     }
 }

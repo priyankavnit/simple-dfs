@@ -4,8 +4,8 @@ import org.agile.dfs.core.entity.BlockItem;
 
 public interface BlockService {
 
-    public BlockItem locate(String fileId);
+    public BlockItem locate(String schema, String fileId);
 
-    public void commit(String fileId, String blockId);
+    public void commit(String schema, String fileId, String blockId);
 
 }
