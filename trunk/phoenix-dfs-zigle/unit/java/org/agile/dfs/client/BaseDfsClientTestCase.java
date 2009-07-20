@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class BaseDfsClientTestCase extends TestCase {
 
     static {
-        DfsClientInitializer.init();
+        DfsInitializer.init();
         // multicast time interval
         try {
             Thread.sleep(2 * 1000);
