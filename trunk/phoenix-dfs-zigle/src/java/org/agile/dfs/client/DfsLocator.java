@@ -5,7 +5,7 @@ import org.agile.dfs.core.entity.NodeItem;
 import org.agile.dfs.rpc.client.AsyncProxyFactory;
 import org.agile.dfs.rpc.client.RpcProxyFactory;
 
-public class ServiceLocator {
+public class DfsLocator {
 
     private static final RpcProxyFactory proxyFactory = new RpcProxyFactory();
     private static final AsyncProxyFactory asyncFactory = new AsyncProxyFactory();

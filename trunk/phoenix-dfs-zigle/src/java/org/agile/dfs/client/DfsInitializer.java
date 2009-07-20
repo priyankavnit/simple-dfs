@@ -4,8 +4,8 @@ import org.agile.dfs.client.service.MulticastService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DfsClientInitializer {
-    private final static Logger logger = LoggerFactory.getLogger(DfsClientInitializer.class);
+public class DfsInitializer {
+    private final static Logger logger = LoggerFactory.getLogger(DfsInitializer.class);
 
     private static boolean initFlag;
 

@@ -3,15 +3,16 @@ package org.agile.dfs.client;
 import java.io.File;
 import java.io.IOException;
 
+import org.agile.dfs.core.entity.FileItem;
+import org.agile.dfs.name.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.agile.dfs.name.service.FileService;
 
 public class DfsFile extends BaseDfsFile {
     private static final long serialVersionUID = 1978;
     private static final Logger logger = LoggerFactory.getLogger(DfsFile.class);
-    private static final FileService fileService = ServiceLocator.lookup(FileService.class);
+    private static final FileService fileService = DfsLocator.lookup(FileService.class);
+    private FileItem item;
 
     public DfsFile(String schema, String fullPath) {
         super(schema, fullPath);
@@ -19,16 +20,17 @@ public class DfsFile extends BaseDfsFile {
 
     @Override
     public boolean createNewFile() throws IOException {
-        boolean flag = fileService.createNewFile(this.getSchema(), this.getFullPath());
-        if (flag) {
+        String id = fileService.createNewFile(this.getSchema(), this.getFullPath());
+        if (id != null) {
+            this.setId(id);
             logger.info("Success to create file {}:{} ", this.getSchema(), this.getFullPath());
         }
-        return flag;
+        return id != null;
     }
 
     @Override
     public boolean mkdir() {
-        boolean flag = fileService.mkdir(this.getSchema(), this.getFullPath(), false);
+        boolean flag = fileService.mkdir(this.getSchema(), this.getFullPath());
         if (flag) {
             logger.info("Success to create directory {}:{})", this.getSchema(), this.getFullPath());
         }
@@ -37,7 +39,7 @@ public class DfsFile extends BaseDfsFile {
 
     @Override
     public boolean mkdirs() {
-        boolean flag = fileService.mkdir(this.getSchema(), this.getFullPath(), true);
+        boolean flag = fileService.mkdirs(this.getSchema(), this.getFullPath());
         if (flag) {
             logger.info("Success to create directory {}:{})", this.getSchema(), this.getFullPath());
         }
@@ -57,11 +59,17 @@ public class DfsFile extends BaseDfsFile {
 
     @Override
     public boolean delete() {
-        boolean flag = fileService.delete(this.getSchema(), this.getFullPath());
-        if (flag) {
-            this.setId(null);
+        fileService.delete(this.getSchema(), this.getFullPath());
+        this.setId(null);
+        return true;
+    }
+
+    @Override
+    public String getId() {
+        if (item == null) {
+            item = fileService.findByPath(this.getSchema(), this.getFullPath());
         }
-        return flag;
+        return item == null ? null : item.getId();
     }
 
 }
