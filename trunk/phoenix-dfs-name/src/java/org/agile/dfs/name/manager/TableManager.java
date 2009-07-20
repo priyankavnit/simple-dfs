@@ -43,7 +43,7 @@ public class TableManager {
         try {
             template.doInConnection(new ConnectionAction() {
                 public Object excute(Connection conn) throws Exception {
-                    logger.info("Drop table sql {}", sql);
+                    // logger.info("Drop table sql {}", sql);
                     Statement state = conn.createStatement();
                     state.execute(sql);
                     return null;
@@ -56,36 +56,37 @@ public class TableManager {
             return false;
         }
     }
-
-    // public void createDirTable(String schema) {
-    // final String tableName = tlocator.dirTableName(schema);
-    // final List list = readAllStatement("/dfs-sql-dir.sql");
-    // if (!existsTable(tableName)) {
-    // template.doInStatement(new StatementAction() {
-    // public Object excute(Statement stat) throws Exception {
-    // for (int i = 0, len = list.size(); i < len; i++) {
-    // String sql = (String) list.get(i);
-    // sql = StringUtil.simpleReplace(sql, "tableName", tableName);
-    // logger.info(sql);
-    // stat.execute(sql);
-    // }
-    // return null;
-    // }
-    // }, false);
-    // logger.info("Create table {} success. ", tableName);
-    // } else {
-    // logger.info("Table {} exists, not create. ", tableName);
-    // }
-    // }
+ 
 
     public void createFileTable(String schema) {
         final String tableName = tlocator.fileTable(schema);
-        final List list = readAllStatement("/dfs-sql-file.sql");
+        final List<String> list = readAllStatement("/dfs-sql-file.sql");
         if (!existsTable(tableName)) {
             template.doInStatement(new StatementAction() {
                 public Object excute(Statement stat) throws Exception {
                     for (int i = 0, len = list.size(); i < len; i++) {
-                        String sql = (String) list.get(i);
+                        String sql = list.get(i);
+                        sql = StringUtil.simpleReplace(sql, "tableName", tableName);
+                        logger.info(sql);
+                        stat.execute(sql);
+                    }
+                    return null;
+                }
+            }, false);
+            logger.info("Create table {} success. ", tableName);
+        } else {
+            logger.info("Table {} exists, not create. ", tableName);
+        }
+    }
+
+    public void createBlockTable(String schema) {
+        final String tableName = tlocator.blockTable(schema);
+        final List<String> list = readAllStatement("/dfs-sql-block.sql");
+        if (!existsTable(tableName)) {
+            template.doInStatement(new StatementAction() {
+                public Object excute(Statement stat) throws Exception {
+                    for (int i = 0, len = list.size(); i < len; i++) {
+                        String sql = list.get(i);
                         sql = StringUtil.simpleReplace(sql, "tableName", tableName);
                         logger.info(sql);
                         stat.execute(sql);
@@ -100,12 +101,12 @@ public class TableManager {
     }
 
     public void createSchemaTable() {
-        final List list = readAllStatement("/dfs-sql-ns.sql");
+        final List<String> list = readAllStatement("/dfs-sql-ns.sql");
         if (!existsTable("TBL_DFS_NAMESPACE")) {
             template.doInStatement(new StatementAction() {
                 public Object excute(Statement stat) throws Exception {
                     for (int i = 0, len = list.size(); i < len; i++) {
-                        String sql = (String) list.get(i);
+                        String sql =  list.get(i);
                         logger.info(sql);
                         stat.execute(sql);
                     }
@@ -118,8 +119,8 @@ public class TableManager {
         }
     }
 
-    private List readAllStatement(String fileName) {
-        List list = new ArrayList();
+    private List<String> readAllStatement(String fileName) {
+        List<String> list = new ArrayList<String>();
         InputStream input = TableManager.class.getResourceAsStream(fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 

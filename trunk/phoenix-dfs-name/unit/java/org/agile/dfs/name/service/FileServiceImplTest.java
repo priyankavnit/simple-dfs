@@ -8,14 +8,14 @@ import org.agile.dfs.util.ServiceFactory;
 
 public class FileServiceImplTest extends BaseNameNodeTestCase {
 
-    private static FileService fileService = ServiceFactory.findService(FileServiceImpl.class);
+    private static FileService fileService =  transactionFactory.findService(FileServiceImpl.class,new String[]{"create*","mk*","delete*"});
     private static SchemaService schemaService = ServiceFactory.findService(SchemaServiceImpl.class);
 
     private String schema = "phoenix";
 
     protected void setUp() throws Exception {
         super.setUp();
-        schemaService.destory(schema);
+        schemaService.destroy(schema);
         if (!schemaService.exists(schema)) {
             schemaService.build(new DfsSchema(schema, "http://www.agile.com/dfs/name"));
         }

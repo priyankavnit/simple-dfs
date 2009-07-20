@@ -7,7 +7,7 @@
 <sqlMapConfig>
 	<settings cacheModelsEnabled="true" />
 
-	<transactionManager type="JDBC" commitRequired="true">
+	<transactionManager type="JDBC" >
 		<dataSource type="SIMPLE">
 			<property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
 			<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3306/dfs" />
@@ -18,4 +18,5 @@
 
 	<sqlMap resource="org/agile/dfs/core/entity/DfsSchema.xml" />
 	<sqlMap resource="org/agile/dfs/core/entity/FileItem.xml" />
+	<sqlMap resource="org/agile/dfs/core/entity/BlockItem.xml" />
 </sqlMapConfig>

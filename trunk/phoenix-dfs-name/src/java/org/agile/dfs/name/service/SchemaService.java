@@ -8,5 +8,5 @@ public interface SchemaService {
 
     public DfsSchema build(final DfsSchema dfsSchema);
 
-    public void destory(final String schema);
+    public void destroy(final String schema);
 }

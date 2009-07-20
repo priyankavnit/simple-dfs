@@ -26,6 +26,8 @@ public class SchemaServiceImpl implements SchemaService {
         root.setStatus(FileItem.STATUS_NORMAL);
         root.setType(FileItem.TYPE_DIR);
         fileItemManager.create(dfsSchema, root);
+        // create schema's block table
+        tableManager.createBlockTable(dfsSchema.getName());
         return dfsSchema;
     }
 
@@ -46,9 +48,10 @@ public class SchemaServiceImpl implements SchemaService {
         return true;
     }
 
-    public void destory(String schema) {
+    public void destroy(String schema) {
         schemaManager.deleteByName(schema);
         tableManager.dropTable(tableLocator.fileTable(schema));
+        tableManager.dropTable(tableLocator.blockTable(schema));
     }
 
 }
