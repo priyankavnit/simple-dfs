@@ -1,11 +1,11 @@
 package org.agile.dfs.rpc.client;
 
 import org.agile.dfs.rpc.endpoint.Endpointable;
-import org.agile.dfs.util.MulValueThreadLocal;
+import org.agile.dfs.rpc.util.MulValueLocal;
 
-public class EndpointHelper {
+public class RpcContext {
 
-    private static final MulValueThreadLocal local = MulValueThreadLocal.newInstance();
+    private static final MulValueLocal local = MulValueLocal.newInstance();
 
     public static Endpointable current() {
 

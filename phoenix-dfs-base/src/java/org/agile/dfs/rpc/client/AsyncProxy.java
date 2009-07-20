@@ -7,12 +7,11 @@ import org.agile.dfs.rpc.endpoint.EndpointFactory;
 import org.agile.dfs.rpc.endpoint.Endpointable;
 import org.agile.dfs.rpc.exception.RpcOperateException;
 import org.agile.dfs.rpc.piple.RpcRequest;
-import org.agile.dfs.rpc.piple.RpcResponse;
-import org.agile.dfs.util.MulValueThreadLocal;
+import org.agile.dfs.rpc.util.MulValueLocal;
 
 @SuppressWarnings("unchecked")
 public class AsyncProxy {
-    private static final MulValueThreadLocal local = MulValueThreadLocal.newInstance();
+    private static final MulValueLocal local = MulValueLocal.newInstance();
     private static final EndpointFactory endpointMgr = new EndpointFactory();
     private Endpointable endpoint;
     private Class interfaceClz;

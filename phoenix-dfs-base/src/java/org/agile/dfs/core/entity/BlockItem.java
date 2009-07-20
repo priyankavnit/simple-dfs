@@ -1,27 +1,28 @@
 package org.agile.dfs.core.entity;
 
-public class BlockItem {
+public class BlockItem implements java.io.Serializable {
+    private static final long serialVersionUID = 1978;
+    public static final String STATUS_READY = "READY";
+    public static final String STATUS_NORMAL = "NORMAL";
+    public static final String STATUS_TRASH = "TRASH";
+    public static final String STATUS_DELETE = "DELETE";
+
     private String id;
-    private FileItem file;
-    private NodeItem node;
+    private String nodeId;
+    private String fileId;
     private String status;
     private int blockNo;
     private int copyNo;
     private int capacity;
     private int size;
 
-    public static BlockItem fromString(String s) {
-        BlockItem item = new BlockItem();
-        // TODO impl
-        return item;
+    public int free() {
+        return capacity - size;
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer(100);
         sb.append("id:").append(id).append(",");
-        sb.append("file:").append(file).append(",");
-        sb.append("node:").append(node).append(",");
-        sb.append("status:").append(status).append(",");
         sb.append("blockNo:").append(blockNo).append(",");
         sb.append("copyNo:").append(copyNo).append(",");
         sb.append("capacity:").append(capacity).append(",");
@@ -38,20 +39,20 @@ public class BlockItem {
         this.id = id;
     }
 
-    public FileItem getFile() {
-        return file;
+    public String getNodeId() {
+        return nodeId;
     }
 
-    public void setFile(FileItem file) {
-        this.file = file;
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
 
-    public NodeItem getNode() {
-        return node;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setNode(NodeItem node) {
-        this.node = node;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
     public String getStatus() {
@@ -78,6 +79,14 @@ public class BlockItem {
         this.copyNo = copyNo;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
     public int getSize() {
         return size;
     }
@@ -86,11 +95,4 @@ public class BlockItem {
         this.size = size;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
 }

@@ -5,6 +5,10 @@ public class DataNode extends NodeItem {
     private int capacity;
     private int usedSize;
 
+    public DataNode(String ip, int port) {
+        super(NODE_TYPE_DATA, ip, port);
+    }
+
     public int getBlockNum() {
         return blockNum;
     }

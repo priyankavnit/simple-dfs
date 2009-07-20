@@ -3,7 +3,7 @@ package org.agile.dfs.rpc.endpoint;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.agile.dfs.util.StringUtil;
+import org.agile.dfs.rpc.util.StringUtil;
 
 public class EndpointFactory {
 

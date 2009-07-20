@@ -1,8 +1,7 @@
 package org.agile.dfs.rpc.exception;
 
-import org.agile.dfs.core.exception.DfsException;
 
-public class ReflectOperateException extends DfsException {
+public class ReflectOperateException extends RpcException {
     private static final long serialVersionUID = 1978;
 
     public ReflectOperateException(Exception e) {

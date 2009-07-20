@@ -51,10 +51,7 @@ public abstract class RpcServer extends SimpleTcpServer {
 
     public final NodeItem self() {
         if (_self == null) {
-            _self = new NodeItem();
-            _self.setIp(this.getIp());
-            _self.setPort(this.getPort());
-            _self.setType(getNodeType());
+            _self = new NodeItem(this.getNodeType(), this.getIp(), this.getPort());
             _self.setStatus(NodeItem.NODE_STATUS_INIT);
         }
         return _self;

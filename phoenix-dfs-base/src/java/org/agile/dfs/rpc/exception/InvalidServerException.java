@@ -2,9 +2,7 @@ package org.agile.dfs.rpc.exception;
 
 import java.io.IOException;
 
-import org.agile.dfs.core.exception.DfsException;
-
-public class InvalidServerException extends DfsException {
+public class InvalidServerException extends RpcException {
 
     private static final long serialVersionUID = 1978;
 

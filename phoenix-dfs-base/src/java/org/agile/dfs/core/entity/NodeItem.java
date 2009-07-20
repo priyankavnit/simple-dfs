@@ -1,6 +1,5 @@
 package org.agile.dfs.core.entity;
 
-import org.agile.dfs.util.StringUtil;
 
 public class NodeItem {
     public static final String NODE_TYPE_NAME = "NAME";
@@ -18,10 +17,6 @@ public class NodeItem {
     private String status;
     private int load;
 
-    public NodeItem() {
-
-    }
-
     public NodeItem(String type, String ip, int port) {
         this.type = type;
         this.ip = ip;
@@ -36,7 +31,10 @@ public class NodeItem {
             return false;
         }
         NodeItem item = (NodeItem) obj;
-        if (StringUtil.equals(this.type, item.type) && StringUtil.equals(this.ip, item.ip) && this.port == item.port) {
+        if (item == this) {
+            return true;
+        }
+        if (item.port == port && (item.ip != null && item.ip.equals(ip))) {
             return true;
         }
         return false;
@@ -53,19 +51,8 @@ public class NodeItem {
         StringBuffer sb = new StringBuffer(100);
         sb.append("ip:").append(ip).append(",");
         sb.append("port:").append(port);
-        // sb.append("type:").append(type).append(",");
-        // sb.append("status:").append(status);
+        sb.append("type:").append(type);
         return sb.toString();
-    }
-
-    public static NodeItem fromString(String str) {
-        NodeItem item = new NodeItem();
-        String[] ps = str.split(",");
-        item.setIp(ps[0].substring(3));
-        item.setPort(Integer.parseInt(ps[1].substring(5)));
-        item.setType(ps[2].substring(5));
-        item.setStatus(ps[3].substring(7));
-        return item;
     }
 
     /* getter and setter */
