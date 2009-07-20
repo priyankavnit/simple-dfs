@@ -9,12 +9,13 @@ import org.agile.dfs.name.service.SchemaService;
 
 public class DfsFileTest extends BaseDfsClientTestCase {
 
-    private static final SchemaService schemaService = ServiceLocator.lookup(SchemaService.class);
+    private static final SchemaService schemaService = DfsLocator.lookup(SchemaService.class);
 
     private String schema = "phoenix";
 
     protected void setUp() throws Exception {
         super.setUp();
+        // schemaService.destroy(schema);
         if (!schemaService.exists(schema)) {
             DfsSchema ns = new DfsSchema();
             ns.setName(schema);
@@ -28,9 +29,11 @@ public class DfsFileTest extends BaseDfsClientTestCase {
     }
 
     public void testCreateNewFile() throws IOException {
-        DfsFile file = new DfsFile(schema, "/home/dfs/one.jpg");
+        String path = "/home/dfs/one.jpg";
+        DfsFile file = new DfsFile(schema, path);
         file.delete();
-        DfsFile file2 = new DfsFile(schema, "/home/dfs/one.jpg");
+        Assert.assertTrue(!file.exists());
+        DfsFile file2 = new DfsFile(schema, path);
         file2.getParentFile().mkdirs();
         file2.createNewFile();
         Assert.assertTrue(file2.exists());

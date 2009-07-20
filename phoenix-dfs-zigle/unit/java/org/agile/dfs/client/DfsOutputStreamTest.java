@@ -2,13 +2,24 @@ package org.agile.dfs.client;
 
 import java.io.IOException;
 
+import org.agile.dfs.core.entity.DfsSchema;
+import org.agile.dfs.name.service.SchemaService;
+
 public class DfsOutputStreamTest extends BaseDfsClientTestCase {
+    private static final SchemaService schemaService = DfsLocator.lookup(SchemaService.class);
+
+    private String schema = "phoenix";
 
     private DfsOutputStream output;
 
     protected void setUp() throws Exception {
         super.setUp();
-        // DfsSchema ns = new DfsSchema("phoenix", "/home/test/test.jpg");
+        if (!schemaService.exists(schema)) {
+            DfsSchema ns = new DfsSchema();
+            ns.setName(schema);
+            ns.setUrl("http://www.agile.org/dfs");
+            schemaService.build(ns);
+        }
         DfsFile file = new DfsFile("phoenix", "/home/test/test.jpg");
         file.getParentFile().mkdirs();
         if (!file.exists()) {
@@ -25,17 +36,13 @@ public class DfsOutputStreamTest extends BaseDfsClientTestCase {
     }
 
     public void testWriteByteArray() throws IOException, InterruptedException {
-        // DfsClientInitializer.init();
-        // OutputStream dos = new DfsOutputStreamImpl("ns", "/agile/" + new
-        // java.util.Random().nextDouble() + "/as.jpg");
-        byte[] b = "hello one! hello two! hello 中国！".getBytes();
-        output.write(b, 0, b.length);
-        // for (int i = 0; i < 1024 * 1024 * 8; i++) {
-        // output.write(b);
-        // }
-        // output.close();
-        output.close(); 
-        // System.out.println(dos);
+        byte[] b = " hello one! hello two! hello 中国！\n".getBytes();
+        // output.write(b, 0, b.length);
+        for (int i = 0; i < 1 * 1024 * 4; i++) {
+            output.write(Integer.toString(i).getBytes());
+            output.write(b);
+        }
+        output.close();
     }
 
 }
