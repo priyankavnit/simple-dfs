@@ -32,10 +32,10 @@ public class TcpEndpoint extends AbstractEndpoint {
     public TcpEndpoint(Socket socket) {
         try {
             this.socket = socket;
-            in = socket.getInputStream();
-            out = socket.getOutputStream();
-            // in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
-            // out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
+            // in = socket.getInputStream();
+            // out = socket.getOutputStream();
+            in = new BufferedInputStream(socket.getInputStream(), 32 * 1024);
+            out = new BufferedOutputStream(socket.getOutputStream(), 32 * 1024);
         } catch (IOException e) {
             throw new InvalidServerException("Tcp endpoint " + socket + " is invalid!", e);
         }

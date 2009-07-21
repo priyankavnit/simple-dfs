@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.agile.dfs.core.common.Configuration;
+import org.agile.dfs.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

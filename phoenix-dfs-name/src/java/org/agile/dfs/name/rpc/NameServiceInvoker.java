@@ -16,7 +16,7 @@ import org.agile.dfs.rpc.exception.ReflectOperateException;
 import org.agile.dfs.rpc.piple.RpcRequest;
 import org.agile.dfs.rpc.server.RpcInvoker;
 
-public class NameRemoteInvoker implements RpcInvoker {
+public class NameServiceInvoker implements RpcInvoker {
     protected static final IBatisTransactionFactory factory = new IBatisTransactionFactory();
     private static final String[] BLK_TRAN = new String[] { "commit", "locate" };
     private static final String[] FLE_TRAN = new String[] { "create*", "mk*", "delete*" };

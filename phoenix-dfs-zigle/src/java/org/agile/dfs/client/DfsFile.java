@@ -3,6 +3,7 @@ package org.agile.dfs.client;
 import java.io.File;
 import java.io.IOException;
 
+import org.agile.dfs.client.service.DfsServiceLocator;
 import org.agile.dfs.core.entity.FileItem;
 import org.agile.dfs.name.service.FileService;
 import org.slf4j.Logger;
@@ -11,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class DfsFile extends BaseDfsFile {
     private static final long serialVersionUID = 1978;
     private static final Logger logger = LoggerFactory.getLogger(DfsFile.class);
-    private static final FileService fileService = DfsLocator.lookup(FileService.class);
+    private static final FileService fileService = DfsServiceLocator.lookup(FileService.class);
     private FileItem item;
 
     public DfsFile(String schema, String fullPath) {

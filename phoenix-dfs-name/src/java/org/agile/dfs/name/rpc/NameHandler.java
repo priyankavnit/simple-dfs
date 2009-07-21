@@ -7,7 +7,7 @@ public class NameHandler extends RpcHandler {
 
     @Override
     public RpcInvoker getRpcInvoker() {
-        return new NameRemoteInvoker();
+        return new NameServiceInvoker();
     }
 
 }

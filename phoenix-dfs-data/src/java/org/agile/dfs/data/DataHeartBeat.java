@@ -1,6 +1,6 @@
 package org.agile.dfs.data;
 
-import org.agile.dfs.core.common.Configuration;
+import org.agile.dfs.config.Configuration;
 import org.agile.dfs.core.entity.NodeItem;
 import org.agile.dfs.data.rpc.DataServer;
 import org.agile.dfs.multicast.MulticastClient;

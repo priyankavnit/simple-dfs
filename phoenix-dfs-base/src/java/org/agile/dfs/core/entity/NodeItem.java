@@ -1,5 +1,6 @@
 package org.agile.dfs.core.entity;
 
+import java.util.Date;
 
 public class NodeItem {
     public static final String NODE_TYPE_NAME = "NAME";
@@ -11,11 +12,20 @@ public class NodeItem {
     public static final String NODE_STATUS_DOWN = "DOWN";
     public static final String NODE_STATUS_ERROR = "ERROR";
 
+    private String id;
     private String type;
     private String ip;
     private int port;
     private String status;
-    private int load;
+    private Date createTime;
+    private Date lastActiveTime;
+
+    private int jvmLoad;
+    private int connNum;
+
+    public NodeItem() {
+
+    }
 
     public NodeItem(String type, String ip, int port) {
         this.type = type;
@@ -34,7 +44,11 @@ public class NodeItem {
         if (item == this) {
             return true;
         }
-        if (item.port == port && (item.ip != null && item.ip.equals(ip))) {
+        // if (item.port == port && (item.ip != null && item.ip.equals(ip))) {
+        // return true;
+        // }
+
+        if (item.id != null && item.id.equals(id)) {
             return true;
         }
         return false;
@@ -49,8 +63,9 @@ public class NodeItem {
 
     public String toString() {
         StringBuffer sb = new StringBuffer(100);
+        sb.append("id:").append(id).append(",");
         sb.append("ip:").append(ip).append(",");
-        sb.append("port:").append(port);
+        sb.append("port:").append(port).append(",");
         sb.append("type:").append(type);
         return sb.toString();
     }
@@ -88,12 +103,44 @@ public class NodeItem {
         this.status = status;
     }
 
-    public int getLoad() {
-        return load;
+    public String getId() {
+        return id;
     }
 
-    public void setLoad(int load) {
-        this.load = load;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastActiveTime() {
+        return lastActiveTime;
+    }
+
+    public void setLastActiveTime(Date lastActiveTime) {
+        this.lastActiveTime = lastActiveTime;
+    }
+
+    public int getJvmLoad() {
+        return jvmLoad;
+    }
+
+    public void setJvmLoad(int jvmLoad) {
+        this.jvmLoad = jvmLoad;
+    }
+
+    public int getConnNum() {
+        return connNum;
+    }
+
+    public void setConnNum(int connNum) {
+        this.connNum = connNum;
     }
 
 }

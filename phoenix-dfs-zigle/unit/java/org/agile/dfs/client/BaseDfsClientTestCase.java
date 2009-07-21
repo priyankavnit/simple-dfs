@@ -1,5 +1,7 @@
 package org.agile.dfs.client;
 
+import org.agile.dfs.client.service.DfsInitializer;
+
 import junit.framework.TestCase;
 
 public class BaseDfsClientTestCase extends TestCase {

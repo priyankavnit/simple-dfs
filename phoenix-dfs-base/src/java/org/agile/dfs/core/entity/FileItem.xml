@@ -30,7 +30,11 @@
 		values
 		( #parentId#, #id#, #name#, #status#, #blockNum#, #minCopyNum#, #maxCopyNum#, #nowCopyNum#, #type#, #version# )
   	</insert> 
-  	
+	
+	<update id="dfs.file.update" parameterClass="java.util.HashMap">
+		update $table$ set status=#status# where id=#id#
+  	</update>
+  	  	
   	<delete id="dfs.file.delete.id">
   		delete from $table$ where id=#id#
   	</delete>

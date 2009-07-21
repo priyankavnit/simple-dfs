@@ -1,14 +1,16 @@
 package org.agile.dfs.client.service;
 
+import org.agile.dfs.client.listener.NameNodeListener;
+
 import junit.framework.TestCase;
 
 public class MulticastServiceTest extends TestCase {
 
-	MulticastService service;
+	NameNodeListener service;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		service = MulticastService.instance();
+		service = NameNodeListener.instance();
 		service.start();
 	}
 

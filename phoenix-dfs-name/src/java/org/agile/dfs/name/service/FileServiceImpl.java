@@ -117,4 +117,19 @@ public class FileServiceImpl implements FileService {
         FileItem item = fileItemManager.findByPath(ds, fullPath);
         return item;
     }
+
+    public boolean commit(String schema, String fullPath) {
+        DfsSchema ds = schemaManager.findByName(schema);
+        if (ds == null) {
+            throw new NameNodeException("Schema " + schema + " not exist! ");
+        }
+        FileItem item = this.findByPath(schema, fullPath);
+        if (item != null) {
+            item.setStatus(FileItem.STATUS_NORMAL);
+            fileItemManager.update(ds, item);
+            return true;
+        }
+        return false;
+    }
+
 }
