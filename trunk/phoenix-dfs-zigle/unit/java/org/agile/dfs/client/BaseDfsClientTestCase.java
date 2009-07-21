@@ -26,4 +26,7 @@ public class BaseDfsClientTestCase extends TestCase {
         super.tearDown();
     }
 
+    public void testDemo() {
+
+    }
 }
