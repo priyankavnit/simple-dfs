@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.agile.dfs.client.service.DfsServiceLocator;
 import org.agile.dfs.core.entity.DfsSchema;
 import org.agile.dfs.name.service.SchemaService;
 

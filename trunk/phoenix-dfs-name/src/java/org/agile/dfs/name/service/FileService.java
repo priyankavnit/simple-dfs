@@ -18,4 +18,6 @@ public interface FileService {
 
     public FileItem findByPath(String schema, String fullPath);
 
+    public boolean commit(String schema, String fullPath);
+
 }

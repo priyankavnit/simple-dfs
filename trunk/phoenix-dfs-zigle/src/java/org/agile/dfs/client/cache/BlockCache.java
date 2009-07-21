@@ -3,7 +3,7 @@ package org.agile.dfs.client.cache;
 import java.io.IOException;
 
 import org.agile.dfs.client.DfsFile;
-import org.agile.dfs.client.DfsLocator;
+import org.agile.dfs.client.service.DfsServiceLocator;
 import org.agile.dfs.core.entity.BlockItem;
 import org.agile.dfs.data.service.DataService;
 import org.agile.dfs.name.service.BlockService;
@@ -11,8 +11,8 @@ import org.agile.dfs.rpc.client.AsyncAttachment;
 import org.agile.dfs.rpc.client.RpcContext;
 
 public class BlockCache {
-    private static final DataService dataService = DfsLocator.async(DataService.class);
-    private static final BlockService blockService = DfsLocator.lookup(BlockService.class);
+    private static final DataService dataService = DfsServiceLocator.async(DataService.class);
+    private static final BlockService blockService = DfsServiceLocator.lookup(BlockService.class);
     private DfsFile dfsFile; // current cache's dfs file
     private BlockItem block; // current writeable block
     private String schema;

@@ -1,6 +1,6 @@
 package org.agile.dfs.data.rpc;
 
-import org.agile.dfs.core.common.Configuration;
+import org.agile.dfs.config.Configuration;
 import org.agile.dfs.core.entity.NodeItem;
 import org.agile.dfs.rpc.server.RpcHandler;
 import org.agile.dfs.rpc.server.RpcServer;

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.agile.dfs.client.service.DfsInitializer;
+
 import junit.framework.TestCase;
 
 public class DfsInputStreamTest extends TestCase {

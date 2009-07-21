@@ -1,8 +1,9 @@
-package org.agile.dfs.client.service;
+package org.agile.dfs.client.listener;
 
-import org.agile.dfs.client.DfsInitializer;
 import org.agile.dfs.client.config.Configuration;
-import org.agile.dfs.core.entity.NodeItem;
+import org.agile.dfs.client.service.DfsInitializer;
+import org.agile.dfs.client.service.NameNodeService;
+import org.agile.dfs.core.entity.NameNode;
 import org.agile.dfs.rpc.serialize.RpcDeSerializer;
 import org.agile.dfs.rpc.serialize.SerializerFactory;
 import org.agile.dfs.server.MulticastHandler;
@@ -10,18 +11,18 @@ import org.agile.dfs.server.MulticastServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MulticastService extends Thread {
+public class NameNodeListener extends Thread {
     private final static Logger logger = LoggerFactory.getLogger(DfsInitializer.class);
     private static NameNodeService nameNodeService = NameNodeService.instance();
     private RpcDeSerializer deserializer = SerializerFactory.instance().getRpcDeSerializer();
 
-    private static final MulticastService _instance = new MulticastService();
+    private static final NameNodeListener _instance = new NameNodeListener();
 
-    private MulticastService() {
+    private NameNodeListener() {
 
     }
 
-    public static MulticastService instance() {
+    public static NameNodeListener instance() {
         return _instance;
     }
 
@@ -32,7 +33,7 @@ public class MulticastService extends Thread {
         MulticastServer ms = new MulticastServer(ip, port);
         ms.addHandler(new MulticastHandler() {
             public void handle(String msg) {
-                NodeItem item = (NodeItem) deserializer.read(msg);
+                NameNode item = (NameNode) deserializer.read(msg);
                 nameNodeService.add(item);
             }
         });

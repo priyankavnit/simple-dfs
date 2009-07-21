@@ -76,6 +76,7 @@ public class MulticastServer {
                 handle.handle(msg);
             } catch (Exception e) {
                 logger.error("Use {} handle msg {} error!", handle.toString(), msg);
+                logger.error(" - ", e);
             }
         }
     }

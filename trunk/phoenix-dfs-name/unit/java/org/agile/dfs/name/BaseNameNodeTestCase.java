@@ -4,12 +4,12 @@ import junit.framework.TestCase;
 
 import org.agile.dfs.core.common.UuidHexGenerator;
 import org.agile.dfs.dao.IBatisTransactionFactory;
-import org.agile.dfs.name.setup.NameInstaller;
+import org.agile.dfs.name.service.NodeInstaller;
 import org.agile.dfs.util.ServiceFactory;
 
 public class BaseNameNodeTestCase extends TestCase {
 
-    private static NameInstaller installer = (NameInstaller) ServiceFactory.findService(NameInstaller.class);
+    private static NodeInstaller installer = (NodeInstaller) ServiceFactory.findService(NodeInstaller.class);
     protected UuidHexGenerator idGen = (UuidHexGenerator) ServiceFactory.findService(UuidHexGenerator.class);
     protected static final IBatisTransactionFactory transactionFactory = new IBatisTransactionFactory();
     static {

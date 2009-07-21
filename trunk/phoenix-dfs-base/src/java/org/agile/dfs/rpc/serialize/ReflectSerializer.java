@@ -77,7 +77,7 @@ public class ReflectSerializer implements RpcSerializer {
                 out.write(smp_val_e);
                 out.write(obj_e);
             } else {
-                ObjectReflectHelper helper = ObjectReflectHelper.instance(obj);
+                ObjectReflectHelper helper = ObjectReflectHelper.instance(obj.getClass());
                 out.write(obj_b);
                 out.write(clz_b);
                 out.write(helper.getClassNameChars());

@@ -20,42 +20,44 @@ public class ObjectReflectHelper {
     private ObjectReflectHelper(Class clz) {
         this.clazz = clz;
         clzNameChars = clz.getName().toCharArray();
-        fields = clz.getDeclaredFields();
-        ArrayHelper<Field> as = new ArrayHelper<Field>();
+        ArrayHelper<Field> totalFileds = new ArrayHelper<Field>();
+        while (!clz.getName().equals("java.lang.Object")) {
+            traceClassFiled(totalFileds, clz);
+            clz = clz.getSuperclass();
+        }
+        fields = totalFileds.array(Field.class);
+    }
+
+    private static final void traceClassFiled(ArrayHelper<Field> container, Class clz) {
+        Field[] fields = clz.getDeclaredFields();
         for (int i = 0, l = fields.length; i < l; i++) {
             if (Modifier.isFinal(fields[i].getModifiers())) {
                 continue;
             }
             fields[i].setAccessible(true);
-            as.add(fields[i]);
+            container.add(fields[i]);
         }
-        fields = as.array(Field.class);
     }
 
-    public static final ObjectReflectHelper instance(Object obj) {
-        Class clz = obj.getClass();
-        String name = clz.getName();
-        ObjectReflectHelper helper = cache.get(name);
+    public static final ObjectReflectHelper instance(Class clz) {
+        String clzName = clz.getName();
+        ObjectReflectHelper helper = cache.get(clzName);
         if (helper == null) {
             helper = new ObjectReflectHelper(clz);
-            cache.put(name, helper);
+            cache.put(clzName, helper);
         }
         return helper;
     }
 
     public static final ObjectReflectHelper instance(String clzName) {
-        ObjectReflectHelper helper = cache.get(clzName);
         try {
             Class clz = Class.forName(clzName);
-            if (helper == null) {
-                helper = new ObjectReflectHelper(clz);
-                cache.put(clzName, helper);
-            }
+            return instance(clz);
         } catch (ClassNotFoundException e) {
             throw new ReflectOperateException(e);
         }
-        return helper;
     }
+
 
     public char[] getClassNameChars() {
         return clzNameChars;

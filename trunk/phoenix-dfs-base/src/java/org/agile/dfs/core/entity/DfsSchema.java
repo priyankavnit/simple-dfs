@@ -1,7 +1,6 @@
 package org.agile.dfs.core.entity;
 
 import java.util.Date;
-import java.util.Map;
 
 public class DfsSchema implements java.io.Serializable {
     private static final long serialVersionUID = 1978;
@@ -30,19 +29,7 @@ public class DfsSchema implements java.io.Serializable {
     public String toString() {
         return "name:" + name + ",url:" + url + ", status:" + status;
     }
-
-    public static DfsSchema fromMap(Map map) {
-        if (map == null) {
-            return null;
-        }
-        DfsSchema ns = new DfsSchema();
-        ns.setId(map.get("id") == null ? null : map.get("id").toString());
-        ns.setName(map.get("name") == null ? null : map.get("name").toString());
-        ns.setUrl(map.get("url") == null ? null : map.get("url").toString());
-        ns.setStatus(map.get("status") == null ? null : map.get("status").toString());
-        // not set create time and description properties
-        return ns;
-    }
+ 
 
     /* getter and setter */
     public String getId() {

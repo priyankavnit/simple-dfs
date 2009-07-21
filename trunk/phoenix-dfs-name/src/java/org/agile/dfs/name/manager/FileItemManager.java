@@ -22,12 +22,21 @@ public class FileItemManager {
     private static final TableLocator locator = ServiceFactory.findService(TableLocator.class);
 
     public FileItem create(DfsSchema schema, FileItem item) {
-        item.setStatus(FileItem.STATUS_NORMAL);
+        item.setStatus(FileItem.STATUS_INIT);
         item.setId(generator.generate());
         Map<String, Object> map = ObjectUtil.toMap(item);
         String table = locator.fileTable(schema);
         map.put("table", table);
         template.insert("dfs.file.insert", map);
+        return item;
+    }
+
+    public FileItem update(DfsSchema schema, FileItem item) {
+        Map<String, Object> map = ObjectUtil.toMap(item);
+        String table = locator.fileTable(schema);
+        map.put("table", table);
+        map.put("id", item.getId());
+        template.insert("dfs.file.update", map);
         return item;
     }
 

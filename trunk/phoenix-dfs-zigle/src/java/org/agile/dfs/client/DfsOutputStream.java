@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.agile.dfs.client.cache.BlockCache;
+import org.agile.dfs.client.service.DfsServiceLocator;
+import org.agile.dfs.name.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DfsOutputStream extends OutputStream {
     private static final Logger logger = LoggerFactory.getLogger(DfsOutputStream.class);
+    private static final FileService fileService = DfsServiceLocator.lookup(FileService.class);
     private DfsFile dfsFile;
     private BlockCache cache;
 
@@ -43,6 +46,7 @@ public class DfsOutputStream extends OutputStream {
         if (cache != null) {
             cache.flush();
             cache.close();
+            fileService.commit(dfsFile.getSchema(), dfsFile.getFullPath());
             cache = null;
             logger.info("Close dfs output stream." + dfsFile);
         }

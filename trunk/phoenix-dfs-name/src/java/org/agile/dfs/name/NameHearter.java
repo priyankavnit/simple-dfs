@@ -1,6 +1,6 @@
 package org.agile.dfs.name;
 
-import org.agile.dfs.core.common.Configuration;
+import org.agile.dfs.config.Configuration;
 import org.agile.dfs.core.entity.NodeItem;
 import org.agile.dfs.multicast.MulticastClient;
 import org.agile.dfs.name.rpc.NameServer;
@@ -9,12 +9,12 @@ import org.agile.dfs.rpc.serialize.SerializerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NameHeartBeat extends Thread {
-    protected final static Logger logger = LoggerFactory.getLogger(NameHeartBeat.class);
+public class NameHearter extends Thread {
+    protected final static Logger logger = LoggerFactory.getLogger(NameHearter.class);
     private RpcSerializer serializer = SerializerFactory.instance().getRpcSerializer();
     private NodeItem node;
 
-    public NameHeartBeat(NameServer server) {
+    public NameHearter(NameServer server) {
         this.node = server.self();
     }
 
