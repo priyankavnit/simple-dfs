@@ -9,18 +9,18 @@ import org.slf4j.LoggerFactory;
 
 public class DataNodeManager {
     private final static Logger logger = LoggerFactory.getLogger(DataNodeManager.class);
-    private static DataNodeManager _instance = new DataNodeManager();
+    // private static DataNodeManager _instance = new DataNodeManager();
     private long lastSelectTime = 0;
 
     // private NameNode node = null;
 
-    private DataNodeManager() {
+    public DataNodeManager() {
 
     }
 
-    public static DataNodeManager instance() {
-        return _instance;
-    }
+//    public static DataNodeManager instance() {
+//        return _instance;
+//    }
 
     private List<DataNode> nodes = new ArrayList<DataNode>(500);
 
