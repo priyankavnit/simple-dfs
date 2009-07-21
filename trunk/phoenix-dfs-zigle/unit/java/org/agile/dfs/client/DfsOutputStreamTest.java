@@ -6,7 +6,7 @@ import org.agile.dfs.core.entity.DfsSchema;
 import org.agile.dfs.name.service.SchemaService;
 
 public class DfsOutputStreamTest extends BaseDfsClientTestCase {
-    private static final SchemaService schemaService = DfsLocator.lookup(SchemaService.class);
+    private static final SchemaService schemaService = DfsServiceLocator.lookup(SchemaService.class);
 
     private String schema = "phoenix";
 

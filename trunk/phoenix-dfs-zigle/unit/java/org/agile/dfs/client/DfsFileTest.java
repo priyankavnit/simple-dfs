@@ -9,7 +9,7 @@ import org.agile.dfs.name.service.SchemaService;
 
 public class DfsFileTest extends BaseDfsClientTestCase {
 
-    private static final SchemaService schemaService = DfsLocator.lookup(SchemaService.class);
+    private static final SchemaService schemaService = DfsServiceLocator.lookup(SchemaService.class);
 
     private String schema = "phoenix";
 
