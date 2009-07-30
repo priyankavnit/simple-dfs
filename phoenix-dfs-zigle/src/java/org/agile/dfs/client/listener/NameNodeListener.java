@@ -1,5 +1,7 @@
 package org.agile.dfs.client.listener;
 
+import java.net.InetAddress;
+
 import org.agile.dfs.client.config.Configuration;
 import org.agile.dfs.client.service.DfsInitializer;
 import org.agile.dfs.client.service.NameNodeService;
@@ -32,7 +34,7 @@ public class NameNodeListener extends Thread {
         logger.info("Startup multicast service {}:{}.", ip, String.valueOf(port));
         MulticastServer ms = new MulticastServer(ip, port);
         ms.addHandler(new MulticastHandler() {
-            public void handle(String msg) {
+            public void handle(InetAddress addr, String msg) {
                 NameNode item = (NameNode) deserializer.read(msg);
                 nameNodeService.add(item);
             }

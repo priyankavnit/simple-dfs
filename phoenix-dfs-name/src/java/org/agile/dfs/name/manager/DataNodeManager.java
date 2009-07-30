@@ -9,13 +9,18 @@ import org.slf4j.LoggerFactory;
 
 public class DataNodeManager {
     private final static Logger logger = LoggerFactory.getLogger(DataNodeManager.class);
-    private long lastSelectTime = 0;
     private DataNode node = null;
+    private long lastSelectTime = 0;
 
     private static final List<DataNode> nodes = new ArrayList<DataNode>(500);
 
+    // ip 10.10.10.5 -> first: 10.10.10.*, second: 10.10.*, third: 10.*
+    public List<DataNode> findDataNode(String ip, int num) { 
+        return null;
+    }
+
     public DataNode findDataNode() {
-        // cache node for 1s
+        // cache selectable node for 1s
         if ((System.currentTimeMillis() - lastSelectTime) < 1000) {
             if (node != null) {
                 return node;
