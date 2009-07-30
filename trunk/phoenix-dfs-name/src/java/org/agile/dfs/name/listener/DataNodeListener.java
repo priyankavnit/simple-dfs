@@ -32,8 +32,8 @@ public class DataNodeListener extends Thread {
         MulticastServer ms = new MulticastServer(ip, port);
         ms.addHandler(new MulticastHandler() {
             public void handle(String msg) {
-                // DataNode item = (DataNode) deserializer.read(msg);
-                // nameNodeService.add(item);
+                DataNode item = (DataNode) deserializer.read(msg);
+                dataNodeManager.add(item);
             }
         });
         ms.start();

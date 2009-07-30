@@ -9,28 +9,18 @@ import org.slf4j.LoggerFactory;
 
 public class DataNodeManager {
     private final static Logger logger = LoggerFactory.getLogger(DataNodeManager.class);
-    // private static DataNodeManager _instance = new DataNodeManager();
     private long lastSelectTime = 0;
+    private DataNode node = null;
 
-    // private NameNode node = null;
-
-    public DataNodeManager() {
-
-    }
-
-//    public static DataNodeManager instance() {
-//        return _instance;
-//    }
-
-    private List<DataNode> nodes = new ArrayList<DataNode>(500);
+    private static final List<DataNode> nodes = new ArrayList<DataNode>(500);
 
     public DataNode findDataNode() {
-        // cache name node for 2s
-        // if ((System.currentTimeMillis() - lastSelectTime) < 1000) {
-        // if (node != null) {
-        // return node;
-        // }
-        // }
+        // cache node for 1s
+        if ((System.currentTimeMillis() - lastSelectTime) < 1000) {
+            if (node != null) {
+                return node;
+            }
+        }
         int loadNo = 0, minload = -1, connNo = 0, minConn = -1;
         for (int i = 0, len = nodes.size(); i < len; i++) {
             DataNode node = nodes.get(i);
@@ -52,8 +42,8 @@ public class DataNodeManager {
             if (minLoadNode == minConnNode) {
                 // node = minConnNode;
             } else {
-                int ll = countMixedLoad(minLoadNode);
-                int cl = countMixedLoad(minConnNode);
+                int ll = countPoint(minLoadNode);
+                int cl = countPoint(minConnNode);
                 if (ll > cl) {
                     // node = minConnNode;
                 } else {
@@ -72,13 +62,12 @@ public class DataNodeManager {
         }
     }
 
-    private int countMixedLoad(DataNode node) {
+    private int countPoint(DataNode node) {
         // TODO impl better method
         // max load = 100
         int load = node.getJvmLoad();
         // max load = 100
         int conn = node.getConnNum();
-
         return load + conn;
     }
 }
