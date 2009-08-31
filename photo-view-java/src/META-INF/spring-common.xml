@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean id="photo.EntityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="photo" />
+	</bean>
+
+	<bean id="photo.JpaTemplate" class="org.springframework.orm.jpa.JpaTemplate">
+		<property name="entityManagerFactory" ref="photo.EntityManagerFactory" />
+	</bean>
+
+	<bean id="photo.TransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="photo.EntityManagerFactory" />
+	</bean>
+	<bean id="photo.NameMatchTransactionAttributeSource"
+		class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
+		<property name="properties">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Interceptor Instance -->
+	<bean id="photo.TransactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager">
+			<ref bean="photo.TransactionManager" />
+		</property>
+		<property name="transactionAttributeSource">
+			<ref bean="photo.NameMatchTransactionAttributeSource" />
+		</property>
+	</bean>
+
+	<!-- parent manager -->
+	<bean id="photo.AbstractProxyManager" abstract="true" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="interceptorNames">
+			<list>
+				<value>photo.TransactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="photo.FileItemManager" parent="photo.AbstractProxyManager">
+		<property name="target">
+			<bean class="org.agile.file.manager.FileItemManager">
+				<property name="template" ref="photo.JpaTemplate" />
+			</bean>
+		</property>
+	</bean>
+</beans>
