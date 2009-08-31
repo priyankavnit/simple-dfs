@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.photo.view.*">
+
+    <mx:Style>
+        global{
+        	font-size: 12;	
+        	font-style: normal;
+        	font-weight: normal; 
+            modalTransparencyBlur: 3;
+            modalTransparency: 0.8;
+            modalTransparencyColor: #161817;
+            modalTransparencyDuration: 500;    
+            theme-color: #595857;    	
+        }  
+        Button {
+   			fontWeight: normal;
+		}
+    </mx:Style>
+    <mx:Button click="upload();" label="upload"/>
+    <mx:Script>
+        <![CDATA[
+            import mx.managers.PopUpManager;
+            import org.agile.photo.view.UploadDialog;
+
+            private function upload():void {
+                var app:Application=Application.application as Application;
+                var dialog:UploadDialog=PopUpManager.createPopUp(app, UploadDialog, true) as UploadDialog;
+                PopUpManager.centerPopUp(dialog);
+            }
+        ]]>
+    </mx:Script>
+
+</mx:Application>

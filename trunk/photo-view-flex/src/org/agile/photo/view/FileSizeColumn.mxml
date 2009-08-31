@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Label xmlns:mx="http://www.adobe.com/2006/mxml" text="{_label}">
+
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var _label:String;
+
+			override public function set data(value:Object):void {
+				var s:int=value.size;
+				var k:int=s / 1024;
+				var m:int=k / 1024;
+				k=k - m * 1024;
+				if (k < 0 && s > 0) {
+					k=1;
+				}
+				_label=m > 0 ? m + "m," + k + "k" : k + "k";
+			}
+		]]>
+	</mx:Script>
+</mx:Label>

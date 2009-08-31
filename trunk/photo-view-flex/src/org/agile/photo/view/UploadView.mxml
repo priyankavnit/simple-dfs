@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:ui="org.agile.photo.view.*" width="100%" height="100%" verticalGap="0" creationComplete="init();">
+    <mx:Style>
+    	.gridHeader {
+   			fontWeight: normal;
+   			fontStyle: normal;
+   			textDecoration: none;
+		}
+    </mx:Style>
+    <!-- main file grid -->
+    <mx:DataGrid id="grid" width="100%" height="100%" fontWeight="normal" dataProvider="{fileSelList}" borderThickness="0" rowHeight="25" change="selectChange(event);" headerStyleName="gridHeader">
+        <mx:columns>
+            <mx:DataGridColumn headerText="序号" width="50" textAlign="center" labelFunction="rowNumFunction" sortable="false"/>
+            <mx:DataGridColumn headerText="文件名" dataField="name"/>
+            <mx:DataGridColumn headerText="文件类型" dataField="type" width="80" textAlign="center"/>
+            <mx:DataGridColumn headerText="文件大小" dataField="size" width="80" textAlign="right" labelFunction="fileSizeFunction"/>
+            <mx:DataGridColumn headerText="上传进度" dataField="status" width="80" textAlign="center" itemRenderer="org.agile.photo.view.ProcessRenderer"/>
+        </mx:columns>
+    </mx:DataGrid>
+    <mx:Box width="100%" height="1" borderStyle="solid" borderColor="#b7babc" borderThickness="1" borderSides="top"/>
+
+    <!-- img preview area -->
+    <mx:Box id="preView" direction="horizontal" width="100%" height="72" paddingLeft="3" paddingRight="1" paddingTop="1" paddingBottom="1" borderStyle="solid" borderColor="#b7babc" borderThickness="1"
+            borderSides="bottom" verticalAlign="middle" includeInLayout="{grid.selectedItem != null}" visible="{grid.selectedItem != null}">
+        <mx:Box borderStyle="solid" borderColor="#ff9999" borderThickness="1" paddingBottom="1" paddingLeft="1" paddingRight="1" paddingTop="1">
+            <mx:Image id="imgPreView" visible="false" includeInLayout="false" source="{grid.selectedItem.data}" width="80" height="60" horizontalAlign="center" verticalAlign="middle"/>
+            <mx:Box id="imgLoading" backgroundColor="#f1f1f1" width="80" height="60" horizontalAlign="center" verticalAlign="middle">
+                <mx:Label text="loading"/>
+            </mx:Box>
+        </mx:Box>
+        <mx:Box width="100%" height="62" direction="vertical" verticalGap="5" paddingTop="5">
+            <mx:Box direction="horizontal" width="100%">
+                <mx:Label textAlign="left" text="文件名: {formatFileName(grid.selectedItem.name)}" width="40%"/>
+                <mx:Label textAlign="left" text="文件大小: {grid.selectedItem.size}" width="30%"/>
+                <mx:Label textAlign="left" text="修改日期: {formatDate(grid.selectedItem.modificationDate)}" width="30%"/>
+            </mx:Box>
+            <mx:Box direction="horizontal" width="100%">
+                <mx:Label textAlign="left" text="创建人: {grid.selectedItem.creator==null?'未知':grid.selectedItem.creator}" width="40%"/>
+                <mx:Label textAlign="left" text="文件类型: {grid.selectedItem.type}" width="30%"/>
+                <mx:Label textAlign="left" text="创建日期: {formatDate(grid.selectedItem.creationDate)}" width="30%"/>
+            </mx:Box>
+        </mx:Box>
+    </mx:Box>
+
+    <mx:Spacer width="100%" height="1" visible="{!btnSelFile.enabled}" includeInLayout="{!btnSelFile.enabled}"/>
+    <!-- total upload press area -->
+    <mx:ProgressBar id="totalProgress" width="100%" height="12" visible="{!btnSelFile.enabled}" includeInLayout="{!btnSelFile.enabled}" enabled="true" labelPlacement="center" label=" " mode="manual"
+                    fontSize="10" color="#b1b2f3"/>
+
+    <!-- control button area -->
+    <mx:Box width="100%" direction="horizontal" horizontalAlign="center" verticalAlign="middle" paddingBottom="5" paddingLeft="3" paddingRight="3" paddingTop="5" backgroundColor="#f1f2f3">
+        <ui:FilterButton id="btnSelFile" label="选取文件 ..." icon="@Embed('img/ico/add.png')"/>
+        <ui:FilterButton id="btnDelFile" label="取消选定文件" icon="@Embed('img/ico/del.png')" enabled="{grid.selectedItem != null}"/>
+        <ui:FilterButton id="btnClsFile" label="清空文件列表" icon="@Embed('img/ico/cls.png')" enabled="{fileSelList.length > 0}"/>
+        <mx:Spacer width="100%"/>
+        <ui:FilterButton id="btnUpdFile" label="开始上传" icon="@Embed('img/ico/upload.png')" enabled="{fileSelList.length > 0}"/>
+    </mx:Box>
+
+    <mx:Script>
+        <![CDATA[
+            import mx.formatters.DateFormatter;
+            import mx.events.ListEvent;
+            import mx.collections.ArrayCollection;
+            import mx.utils.ObjectUtil;
+            import mx.controls.Alert;
+
+            public static var STATUS_READY:String="STATUS_READY";
+            public static var STATUS_LOADING:String="STATUS_LOADING";
+            public static var STATUS_STOP:String="STATUS_STOP";
+            private static var dateFormater:DateFormatter=new DateFormatter();
+
+
+            [Bindable]
+            public var url:String;
+
+            public var callback:Function;
+            [Bindable]
+            private var fileSelList:ArrayCollection=new ArrayCollection();
+            private var fileRefList:FileReferenceList=new FileReferenceList();
+            private var totalFileSize:int;
+            private var totalLoadSize:int;
+            private var status:String=STATUS_READY;
+
+            private function init():void {
+                dateFormater.formatString="YY-MM-DD JJ:NN";
+                // init single click event
+                btnSelFile.singleClickListener=selectFiles;
+                btnDelFile.singleClickListener=cancelSelFile;
+                btnClsFile.singleClickListener=clearListFile;
+                btnUpdFile.singleClickListener=doMulUpload;
+                // init upload url
+                if (null == this.loaderInfo) {
+                    url="upload/loader";
+                }
+                var iurl:String=this.loaderInfo.url;
+                var n:int=iurl.lastIndexOf("/");
+                url=iurl.substr(0, n + 1) + "loader";
+            }
+
+            private function formatFileName(name:String):String {
+                if (name == null) {
+                    return "null";
+                } else {
+                    if (name.length < 15) {
+                        return name;
+                    } else {
+                        return name.substr(0, 7) + "..." + name.substr(name.length - 7, 7);
+                    }
+                }
+            }
+
+            private function formatDate(date:Date):String {
+                return dateFormater.format(date);
+            }
+            
+            private function rowNumFunction(item:Object, inx:int):String {
+                var ix:int=fileSelList.getItemIndex(item) + 1;
+                return String(ix);
+            }
+
+            private function fileSizeFunction(item:Object, inx:int):String {
+                var s:int=item.size;
+                var k:int=s / 1024;
+                var m:int=k / 1024;
+                k=k - m * 1024;
+                if (k <= 0 && s > 0) {
+                    k=1;
+                } else {
+                    k=k + 1;
+                }
+                var _label:String=m > 0 ? m + "m," + k + "k" : k + "k";
+                return _label;
+            }
+
+            private function selectFiles(event:Event=null):void {
+                fileRefList.addEventListener(Event.SELECT, onSelectFile);
+                var arr:Array=[];
+                arr.push(new FileFilter("图片(*.gif;*.jpeg;*.jpg;*.png) ", "*.gif;*.jpeg;*.jpg;*.png"));
+                fileRefList.browse(arr);
+            }
+
+            private function onSelectFile(event:Event=null):void {
+                var arrFoundList:Array=new Array();
+                for (var i:Number=0; i < fileSelList.length; i++) {
+                    for (var j:Number=0; j < fileRefList.fileList.length; j++) {
+                        if (fileSelList[i].name == fileRefList.fileList[j].name) {
+                            arrFoundList.push(fileRefList.fileList[j].name);
+                            fileRefList.fileList.splice(j, 1);
+                            j--;
+                        }
+                    }
+                }
+                if (fileRefList.fileList.length >= 1) {
+                    for (var k:Number=0; k < fileRefList.fileList.length; k++) {
+                        if (fileSelList.length >= 10) {
+                            Alert.show("一次最多可选取 10 个文件上传！ ");
+                            break;
+                        }
+                        var file:FileReference=fileRefList.fileList[k];
+                        fileSelList.addItem({"name": file.name, "type": file.type, "size": file.size, "creator": file.creator, "creationDate": file.creationDate, "modificationDate": file.modificationDate, "file": file, "status": "", "process": 0});
+                            // doPreView(file);
+                    }
+                }
+                if (arrFoundList.length >= 1) {
+                    Alert.show("" + arrFoundList, "文件已存在列表中！ ");
+                }
+            }
+
+            private function cancelSelFile(event:Event=null):void {
+                var inx:int=fileSelList.getItemIndex(grid.selectedItem);
+                if (inx >= 0) {
+                    fileSelList.removeItemAt(inx);
+                }
+            }
+
+            private function clearListFile(event:Event=null):void {
+                fileSelList.removeAll();
+            }
+
+            private function selectChange(evt:ListEvent):void {
+                var sel:Object=grid.selectedItem;
+                if (sel != null && sel.file != null) {
+                    doPreView(sel.file);
+                }
+            }
+
+            private function doPreView(file:FileReference):void {
+                imgLoading.visible=true;
+                imgLoading.includeInLayout=true;
+                imgPreView.visible=false;
+                imgPreView.includeInLayout=false;
+                file.addEventListener(Event.COMPLETE, function(evt:Event):void {
+                        var file:FileReference=evt.target as FileReference;
+                        imgPreView.source=file.data;
+                        imgLoading.visible=false;
+                        imgLoading.includeInLayout=false;
+                        imgPreView.visible=true;
+                        imgPreView.includeInLayout=true;
+                    });
+                file.removeEventListener(ProgressEvent.PROGRESS, uploadProgress);
+                file.load();
+            }
+
+
+            private function doMulUpload(event:Event=null):void {
+                btnSelFile.enabled=false;
+                btnDelFile.enabled=false;
+                btnClsFile.enabled=false;
+                btnUpdFile.enabled=false;
+                grid.enabled=false;
+                grid.selectedIndex=-1;
+                btnUpdFile.label="取消上传";
+                btnUpdFile.singleClickListener=stopMulUpload;
+                preView.visible=false;
+                preView.includeInLayout=false;
+                totalFileSize=0;
+                totalLoadSize=0;
+                for each (var item:Object in fileSelList) {
+                    var file:FileReference=item.file;
+                    totalFileSize+=file.size;
+                }
+                for each (var item2:Object in fileSelList) {
+                    var file2:FileReference=item2.file;
+                    uploadFile(file2);
+                }
+
+            }
+
+            private function stopMulUpload(event:Event=null):void {
+                status=STATUS_STOP;
+                for each (var item:Object in fileSelList) {
+                    var file:FileReference=item.file;
+                    file.cancel();
+                }
+                btnUpdFile.label="开始上传";
+                btnUpdFile.singleClickListener=doMulUpload;
+                btnSelFile.enabled=true;
+                btnDelFile.enabled=true;
+                btnClsFile.enabled=true;
+                grid.enabled=true;
+                preView.visible=true;
+                preView.includeInLayout=true;
+            }
+
+            private function uploadFile(file:FileReference):void {
+                if (status == STATUS_STOP) {
+                    return;
+                }
+                file.addEventListener(ProgressEvent.PROGRESS, uploadProgress);
+                var request:URLRequest=new URLRequest(url);
+                try {
+                    file.upload(request);
+                } catch (error:Error) {
+                    trace(error);
+                    status=STATUS_STOP;
+                    btnUpdFile.label="上传失败，关闭";
+                    btnUpdFile.singleClickListener=callback;
+                    btnUpdFile.enabled=true;
+                    btnDelFile.enabled=false;
+                    btnClsFile.enabled=false;
+                    grid.enabled=false;
+                }
+            }
+
+            private function uploadProgress(e:ProgressEvent):void {
+                var obj:Object=findByFileReference(e.target as FileReference);
+                if (obj != null) {
+                    obj.loaded=e.bytesLoaded;
+                }
+                var lsize:int=0;
+                for each (var item:Object in fileSelList) {
+                    if (item.loaded != null) {
+                        lsize+=item.loaded;
+                    }
+                }
+                var proc:uint=lsize / totalFileSize * 100;
+                totalProgress.label=proc + "%";
+                totalProgress.setProgress(proc, 100);
+                fileSelList.refresh();
+                if (proc == 100) {
+                    btnUpdFile.label="上传完成，关闭";
+                    btnUpdFile.singleClickListener=callback;
+                    btnUpdFile.enabled=true;
+                    btnDelFile.enabled=false;
+                    btnClsFile.enabled=false;
+                    grid.enabled=false;
+                }
+            }
+
+            private function findByFileReference(file:FileReference):Object {
+                for each (var item:Object in fileSelList) {
+                    var f:FileReference=item.file;
+                    if (file == f) {
+                        return item;
+                    }
+                }
+                return null;
+            }
+        ]]>
+    </mx:Script>
+</mx:Box>
