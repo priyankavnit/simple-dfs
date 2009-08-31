@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Label xmlns:mx="http://www.adobe.com/2006/mxml" text="{_label}">
+
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var _label:String;
+
+			override public function set data(value:Object):void {
+				var s:int=value.size;
+				var p:int=value.loaded;
+				var proc:uint=p / s * 100;
+				_label = proc + "%";
+			}
+		]]>
+	</mx:Script>
+</mx:Label>

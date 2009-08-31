@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" direction="vertical" horizontalAlign="center"
+		verticalAlign="middle" creationComplete="init();">
+	<!-- <mx:Style source="assets/styles/main.css"/> -->
+	<!-- <mx:Script source="FlexFileUpload_cb.as"/> -->
+	<mx:DataGrid id="grid" width="100%" height="100%"/>
+	<mx:ProgressBar id="progress" labelPlacement="center" width="100%" height="20"/>
+	<mx:Box width="100%" direction="horizontal" horizontalAlign="center">
+		<mx:ControlBar>
+			<mx:Button id="browse" label="Browse For Files" />
+			<mx:Button id="upload" label="Upload" />
+			<mx:Button id="delbt" label="Remove" />
+			<mx:Button id="clear" label="Clear All" />
+		</mx:ControlBar>
+	</mx:Box>
+	<mx:Script>
+		<![CDATA[
+		    import org.agile.photo.action.UploadAction;
+		    
+		    public var url:String = "";
+			private var action:UploadAction = new UploadAction();
+			
+			private function init():void{
+			    var vars:URLVariables = new URLVariables();
+			    action.initUpload(grid, browse, clear, delbt, upload, progress, url, vars, 10 * 1024 * 1024, filters);
+			}
+		]]>
+	</mx:Script>
+</mx:Box>
