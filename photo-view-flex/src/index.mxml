@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
 
     <mx:Style>
         global{
@@ -15,17 +15,52 @@
         Button {
    			fontWeight: normal;
 		}
+    	.gridHeader {
+   			fontWeight: normal;
+   			fontStyle: normal;
+   			textDecoration: none;
+    	}
     </mx:Style>
-    <mx:Button click="upload();" label="upload"/>
+    <mx:Box width="600" direction="horizontal" paddingRight="3">
+        <mx:Label text="Total image file list" fontWeight="bold"/>
+        <mx:Spacer width="100%"/>
+        <mx:Button click="doRpc();" label="rpc call"/>
+        <mx:Button click="upload();" label="upload ..."/>
+    </mx:Box>
+    <mx:DataGrid id="grid" width="600" height="400" dataProvider="{files}" headerStyleName="gridHeader">
+        <mx:columns>
+            <mx:DataGridColumn headerText="NO" dataField="" width="50" textAlign="center" labelFunction="rowNum"/>
+            <mx:DataGridColumn headerText="ID" dataField="" width="60" textAlign="center"/>
+            <mx:DataGridColumn headerText="name" dataField="name" width="200"/>
+            <mx:DataGridColumn headerText="modified" dataField="modified" textAlign="center"/>
+        </mx:columns>
+    </mx:DataGrid>
     <mx:Script>
         <![CDATA[
+            import mx.collections.ArrayCollection;
             import mx.managers.PopUpManager;
+            import org.agile.upload.action.FileItemAction;
             import org.agile.upload.view.UploadDialog;
+
+            [Bindable]
+            private var files:ArrayCollection=new ArrayCollection();
+            private var action:FileItemAction=new FileItemAction();
 
             private function upload():void {
                 var app:Application=Application.application as Application;
                 var dialog:UploadDialog=PopUpManager.createPopUp(app, UploadDialog, true) as UploadDialog;
                 PopUpManager.centerPopUp(dialog);
+            }
+
+            private function doRpc():void {
+                action.list(function(data:Object):void {
+                        trace(data);
+                    });
+            }
+
+            private function rowNum(item:Object, col:int):String {
+                var ix:int=files.getItemIndex(item) + 1;
+                return String(ix);
             }
         ]]>
     </mx:Script>
