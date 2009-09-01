@@ -1,4 +1,4 @@
-package org.agile.photo.view {
+package org.agile.upload.view {
     import flash.events.MouseEvent;
     import flash.filters.ColorMatrixFilter;
 

@@ -1,4 +1,4 @@
-package org.agile.file.web.servlet;
+package org.agile.upload.servlet;
 
 import java.io.IOException;
 
@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.agile.file.entity.FileItem;
-import org.agile.file.manager.FileItemManager;
+import org.agile.upload.entity.FileItem;
+import org.agile.upload.manager.FileItemManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 

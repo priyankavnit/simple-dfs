@@ -1,4 +1,4 @@
-package org.agile.file.web.servlet;
+package org.agile.upload.servlet;
 
 import java.io.File;
 import java.io.IOException;

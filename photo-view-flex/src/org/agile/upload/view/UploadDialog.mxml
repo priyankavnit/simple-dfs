@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.photo.view.*" layout="vertical" width="600" height="450" titleStyleName="titleText" backgroundColor="#353535"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" layout="vertical" width="600" height="450" titleStyleName="titleText" backgroundColor="#353535"
                 borderStyle="solid" borderColor="#c7c8c9" borderThickness="2" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" cornerRadius="8" showCloseButton="true"
                 close="wrapperClose();" creationComplete="init();" title="多图片上传对话框">
     <mx:Style>
