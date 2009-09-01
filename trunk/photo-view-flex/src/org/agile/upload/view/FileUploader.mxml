@@ -15,7 +15,7 @@
 	</mx:Box>
 	<mx:Script>
 		<![CDATA[
-		    import org.agile.photo.action.UploadAction;
+		    import org.agile.upload.action.UploadAction;
 		    
 		    public var url:String = "";
 			private var action:UploadAction = new UploadAction();
