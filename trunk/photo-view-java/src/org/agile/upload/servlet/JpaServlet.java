@@ -34,7 +34,7 @@ public class JpaServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        manager = (FileItemManager) context.getBean("photo.FileItemManager");
+        manager = (FileItemManager) context.getBean("upload.FileItemManager");
     }
 
 }

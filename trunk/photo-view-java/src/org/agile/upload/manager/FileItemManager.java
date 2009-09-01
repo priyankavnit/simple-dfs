@@ -6,6 +6,10 @@ import org.springframework.orm.jpa.JpaTemplate;
 public class FileItemManager {
     private JpaTemplate template;
 
+    public String hello(String name) {
+        return "hello " + name + " at " + new java.util.Date();
+    }
+
     public FileItem save(FileItem item) {
         synchronized (template) {
             if (item.getId() == null) {
