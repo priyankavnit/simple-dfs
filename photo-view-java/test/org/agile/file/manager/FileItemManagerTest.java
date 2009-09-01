@@ -16,7 +16,7 @@ public class FileItemManagerTest extends LocalDatastoreTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        manager = (FileItemManager) this.getBean("photo.FileItemManager");
+        manager = (FileItemManager) this.getBean("upload.FileItemManager");
     }
 
     @Override

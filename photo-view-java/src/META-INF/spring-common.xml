@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
-	<bean id="photo.EntityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+	<bean id="upload.EntityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="photo" />
 	</bean>
 
-	<bean id="photo.JpaTemplate" class="org.springframework.orm.jpa.JpaTemplate">
-		<property name="entityManagerFactory" ref="photo.EntityManagerFactory" />
+	<bean id="upload.JpaTemplate" class="org.springframework.orm.jpa.JpaTemplate">
+		<property name="entityManagerFactory" ref="upload.EntityManagerFactory" />
 	</bean>
 
-	<bean id="photo.TransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="photo.EntityManagerFactory" />
+	<bean id="upload.TransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="upload.EntityManagerFactory" />
 	</bean>
-	<bean id="photo.NameMatchTransactionAttributeSource"
+	<bean id="upload.NameMatchTransactionAttributeSource"
 		class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
 		<property name="properties">
 			<props>
@@ -26,29 +26,29 @@
 	</bean>
 
 	<!-- Interceptor Instance -->
-	<bean id="photo.TransactionInterceptor"
+	<bean id="upload.TransactionInterceptor"
 		class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<property name="transactionManager">
-			<ref bean="photo.TransactionManager" />
+			<ref bean="upload.TransactionManager" />
 		</property>
 		<property name="transactionAttributeSource">
-			<ref bean="photo.NameMatchTransactionAttributeSource" />
+			<ref bean="upload.NameMatchTransactionAttributeSource" />
 		</property>
 	</bean>
 
 	<!-- parent manager -->
-	<bean id="photo.AbstractProxyManager" abstract="true" class="org.springframework.aop.framework.ProxyFactoryBean">
+	<bean id="upload.AbstractProxyManager" abstract="true" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="interceptorNames">
 			<list>
-				<value>photo.TransactionInterceptor</value>
+				<value>upload.TransactionInterceptor</value>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="photo.FileItemManager" parent="photo.AbstractProxyManager">
+	<bean id="upload.FileItemManager" parent="upload.AbstractProxyManager">
 		<property name="target">
-			<bean class="org.agile.file.manager.FileItemManager">
-				<property name="template" ref="photo.JpaTemplate" />
+			<bean class="org.agile.upload.manager.FileItemManager">
+				<property name="template" ref="upload.JpaTemplate" />
 			</bean>
 		</property>
 	</bean>

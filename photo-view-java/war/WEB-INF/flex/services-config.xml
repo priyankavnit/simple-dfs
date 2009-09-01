@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services-config>
+	<channels>
+		<channel-definition id="amfOnHttp" class="mx.messaging.channels.AMFChannel">
+			<endpoint uri="http://{server.name}:{server.port}/flex/amf"
+				class="flex.messaging.endpoints.AMFEndpoint" />
+		</channel-definition>
+	</channels>
+	<factories>
+		<factory id="spring" class="org.granite.spring.SpringServiceFactory" />
+	</factories>
+
+	<services>
+		<service id="granite-service" class="flex.messaging.services.RemotingService"
+			messageTypes="flex.messaging.messages.RemotingMessage">
+			<default-channels>
+				<channel ref="amfOnHttp" />
+			</default-channels>
+
+			<destination id="FileItemManager">
+				<properties>
+					<factory>spring</factory>
+					<source>upload.FileItemManager</source>
+				</properties>
+			</destination>
+		</service>
+	</services>
+</services-config>
