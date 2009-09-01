@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.photo.view.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*">
 
     <mx:Style>
         global{
@@ -20,7 +20,7 @@
     <mx:Script>
         <![CDATA[
             import mx.managers.PopUpManager;
-            import org.agile.photo.view.UploadDialog;
+            import org.agile.upload.view.UploadDialog;
 
             private function upload():void {
                 var app:Application=Application.application as Application;

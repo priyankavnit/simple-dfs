@@ -1,4 +1,4 @@
-package org.agile.file.entity;
+package org.agile.upload.entity;
 
 import java.util.Date;
 
