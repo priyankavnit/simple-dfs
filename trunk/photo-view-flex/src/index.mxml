@@ -37,6 +37,7 @@
     </mx:DataGrid>
     <mx:Script>
         <![CDATA[
+            import mx.controls.Alert;
             import mx.collections.ArrayCollection;
             import mx.managers.PopUpManager;
             import org.agile.upload.action.FileItemAction;
@@ -55,6 +56,7 @@
             private function doRpc():void {
                 action.list(function(data:Object):void {
                         trace(data);
+                        Alert.show("RES:" + data, "Hello from GDS");
                     });
             }
 
