@@ -7,7 +7,7 @@
 
 package org.agile.upload.entity {
 
-    import com.google.appengine.api.datastore.Blob;
+    import flash.utils.ByteArray;
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import flash.utils.IExternalizable;
@@ -22,7 +22,7 @@ package org.agile.upload.entity {
         private var __initialized:Boolean = true;
         private var __detachedState:String = null;
 
-        private var _data:Blob;
+        private var _data:ByteArray;
         private var _id:Number;
         private var _modified:Date;
         private var _name:String;
@@ -38,10 +38,10 @@ package org.agile.upload.entity {
             );
         }
 
-        public function set data(value:Blob):void {
+        public function set data(value:ByteArray):void {
             _data = value;
         }
-        public function get data():Blob {
+        public function get data():ByteArray {
             return _data;
         }
 
@@ -70,7 +70,7 @@ package org.agile.upload.entity {
             __initialized = input.readObject() as Boolean;
             __detachedState = input.readObject() as String;
             if (meta::isInitialized()) {
-                _data = input.readObject() as Blob;
+                _data = input.readObject() as ByteArray;
                 _id = function(o:*):Number { return (o is Number ? o as Number : Number.NaN) } (input.readObject());
                 _modified = input.readObject() as Date;
                 _name = input.readObject() as String;

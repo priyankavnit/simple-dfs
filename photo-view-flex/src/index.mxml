@@ -24,19 +24,19 @@
     <mx:Box width="600" direction="horizontal" paddingRight="3">
         <mx:Label text="Total image file list" fontWeight="bold"/>
         <mx:Spacer width="100%"/>
-        <mx:Button click="doRpc();" label="rpc call"/>
+        <mx:Button click="list();" label="refresh"/>
         <mx:Button click="upload();" label="upload ..."/>
     </mx:Box>
     <mx:DataGrid id="grid" width="600" height="400" dataProvider="{files}" headerStyleName="gridHeader">
         <mx:columns>
-            <mx:DataGridColumn headerText="NO" dataField="" width="50" textAlign="center" labelFunction="rowNum"/>
-            <mx:DataGridColumn headerText="ID" dataField="" width="60" textAlign="center"/>
+            <mx:DataGridColumn headerText="ID" dataField="id" width="60" textAlign="center"/>
             <mx:DataGridColumn headerText="name" dataField="name" width="200"/>
             <mx:DataGridColumn headerText="modified" dataField="modified" textAlign="center"/>
         </mx:columns>
     </mx:DataGrid>
     <mx:Script>
         <![CDATA[
+            import org.agile.upload.entity.FileItem;
             import mx.controls.Alert;
             import mx.collections.ArrayCollection;
             import mx.managers.PopUpManager;
@@ -57,6 +57,14 @@
                 action.list(function(data:Object):void {
                         trace(data);
                         Alert.show("RES:" + data, "Hello from GDS");
+                    });
+            }
+
+            private function list():void {
+                action.list(function(data:Object):void {
+                        if (data != null) {
+                            files=data as ArrayCollection;
+                        }
                     });
             }
 

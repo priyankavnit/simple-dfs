@@ -2,8 +2,10 @@ package org.agile.upload.entity;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +22,7 @@ public class FileItem {
 
     private Date modified;
 
+    // @Basic(fetch=FetchType.LAZY)
     @Enumerated
     private Blob data;
 
@@ -54,5 +57,5 @@ public class FileItem {
     public void setData(Blob data) {
         this.data = data;
     }
-    
+
 }
