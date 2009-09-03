@@ -1,4 +1,4 @@
-package org.agile.upload.action {  
+package org.agile.upload.action {
 
     import mx.messaging.ChannelSet;
     import mx.messaging.channels.AMFChannel;
@@ -29,7 +29,7 @@ package org.agile.upload.action {
          * @param loadingBarContent 动态进度栏的显示内容
          * @param timeout 超时时间（以秒计）
          * */
-        public function invoke(url:String, remoteObjectName:String, operationName:String, args:Object=null, showLoadingBar:Boolean=false, loadingBarContent:String=null, timeout:Number=90):void {
+        public function invoke(url:String, remoteObjectName:String, operationName:String, args:Object=null, showLoadingBar:Boolean=false, loadingBarContent:String=null, timeout:Number=5):void {
             var ro:RemoteObject=new RemoteObject(remoteObjectName);
             if (url != null) {
                 var endpoint:String=url;
