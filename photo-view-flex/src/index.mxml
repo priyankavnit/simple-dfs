@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
-
     <mx:Style>
         global{
         	font-size: 12;	
@@ -61,6 +60,7 @@
             }
 
             private function list():void {
+                var item:FileItem=new FileItem();
                 action.list(function(data:Object):void {
                         if (data != null) {
                             files=data as ArrayCollection;
