@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" xmlns:comp="org.agile.upload.component.*" height="100%" width="100%" horizontalAlign="center"
+                verticalAlign="middle" creationComplete="init();">
     <mx:Style>
         global{
         	font-size: 12;	
@@ -20,21 +21,22 @@
    			textDecoration: none;
     	}
     </mx:Style>
-    <mx:Box width="600" direction="horizontal" paddingRight="3">
+    <mx:Box width="600" direction="horizontal" paddingRight="1">
         <mx:Label text="Total image file list" fontWeight="bold"/>
         <mx:Spacer width="100%"/>
         <mx:Button click="list();" label="refresh"/>
         <mx:Button click="upload();" label="upload ..."/>
     </mx:Box>
-    <mx:DataGrid id="grid" width="600" height="400" dataProvider="{files}" headerStyleName="gridHeader">
+    <mx:DataGrid id="grid" width="600" height="400" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader">
         <mx:columns>
-            <mx:DataGridColumn headerText="ID" dataField="id" width="60" textAlign="center"/>
-            <mx:DataGridColumn headerText="name" dataField="name" width="200"/>
-            <mx:DataGridColumn headerText="modified" dataField="modified" textAlign="center"/>
+            <comp:ArrayColumn headerText="ID" dataField="0" width="50" textAlign="center"/>
+            <comp:ArrayColumn headerText="Name" dataField="1"/>
+            <comp:ArrayColumn headerText="Modified" dataField="2" dataType="date" width="150"/>
         </mx:columns>
     </mx:DataGrid>
     <mx:Script>
         <![CDATA[
+            import org.agile.upload.view.PhotoDialog;
             import org.agile.upload.entity.FileItem;
             import mx.controls.Alert;
             import mx.collections.ArrayCollection;
@@ -46,17 +48,14 @@
             private var files:ArrayCollection=new ArrayCollection();
             private var action:FileItemAction=new FileItemAction();
 
+            private function init():void {
+                list();
+            }
+
             private function upload():void {
                 var app:Application=Application.application as Application;
                 var dialog:UploadDialog=PopUpManager.createPopUp(app, UploadDialog, true) as UploadDialog;
                 PopUpManager.centerPopUp(dialog);
-            }
-
-            private function doRpc():void {
-                action.list(function(data:Object):void {
-                        trace(data);
-                        Alert.show("RES:" + data, "Hello from GDS");
-                    });
             }
 
             private function list():void {
@@ -66,6 +65,15 @@
                             files=data as ArrayCollection;
                         }
                     });
+            }
+
+            private function openView():void {
+                var item:Array=grid.selectedItem as Array;
+                var id:Number=item[0];
+                var app:Application=Application.application as Application;
+                var dialog:PhotoDialog=PopUpManager.createPopUp(app, PhotoDialog, true) as PhotoDialog;
+                dialog.view.fid=id;
+                PopUpManager.centerPopUp(dialog);
             }
 
             private function rowNum(item:Object, col:int):String {
