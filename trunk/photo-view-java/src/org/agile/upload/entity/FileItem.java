@@ -22,7 +22,7 @@ public class FileItem {
 
     private Date modified;
 
-    // @Basic(fetch=FetchType.LAZY)
+    @Basic(fetch=FetchType.EAGER)
     @Enumerated
     private Blob data;
 

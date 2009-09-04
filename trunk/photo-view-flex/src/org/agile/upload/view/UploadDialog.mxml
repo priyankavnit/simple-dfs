@@ -21,6 +21,8 @@
             import mx.collections.ArrayCollection;
 
             public var widget:UIComponent;
+            [Bindable]
+            public var callback:Function;
 
             private function init():void {
                 if (widget) {
@@ -30,6 +32,9 @@
             }
 
             private function wrapperClose(event:Event=null):void {
+                if (callback != null) {
+                    callback.apply();
+                }
                 PopUpManager.removePopUp(this)
             }
         ]]>
