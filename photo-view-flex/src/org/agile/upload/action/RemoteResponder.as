@@ -1,4 +1,4 @@
-package org.agile.upload.action {  
+package org.agile.upload.action {
     import mx.controls.Alert;
     import mx.core.IFlexDisplayObject;
     import mx.managers.CursorManager;
@@ -31,7 +31,7 @@ package org.agile.upload.action {
         public function fault(info:Object):void {
             beforeFault(info);
             trace(info);
-            // Alert.show("> " + info, "RPC Call Error!");
+            Alert.show("> " + info, "RPC Call Error!");
             afterFault(info);
         }
 

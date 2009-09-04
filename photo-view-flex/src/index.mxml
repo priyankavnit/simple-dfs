@@ -21,6 +21,7 @@
    			textDecoration: none;
     	}
     </mx:Style>
+    <mx:Spacer height="50%" width="600"/>
     <mx:Box width="600" direction="horizontal" paddingRight="1">
         <mx:Label text="Total image file list" fontWeight="bold"/>
         <mx:Spacer width="100%"/>
@@ -34,6 +35,12 @@
             <comp:ArrayColumn headerText="Modified" dataField="2" dataType="date" width="150"/>
         </mx:columns>
     </mx:DataGrid>
+    <mx:Spacer height="50%" width="600"/>
+    <mx:Box height="25" width="600" direction="horizontal">
+        <mx:Label text="copyright   agile.chen@gmail.com"/>
+        <mx:Spacer width="100%"/>
+        <mx:Label id="memLabel" color="#313131"/>
+    </mx:Box>
     <mx:Script>
         <![CDATA[
             import org.agile.upload.view.PhotoDialog;
@@ -50,11 +57,13 @@
 
             private function init():void {
                 list();
+                memory();
             }
 
             private function upload():void {
                 var app:Application=Application.application as Application;
                 var dialog:UploadDialog=PopUpManager.createPopUp(app, UploadDialog, true) as UploadDialog;
+                dialog.callback=list;
                 PopUpManager.centerPopUp(dialog);
             }
 
@@ -79,6 +88,23 @@
             private function rowNum(item:Object, col:int):String {
                 var ix:int=files.getItemIndex(item) + 1;
                 return String(ix);
+            }
+
+            private function memory():void {
+                var timer:Timer=new Timer(5 * 1000, 0);
+                timer.addEventListener(TimerEvent.TIMER, function():void {
+                        System.gc();
+                        memLabel.text=format(System.totalMemory);
+                    });
+                timer.start();
+            }
+
+            private function format(mem:uint):String {
+                var k:uint=mem / 1024;
+                var b:uint=mem % 1024;
+                var m:uint=k / 1024;
+                k=k % 1024;
+                return m + "m," + k + "k";
             }
         ]]>
     </mx:Script>

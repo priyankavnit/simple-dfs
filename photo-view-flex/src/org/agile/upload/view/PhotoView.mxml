@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" width="100%" height="100%" verticalGap="0" creationComplete="init();">
     <mx:Image id="img" width="100%" height="100%"/>
-    <mx:Label text="Id:{},  Name:{},  Modified:{}" width="100%" height="25"/>
+    <mx:Label text="Id:{item.id},  Name:{item.name},  Modified:{DateHelper.format(item.modified, 'YYYY-MM-DD JJ:NN:SS')}" textAlign="center" width="100%" height="25"/>
     <mx:Script>
         <![CDATA[
+            import org.agile.upload.helper.DateHelper;
             import org.agile.upload.entity.FileItem;
             import org.agile.upload.action.FileItemAction;
 
             [Bindable]
             public var fid:Number=-1;
+            [Bindable]
+            private var item:FileItem;
+
             private var action:FileItemAction=new FileItemAction();
 
             private function init():void {
                 if (fid != -1) {
                     action.findById(fid, function(data:Object):void {
-                            var item:FileItem=data as FileItem;
+                            item=data as FileItem;
                             if (item != null && item.data != null) {
                                 img.source=item.data;
                             }
