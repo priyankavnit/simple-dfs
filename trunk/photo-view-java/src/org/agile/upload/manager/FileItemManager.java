@@ -13,9 +13,15 @@ public class FileItemManager {
     }
 
     @SuppressWarnings("unchecked")
-    public List<FileItem> list() {
-        List<FileItem>  res = template.find("select item from FileItem item");
-        return res;
+    public List list() {
+        List ret = template.find("select item.id,item.name,item.modified from FileItem item");
+        return ret;
+    }
+
+    @SuppressWarnings("unchecked")
+    public FileItem findById(long id) {
+        List list = template.find("select item from FileItem item where item.id=" + id);
+        return (FileItem) (list.size() > 0 ? list.get(0) : null);
     }
 
     public FileItem save(FileItem item) {
