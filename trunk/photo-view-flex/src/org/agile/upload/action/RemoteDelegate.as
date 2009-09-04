@@ -39,7 +39,7 @@ package org.agile.upload.action {
                 ro.channelSet=channelSet;
             }
             ro.requestTimeout=timeout;
-            ro.showBusyCursor=false;
+            ro.showBusyCursor=true;
             var op:Operation=ro.getOperation(operationName) as Operation;
 
             if (showLoadingBar) {
