@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:pe="com.flexblocks.imagecropper.*" backgroundColor="#f1f2f3" horizontalAlign="center" verticalAlign="middle" layout="vertical">
+	<mx:Style>
+		global{
+			font-size:12;
+			color: #313233;
+			font-anti-alias-type:advanced;
+			font-family:微软雅黑;
+		}
+	</mx:Style>
+
+	<mx:Box width="800" height="40" paddingBottom="3" paddingLeft="3" paddingRight="3" paddingTop="3" backgroundColor="#c1c2c3" direction="horizontal" horizontalAlign="center" verticalAlign="middle">
+
+		<mx:Button label="Crop" click="doCrop();"/>
+		<mx:Button label="B/W" click="doBw()"/>
+		<mx:Button label="Sepia" click="doSepia()"/>
+		<mx:Button label="Infrared" click="doInfrared()"/>
+		<mx:Button label="OutLine" click="doOutLine()"/>
+		<mx:Button label="Emboss" click="doEmboss()"/>
+		<mx:Button label="RedEye" click="doRedEye()"/>
+		<mx:Button label="B/C" click="doBC()"/>
+		<mx:Spacer width="100%"/>
+		<mx:Button label="编辑完成，保存"/>
+	</mx:Box>
+	<mx:Box width="800" height="600" cornerRadius="5" borderColor="#575859" borderStyle="solid" borderThickness="1">
+		<pe:ImageCropper id="imageCropper" width="100%" height="100%" enabled="true" backgroundColor="#c1c2c3" sourceImage="3.jpg" handleColor="#FF00FF" maskColor="#660066" maskAlpha="0.6" sourceImageLoadError="trace('Error while loading image')" sourceImageReady="doReady();"/>
+	</mx:Box>
+
+	<mx:Script>
+		<![CDATA[
+			import com.ImageManipulation.ImageFilters;
+
+			private var currentCropbox:Rectangle=new Rectangle();
+
+			private function doReady():void {
+				imageCropper.handleSize=10;
+				currentCropbox.width=imageCropper.width - 20;
+				currentCropbox.height=imageCropper.height - 20;
+				currentCropbox.x=10;
+				currentCropbox.y=10;
+				imageCropper.setCropRect(currentCropbox.width, currentCropbox.height, currentCropbox.x, currentCropbox.y, true);
+			}
+
+			private function doCrop():void {
+				var ndata:BitmapData=imageCropper.croppedBitmapData;
+				imageCropper.setTargetImageBitmapData(ndata);
+				imageCropper.outlineAlpha=0.05;
+				imageCropper.handleAlpha=0.05;
+				imageCropper.maskAlpha=0.05;
+			}
+
+			private function doBw():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.MakeBW();
+				imageCropper.setTargetImageBitmapData(target);
+			}
+
+			private function doSepia():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.MakeSepia();
+				imageCropper.setTargetImageBitmapData(target);
+			}
+
+			private function doInfrared():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.InfraredImage();
+				imageCropper.setTargetImageBitmapData(target);
+			}
+
+			private function doOutLine():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.OutLineImage();
+				imageCropper.setTargetImageBitmapData(target);
+			}
+
+			private function doEmboss():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.EmbossImage();
+				imageCropper.setTargetImageBitmapData(target);
+			}
+
+			private function doRedEye():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.RedEyeImage();
+				imageCropper.setTargetImageBitmapData(target);
+			}
+
+			private function doBC():void {
+				var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+				var target:BitmapData=imageFilter.CorrectBrightNess(3, 5);
+				imageCropper.setTargetImageBitmapData(target);
+			}
+		]]>
+	</mx:Script>
+</mx:Application>
