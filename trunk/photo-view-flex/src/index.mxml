@@ -6,6 +6,7 @@
         	font-size: 12;	
         	font-style: normal;
         	font-weight: normal; 
+        	font-anti-alias-type:advanced;
             modalTransparencyBlur: 3;
             modalTransparency: 0.8;
             modalTransparencyColor: #161817;
@@ -21,33 +22,38 @@
    			textDecoration: none;
     	}
     </mx:Style>
-    <mx:Spacer height="50%" width="600"/>
-    <mx:Box width="600" direction="horizontal" paddingRight="1">
+    <mx:Spacer height="50%" width="700"/>
+    <mx:Box width="700" direction="horizontal" paddingRight="1">
         <mx:Label text="Total image file list" fontWeight="bold"/>
         <mx:Spacer width="100%"/>
+        <mx:Button click="delSelFiles();" label="delete" enabled="{grid.selectedItem!=null}"/>
         <mx:Button click="list();" label="refresh"/>
         <mx:Button click="upload();" label="upload ..."/>
     </mx:Box>
-    <mx:DataGrid id="grid" width="600" height="400" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader">
+    <mx:DataGrid id="grid" width="700" height="450" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader" allowMultipleSelection="false">
         <mx:columns>
             <comp:ArrayColumn headerText="ID" dataField="0" width="50" textAlign="center"/>
             <comp:ArrayColumn headerText="Name" dataField="1"/>
             <comp:ArrayColumn headerText="Modified" dataField="2" dataType="date" width="150"/>
         </mx:columns>
     </mx:DataGrid>
-    <mx:Spacer height="50%" width="600"/>
-    <mx:Box height="25" width="600" direction="horizontal">
-        <mx:Label text="copyright   agile.chen@gmail.com"/>
+    <mx:Spacer height="50%" width="700"/>
+    <mx:Box height="25" width="700" direction="horizontal">
+        <mx:Label text="base on google appengine/j"/>
+        <mx:Label text="email:agile.chen@gmail.com"/>
         <mx:Spacer width="100%"/>
+        <mx:Label text="{DateHelper.format(new Date(),'YYYY-MM-DD JJ:NN:SS')}"/>
         <mx:Label id="memLabel" color="#313131"/>
     </mx:Box>
     <mx:Script>
         <![CDATA[
-            import org.agile.upload.view.PhotoDialog;
-            import org.agile.upload.entity.FileItem;
+            import org.agile.upload.helper.DateHelper;
+            import mx.events.CloseEvent;
             import mx.controls.Alert;
             import mx.collections.ArrayCollection;
             import mx.managers.PopUpManager;
+            import org.agile.upload.view.PhotoDialog;
+            import org.agile.upload.entity.FileItem;
             import org.agile.upload.action.FileItemAction;
             import org.agile.upload.view.UploadDialog;
 
@@ -76,12 +82,40 @@
                     });
             }
 
+            private function delSelFiles():void {
+                var sels:Array=new Array(grid.selectedItem);
+                var msg:String="Are you sure delete these files? ";
+                for (var i:int=0, len:int=sels.length; i < len; i++) {
+                    var item:Object=sels[i];
+                    msg+="\n";
+                    msg+="   " + item[1];
+                }
+                msg+="\n\n";
+                var alert:Alert=Alert.show(msg, "Confirm Delete Files!", Alert.YES | Alert.NO, this, delHandler, null, Alert.NO);
+            }
+
+            private function delHandler(event:CloseEvent):void {
+                if (event.detail == Alert.YES) {
+                    var sels:Array=grid.selectedItems;
+                    var ids:ArrayCollection=new ArrayCollection();
+                    for (var i:int=0, len:int=sels.length; i < len; i++) {
+                        var item:Object=sels[i];
+                        ids.addItem(item[0]);
+                    }
+                    if (ids.length > 0) {
+                        action.remove(ids, list);
+                    }
+                }
+            }
+
             private function openView():void {
                 var item:Array=grid.selectedItem as Array;
                 var id:Number=item[0];
                 var app:Application=Application.application as Application;
                 var dialog:PhotoDialog=PopUpManager.createPopUp(app, PhotoDialog, true) as PhotoDialog;
+                dialog.title="图片编辑器 - " + item[1];
                 dialog.view.fid=id;
+                dialog.callback=list;
                 PopUpManager.centerPopUp(dialog);
             }
 
@@ -91,6 +125,7 @@
             }
 
             private function memory():void {
+                memLabel.text=format(System.totalMemory);
                 var timer:Timer=new Timer(5 * 1000, 0);
                 timer.addEventListener(TimerEvent.TIMER, function():void {
                         System.gc();
