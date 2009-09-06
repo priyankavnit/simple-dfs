@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.ShortBlob;
 
 @Entity
 public class FileItem {
@@ -22,10 +23,14 @@ public class FileItem {
 
     private Date modified;
 
+    @Basic(fetch=FetchType.LAZY)
+    @Enumerated
+    private Blob rawimage;
+
     @Basic(fetch=FetchType.EAGER)
     @Enumerated
-    private Blob data;
-
+    private ShortBlob thumbnail;
+    
     public Long getId() {
         return id;
     }
@@ -50,12 +55,21 @@ public class FileItem {
         this.modified = modified;
     }
 
-    public Blob getData() {
-        return data;
-    }
+	public Blob getRawimage() {
+		return rawimage;
+	}
 
-    public void setData(Blob data) {
-        this.data = data;
-    }
+	public void setRawimage(Blob rawimage) {
+		this.rawimage = rawimage;
+	}
+
+	public ShortBlob getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(ShortBlob thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+ 
 
 }

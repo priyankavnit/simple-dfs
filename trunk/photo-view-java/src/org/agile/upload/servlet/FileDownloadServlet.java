@@ -1,31 +1,36 @@
 package org.agile.upload.servlet;
 
-import java.io.File;
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.agile.upload.entity.FileItem;
+import org.agile.upload.helper.MimeUtil;
+import org.agile.upload.manager.FileItemManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 public class FileDownloadServlet extends HttpServlet {
-	private static final long serialVersionUID = 2472992451592754307L;
-
-	private String fileRoot;
-
-	public FileDownloadServlet() {
-		super();
-	}
+	private static final long serialVersionUID = 1978L;
+	private static FileItemManager manager;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// String uri = request.getRequestURI();
-		String name = fileRoot + request.getQueryString();
-		File file = new File(name);
-		if (file.exists()) {
-			log("Down file " + name);
-		} else {
-			log(name + " not exists! ");
+		String sid = request.getParameter("fileItemId");
+		if (sid != null) {
+			Long id = Long.parseLong(sid);
+			FileItem item = manager.findById(id);
+			if (item != null && item.getRawimage() != null) {
+				String mime = MimeUtil.getMimeByFileName(item.getName());
+				response.setContentType(mime);
+				byte[] data = item.getRawimage().getBytes();
+				ServletOutputStream os = response.getOutputStream();
+				os.write(data);
+				os.flush();
+			}
 		}
 	}
 
@@ -33,27 +38,15 @@ public class FileDownloadServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	@Override
 	public void init() throws ServletException {
 		super.init();
-		ServletContext config = this.getServletContext();
-		fileRoot = config.getInitParameter("fileStoreRoot");
-		if (fileRoot == null || fileRoot.trim().length() == 0) {
-			// throw new ServletException("Store file's root is null, can't startup!");
-		} else {
-			File file = new File(fileRoot);
-			if (!file.exists()) {
-				file.mkdirs();
-			}
-		}
-		log("Store file's root is " + fileRoot);
-
+		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+		manager = (FileItemManager) context.getBean("upload.FileItemManager");
 	}
 
 	public void destroy() {
 		super.destroy();
 	}
 
-	public void log(String msg) {
-		System.out.println(msg);
-	}
 }

@@ -56,7 +56,7 @@ public class FileUploadServlet extends HttpServlet {
                     file.setName(fileName);
                     file.setModified(new java.util.Date());
                     try {
-                        file.setData(new Blob(IOUtils.toByteArray(in)));
+                        file.setRawimage(new Blob(IOUtils.toByteArray(in)));
                         manager.save(file);
                         out.println("file id = " + file.getId());
                     } finally {
