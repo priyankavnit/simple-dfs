@@ -22,10 +22,11 @@ package org.agile.upload.entity {
         private var __initialized:Boolean = true;
         private var __detachedState:String = null;
 
-        private var _data:ByteArray;
         private var _id:Number;
         private var _modified:Date;
         private var _name:String;
+        private var _rawimage:ByteArray;
+        private var _thumbnail:ByteArray;
 
         meta function isInitialized(name:String = null):Boolean {
             if (!name)
@@ -36,13 +37,6 @@ package org.agile.upload.entity {
                 (!(property is FileItem) || (property as FileItem).meta::isInitialized()) &&
                 (!(property is IPersistentCollection) || (property as IPersistentCollection).isInitialized())
             );
-        }
-
-        public function set data(value:ByteArray):void {
-            _data = value;
-        }
-        public function get data():ByteArray {
-            return _data;
         }
 
         public function set id(value:Number):void {
@@ -66,14 +60,29 @@ package org.agile.upload.entity {
             return _name;
         }
 
+        public function set rawimage(value:ByteArray):void {
+            _rawimage = value;
+        }
+        public function get rawimage():ByteArray {
+            return _rawimage;
+        }
+
+        public function set thumbnail(value:ByteArray):void {
+            _thumbnail = value;
+        }
+        public function get thumbnail():ByteArray {
+            return _thumbnail;
+        }
+
         public function readExternal(input:IDataInput):void {
             __initialized = input.readObject() as Boolean;
             __detachedState = input.readObject() as String;
             if (meta::isInitialized()) {
-                _data = input.readObject() as ByteArray;
                 _id = function(o:*):Number { return (o is Number ? o as Number : Number.NaN) } (input.readObject());
                 _modified = input.readObject() as Date;
                 _name = input.readObject() as String;
+                _rawimage = input.readObject() as ByteArray;
+                _thumbnail = input.readObject() as ByteArray;
             }
             else {
                 _id = function(o:*):Number { return (o is Number ? o as Number : Number.NaN) } (input.readObject());
@@ -84,10 +93,11 @@ package org.agile.upload.entity {
             output.writeObject(__initialized);
             output.writeObject(__detachedState);
             if (meta::isInitialized()) {
-                output.writeObject(_data);
                 output.writeObject(_id);
                 output.writeObject(_modified);
                 output.writeObject(_name);
+                output.writeObject(_rawimage);
+                output.writeObject(_thumbnail);
             }
             else {
                 output.writeObject(_id);

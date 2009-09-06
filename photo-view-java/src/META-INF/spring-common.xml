@@ -19,6 +19,7 @@
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="create*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="remove*">PROPAGATION_REQUIRED</prop>
 				<prop key="update*">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
@@ -44,11 +45,13 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="upload.TransformManager" class="org.agile.upload.manager.TransformManager" />
 
 	<bean id="upload.FileItemManager" parent="upload.AbstractProxyManager">
 		<property name="target">
 			<bean class="org.agile.upload.manager.FileItemManager">
 				<property name="template" ref="upload.JpaTemplate" />
+				<property name="transformer" ref="upload.TransformManager" />
 			</bean>
 		</property>
 	</bean>
