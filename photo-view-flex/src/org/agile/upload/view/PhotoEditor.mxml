@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" verticalGap="1" xmlns:pe="com.flexblocks.imagecropper.*" backgroundColor="#f1f2f3" horizontalAlign="center"
+        verticalAlign="middle" creationComplete="init();">
+    <!--
+         <mx:Box width="100%" paddingBottom="4" paddingLeft="3" paddingRight="3" paddingTop="3" backgroundColor="#d1d2d3" horizontalGap="3" direction="horizontal" horizontalAlign="center"
+         verticalAlign="middle">
+         <mx:Label text="ID:" fontWeight="bold"/>
+         <mx:Label text="{item.id}"/>
+         <mx:Label text="  Name:" fontWeight="bold"/>
+         <mx:Label text="{item.name}"/>
+         <mx:Label text="  Modified:" fontWeight="bold"/>
+         <mx:Label text="{DateHelper.format(item.modified, 'YYYY-MM-DD JJ:NN:SS')}"/>
+         <mx:Spacer width="100%"/>
+         <mx:Button label="保存" click="doSave()"/>
+         </mx:Box>
+    -->
+    <mx:Box width="100%" height="100%" paddingBottom="1" paddingLeft="1" paddingRight="1" paddingTop="1" backgroundColor="#ffffff" horizontalAlign="center" verticalAlign="middle">
+        <pe:ImageCropper id="imageCropper" width="100%" height="100%" enabled="true" backgroundColor="#f3f3f3" handleColor="#FF00FF" maskColor="#660066" maskAlpha="0.6"
+                         sourceImageLoadError="trace('Error while loading image')" sourceImageReady="doReady();"/>
+    </mx:Box>
+    <mx:Box width="100%" paddingBottom="4" paddingLeft="3" paddingRight="3" paddingTop="3" backgroundColor="#d1d2d3" horizontalGap="3" direction="horizontal" horizontalAlign="center"
+            verticalAlign="middle">
+        <mx:Button label="裁切" click="doCrop();"/>
+        <mx:Button label="黑白" click="doBw()"/>
+        <mx:Button label="陈旧" click="doSepia()"/>
+        <mx:Button label="红外" click="doInfrared()"/>
+        <mx:Button label="轮廓" click="doOutLine()"/>
+        <mx:Button label="浮雕" click="doEmboss()"/>
+        <mx:Button label="红眼" click="doRedEye()"/>
+        <!--
+             <mx:Button label="亮度" click="doBC()"/>
+        -->
+        <mx:Spacer width="100%"/>
+        <mx:Button label="还原" click="doRefresh()"/>
+        <mx:Spacer width="5"/>
+        <mx:Button label="保存" click="doSave()"/>
+    </mx:Box>
+    <mx:Script>
+        <![CDATA[
+            import be.nascom.flash.net.upload.ImageUploader;
+            import mx.graphics.codec.JPEGEncoder;
+            import org.agile.upload.helper.ImageDataHelper;
+            import org.agile.upload.helper.DateHelper;
+            import org.agile.upload.action.FileItemAction;
+            import org.agile.upload.entity.FileItem;
+            import com.ImageManipulation.ImageFilters;
+
+            [Bindable]
+            public var fid:Number=-1;
+            [Bindable]
+            private var item:FileItem;
+
+            private var action:FileItemAction=new FileItemAction();
+
+            private var cropbox:Rectangle=new Rectangle();
+
+            private var downUrl:String;
+            private var loadUrl:String;
+
+            private function init():void {
+                if (null == this.loaderInfo) {
+                    downUrl="upload/down";
+                    loadUrl="upload/load";
+                }
+                var iurl:String=this.loaderInfo.url;
+                var n:int=iurl.lastIndexOf("/");
+                downUrl=iurl.substr(0, n + 1) + "down";
+                loadUrl=iurl.substr(0, n + 1) + "load";
+                doRefresh();
+            }
+
+            private function doReady():void {
+                imageCropper.handleSize=10;
+                cropbox.width=imageCropper.width - 20;
+                cropbox.height=imageCropper.height - 20;
+                cropbox.x=10;
+                cropbox.y=10;
+                imageCropper.setCropRect(cropbox.width, cropbox.height, cropbox.x, cropbox.y, true);
+            }
+
+            private function doCrop():void {
+                var ndata:BitmapData=imageCropper.croppedBitmapData;
+                imageCropper.setTargetImageBitmapData(ndata);
+                imageCropper.outlineAlpha=0.05;
+                imageCropper.handleAlpha=0.05;
+                imageCropper.maskAlpha=0.05;
+            }
+
+            private function doBw():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.MakeBW();
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doSepia():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.MakeSepia();
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doInfrared():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.InfraredImage();
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doOutLine():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.OutLineImage();
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doEmboss():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.EmbossImage();
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doRedEye():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.RedEyeImage();
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doBC():void {
+                var imageFilter:ImageFilters=new ImageFilters(imageCropper.getTargetImageBitmapData());
+                var target:BitmapData=imageFilter.CorrectBrightNess(3, 5);
+                imageCropper.setTargetImageBitmapData(target);
+            }
+
+            private function doRefresh():void {
+                if (fid != -1) {
+                    action.findById(fid, function(data:Object):void {
+                            item=data as FileItem;
+                            if (item != null && item.rawimage != null) {
+                                imageCropper.sourceImage=downUrl + "?fileItemId=" + fid;
+                            }
+                        });
+                }
+            }
+
+            private function doSave():void {
+                var bitmap:BitmapData=imageCropper.getTargetImageBitmapData();
+                //  var helper:ImageUploader=new ImageUploader(loadUrl);
+                //  helper.upload(bitmap);
+                var jpegEncoder:JPEGEncoder=new JPEGEncoder(75);
+                var data:ByteArray=jpegEncoder.encode(bitmap);
+                item.rawimage=data;
+                action.save(item);
+            }
+        ]]>
+    </mx:Script>
+</mx:Box>

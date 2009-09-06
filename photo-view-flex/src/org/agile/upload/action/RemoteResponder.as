@@ -40,7 +40,11 @@ package org.agile.upload.action {
             beforeResult(data);
             if (_onResult != null) {
                 var evt:ResultEvent=data as ResultEvent;
-                _onResult(evt.token.result);
+                if (evt.token.result == null) {
+                    _onResult();
+                } else {
+                    _onResult(evt.token.result);
+                }
             }
             if (_callback != null) {
                 _callback();
