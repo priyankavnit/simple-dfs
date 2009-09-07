@@ -58,6 +58,9 @@
 
     <mx:Script>
         <![CDATA[
+            import mx.logging.ILogger;
+            import org.agile.upload.logging.LoggerFactory;
+            import org.agile.upload.helper.UnitHelper;
             import mx.formatters.DateFormatter;
             import mx.events.ListEvent;
             import mx.collections.ArrayCollection;
@@ -69,6 +72,7 @@
             public static var STATUS_STOP:String="STATUS_STOP";
             private static var dateFormater:DateFormatter=new DateFormatter();
 
+            private var logger:ILogger=LoggerFactory.getLogger("upload.view.UploadView");
 
             [Bindable]
             public var url:String;
@@ -95,6 +99,9 @@
                 var iurl:String=this.loaderInfo.url;
                 var n:int=iurl.lastIndexOf("/");
                 url=iurl.substr(0, n + 1) + "load";
+
+                logger.error("url is " + url);
+                logger.warn("url is " + url);
             }
 
             private function formatFileName(name:String):String {
@@ -112,7 +119,7 @@
             private function formatDate(date:Date):String {
                 return dateFormater.format(date);
             }
-            
+
             private function rowNumFunction(item:Object, inx:int):String {
                 var ix:int=fileSelList.getItemIndex(item) + 1;
                 return String(ix);
@@ -120,16 +127,7 @@
 
             private function fileSizeFunction(item:Object, inx:int):String {
                 var s:int=item.size;
-                var k:int=s / 1024;
-                var m:int=k / 1024;
-                k=k - m * 1024;
-                if (k <= 0 && s > 0) {
-                    k=1;
-                } else {
-                    k=k + 1;
-                }
-                var _label:String=m > 0 ? m + "m," + k + "k" : k + "k";
-                return _label;
+                return UnitHelper.formatBytes(s);
             }
 
             private function selectFiles(event:Event=null):void {
@@ -223,7 +221,6 @@
                     var file2:FileReference=item2.file;
                     uploadFile(file2);
                 }
-
             }
 
             private function stopMulUpload(event:Event=null):void {
@@ -246,6 +243,13 @@
                 if (status == STATUS_STOP) {
                     return;
                 }
+//                file.addEventListener(Event.OPEN, openHandler);
+//                // file.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+//                // file.addEventListener(Event.COMPLETE, completeHandler);
+//                file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+//                file.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+//                file.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+
                 file.addEventListener(ProgressEvent.PROGRESS, uploadProgress);
                 var request:URLRequest=new URLRequest(url);
                 try {
@@ -274,7 +278,7 @@
                     }
                 }
                 var proc:uint=lsize / totalFileSize * 100;
-                totalProgress.label=proc + "%";
+                totalProgress.label=proc + "% (" + UnitHelper.formatBytes(lsize) + " of " + UnitHelper.formatBytes(totalFileSize) + ")";
                 totalProgress.setProgress(proc, 100);
                 fileSelList.refresh();
                 if (proc == 100) {
