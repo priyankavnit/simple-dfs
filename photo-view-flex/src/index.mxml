@@ -30,13 +30,17 @@
         <mx:Button click="list();" label="refresh"/>
         <mx:Button click="upload();" label="upload ..."/>
     </mx:Box>
-    <mx:DataGrid id="grid" width="700" height="450" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader" allowMultipleSelection="false">
+    <mx:DataGrid id="grid" width="700" height="350" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader" allowMultipleSelection="false">
         <mx:columns>
             <comp:ArrayColumn headerText="ID" dataField="0" width="50" textAlign="center"/>
             <comp:ArrayColumn headerText="Name" dataField="1"/>
             <comp:ArrayColumn headerText="Modified" dataField="2" dataType="date" width="150"/>
         </mx:columns>
     </mx:DataGrid>
+    <mx:Box id="loggingBox" visible="false" includeInLayout="false" width="700" direction="horizontal">
+        <mx:TextArea id="logging" height="60" width="100%"/>
+        <mx:Button label="CLS" height="60" click="{logging.text=''}"/>
+    </mx:Box>
     <mx:Spacer height="50%" width="700"/>
     <mx:Box height="25" width="700" direction="horizontal">
         <mx:Label text="base on google appengine/j"/>
@@ -44,9 +48,11 @@
         <mx:Spacer width="100%"/>
         <mx:Label text="{DateHelper.format(new Date(),'YYYY-MM-DD JJ:NN:SS')}"/>
         <mx:Label id="memLabel" color="#313131"/>
+        <mx:Label text="l" doubleClickEnabled="true" doubleClick="switchLogging();"/>
     </mx:Box>
     <mx:Script>
         <![CDATA[
+            import org.agile.upload.logging.LoggerFactory;
             import org.agile.upload.helper.DateHelper;
             import mx.events.CloseEvent;
             import mx.controls.Alert;
@@ -62,6 +68,7 @@
             private var action:FileItemAction=new FileItemAction();
 
             private function init():void {
+                LoggerFactory.setLoggingArea(logging);
                 list();
                 memory();
             }
@@ -140,6 +147,16 @@
                 var m:uint=k / 1024;
                 k=k % 1024;
                 return m + "m," + k + "k";
+            }
+
+            private function switchLogging():void {
+                if (loggingBox.visible) {
+                    loggingBox.visible=false;
+                    loggingBox.includeInLayout=false;
+                } else {
+                    loggingBox.visible=true;
+                    loggingBox.includeInLayout=true;
+                }
             }
         ]]>
     </mx:Script>
