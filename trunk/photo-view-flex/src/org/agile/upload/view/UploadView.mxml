@@ -100,8 +100,6 @@
                 var n:int=iurl.lastIndexOf("/");
                 url=iurl.substr(0, n + 1) + "load";
 
-                logger.error("url is " + url);
-                logger.warn("url is " + url);
             }
 
             private function formatFileName(name:String):String {
@@ -243,12 +241,23 @@
                 if (status == STATUS_STOP) {
                     return;
                 }
-//                file.addEventListener(Event.OPEN, openHandler);
-//                // file.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-//                // file.addEventListener(Event.COMPLETE, completeHandler);
-//                file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-//                file.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+                file.addEventListener(Event.OPEN, function(event:Event):void {
+                        logger.info("file open");
+                    });
+//                // file.addEventListener(ProgressEvent.PROGRESS, progressHandler); 
+                file.addEventListener(Event.COMPLETE, function(event:Event):void {
+                        logger.info("file complete");
+                    });
+                file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function(event:Event):void {
+                        logger.info("security error");
+                    });
+                file.addEventListener(HTTPStatusEvent.HTTP_STATUS, function(event:Event):void {
+                        logger.info("http status " + event.target);
+                    });
 //                file.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+                file.addEventListener(IOErrorEvent.IO_ERROR, function(event:Event):void {
+                        logger.info("io error");
+                    });
 
                 file.addEventListener(ProgressEvent.PROGRESS, uploadProgress);
                 var request:URLRequest=new URLRequest(url);
