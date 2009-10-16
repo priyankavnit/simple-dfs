@@ -19,11 +19,19 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class FileItemManager {
 	private JpaTemplate template;
 	private TransformManager transformer;
+	private CacheManager cache;
 
 	@SuppressWarnings("unchecked")
 	public List list() {
-		List ret = template.find("select item.id,item.name,item.modified from FileItem item");
-		return ret;
+		String key = "fileitem.list";
+		List c = (List) cache.get(key);
+		if (c != null) {
+			return c;
+		} else {
+			List list = template.find("select item.id,item.name,item.modified from FileItem item");
+			cache.put(key, list);
+			return list;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,7 +51,6 @@ public class FileItemManager {
 				Query query = em.createQuery(ql);
 				return query.getSingleResult();
 			}
-
 		});
 		return (Blob) obj;
 	}
@@ -71,7 +78,7 @@ public class FileItemManager {
 				List<Key> keys = new ArrayList<Key>();
 				// keys.add(parent);
 				for (Number id : list) {
-					Key key = KeyFactory.createKey( FileItem.class.getSimpleName(), id.longValue());
+					Key key = KeyFactory.createKey(FileItem.class.getSimpleName(), id.longValue());
 					keys.add(key);
 				}
 				Query query = em.createQuery("delete from " + FileItem.class.getName() + " where id = :ids");
@@ -90,4 +97,7 @@ public class FileItemManager {
 		this.transformer = transformer;
 	}
 
+	public void setCache(CacheManager cache) {
+		this.cache = cache;
+	}
 }
