@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="org.agile.upload.view.*" xmlns:comp="org.agile.upload.component.*" height="100%" width="100%" horizontalAlign="center"
-                verticalAlign="middle" creationComplete="init();">
+                verticalAlign="middle" creationComplete="init();" verticalGap="0">
     <mx:Style>
         global{
         	font-size: 12;	
@@ -26,11 +26,12 @@
     <mx:Box width="700" direction="horizontal" paddingRight="1">
         <mx:Label text="Total image file list" fontWeight="bold"/>
         <mx:Spacer width="100%"/>
+        <mx:Button click="{iframe.source='about:blank'}" label="blank"/>
         <mx:Button click="delSelFiles();" label="delete" enabled="{grid.selectedItem!=null}"/>
         <mx:Button click="list();" label="refresh"/>
         <mx:Button click="upload();" label="upload ..."/>
     </mx:Box>
-    <mx:DataGrid id="grid" width="700" height="350" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader" allowMultipleSelection="false">
+    <mx:DataGrid id="grid" width="700" height="150" dataProvider="{files}" doubleClick="openView();" doubleClickEnabled="true" headerStyleName="gridHeader" allowMultipleSelection="false">
         <mx:columns>
             <comp:ArrayColumn headerText="ID" dataField="0" width="50" textAlign="center"/>
             <comp:ArrayColumn headerText="Name" dataField="1"/>
@@ -41,12 +42,12 @@
         <mx:TextArea id="logging" height="60" width="100%"/>
         <mx:Button label="CLS" height="60" click="{logging.text=''}"/>
     </mx:Box>
+    <comp:IFrame id="iframe" source="http://numen.appspot.com/upload/" width="700" height="100"/>
     <mx:Spacer height="50%" width="700"/>
     <mx:Box height="25" width="700" direction="horizontal">
         <mx:Label text="base on google appengine/j"/>
         <mx:Label text="email:agile.chen@gmail.com"/>
         <mx:Spacer width="100%"/>
-        <mx:Label text="{DateHelper.format(new Date(),'YYYY-MM-DD JJ:NN:SS')}"/>
         <mx:Label id="memLabel" color="#313131"/>
         <mx:Label text="l" doubleClickEnabled="true" doubleClick="switchLogging();"/>
     </mx:Box>
@@ -132,11 +133,12 @@
             }
 
             private function memory():void {
-                memLabel.text=format(System.totalMemory);
-                var timer:Timer=new Timer(5 * 1000, 0);
+                memLabel.text=DateHelper.format(new Date(), 'YYYY-MM-DD JJ:NN:SS') + "  " + format(System.totalMemory);
+
+                var timer:Timer=new Timer(3 * 1000, 0);
                 timer.addEventListener(TimerEvent.TIMER, function():void {
                         System.gc();
-                        memLabel.text=format(System.totalMemory);
+                        memLabel.text=DateHelper.format(new Date(), 'YYYY-MM-DD JJ:NN:SS') + "  " + format(System.totalMemory);
                     });
                 timer.start();
             }
