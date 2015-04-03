@@ -1,0 +1,1 @@
+A distributed file system, implement by java. like apache's hdfs, but more easier,management, more simple.
